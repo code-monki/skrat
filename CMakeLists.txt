@@ -6,6 +6,36 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
 
+# Qt6 ships as CMake config packages (Qt6Config.cmake). If neither
+# CMAKE_PREFIX_PATH nor Qt6_DIR points at a kit, probe common installs so
+# `cmake -S . -B build` works after e.g. `brew install qt` on macOS.
+if((NOT CMAKE_PREFIX_PATH) AND ((NOT DEFINED Qt6_DIR) OR (Qt6_DIR STREQUAL "")))
+  set(_skrat_qt6_prefixes "")
+  if(DEFINED ENV{QTDIR} AND NOT "$ENV{QTDIR}" STREQUAL "")
+    list(APPEND _skrat_qt6_prefixes "$ENV{QTDIR}")
+  endif()
+  if(DEFINED ENV{HOMEBREW_PREFIX} AND NOT "$ENV{HOMEBREW_PREFIX}" STREQUAL "")
+    list(APPEND _skrat_qt6_prefixes
+      "$ENV{HOMEBREW_PREFIX}/opt/qt@6"
+      "$ENV{HOMEBREW_PREFIX}/opt/qt"
+    )
+  endif()
+  if(APPLE)
+    list(APPEND _skrat_qt6_prefixes
+      "/opt/homebrew/opt/qt@6"
+      "/opt/homebrew/opt/qt"
+      "/usr/local/opt/qt@6"
+      "/usr/local/opt/qt"
+    )
+  endif()
+  foreach(_skrat_qt IN LISTS _skrat_qt6_prefixes)
+    if(EXISTS "${_skrat_qt}/lib/cmake/Qt6/Qt6Config.cmake")
+      list(PREPEND CMAKE_PREFIX_PATH "${_skrat_qt}")
+      break()
+    endif()
+  endforeach()
+endif()
+
 find_package(Qt6 6.4 REQUIRED COMPONENTS Core Gui Widgets Pdf PdfWidgets)
 
 add_executable(skrat

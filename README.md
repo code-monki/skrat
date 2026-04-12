@@ -33,6 +33,29 @@ make run        # build, then launch the app
 make clean      # remove the build directory
 ```
 
+### Continuous integration
+
+[GitHub Actions](https://github.com/code-monki/skrat/actions/workflows/ci.yml) builds **`master`** / **`main`** on every push and pull request, and also runs when you push a **version tag** matching **`v*`** (for example **`v0.2.0`**). Workflow file: [`.github/workflows/ci.yml`](.github/workflows/ci.yml).
+
+| Where | Link |
+|--------|------|
+| **Stable downloads (tagged releases)** | [github.com/code-monki/skrat/releases](https://github.com/code-monki/skrat/releases) — see also [`releases/README.md`](releases/README.md) |
+| Workflow runs (pick a green run) | [github.com/code-monki/skrat/actions/workflows/ci.yml](https://github.com/code-monki/skrat/actions/workflows/ci.yml) |
+| All Actions activity | [github.com/code-monki/skrat/actions](https://github.com/code-monki/skrat/actions) |
+
+**Pre-built executables** from routine CI are attached to each successful run as **Artifacts** (GitHub wraps each file in a `.zip`). Open a run, scroll to **Artifacts**, and download the name that matches your platform. **Tagged `v*` builds** additionally publish **`.tar.gz` / `.zip`** assets on the **Releases** page (same binaries, packaged for that tag).
+
+| Artifact | Description |
+|----------|-------------|
+| `skrat-ubuntu-x86_64` | Ubuntu 24.04-style build, x86_64 |
+| `skrat-ubuntu-aarch64` | Ubuntu 24.04-style build, AArch64 |
+| `skrat-fedora-x86_64` | Fedora (container) build, x86_64 |
+| `skrat-fedora-aarch64` | Fedora (container) build, AArch64 |
+| `skrat-macos-universal` | macOS universal binary (`arm64` + `x86_64`) |
+| `skrat-windows-x86_64` | Windows x86_64 (`skrat.exe`, MSVC 2022) |
+
+These are **CI convenience builds**, not installers: they expect **Qt 6** (and related) libraries to be available on the machine the same way a normal local compile would—use your distro packages, an official Qt kit, or Qt’s deployment tools (**`macdeployqt`**, **`windeployqt`**, etc.) if you need something self-contained. After unzipping, you may need **`chmod +x skrat`** on Unix.
+
 ### Troubleshooting: `Could not find a package configuration file provided by "Qt6"`
 
 CMake only finds Qt when **`CMAKE_PREFIX_PATH`** points at a **Qt kit directory** (the folder that contains `lib/cmake/Qt6/Qt6Config.cmake`), for example **`$HOME/Qt/6.9.3/macos`**.
@@ -138,4 +161,6 @@ Examples:
 
 ## License
 
-This application’s source is licensed under the **GNU General Public License v3.0 or later** (`GPL-3.0-or-later`). Qt is used under **your** Qt license terms (for example the open-source Qt LGPL/GPL offerings, or a commercial Qt license).
+This application’s **source code** is licensed under the **GNU General Public License v3.0 or later** (`GPL-3.0-or-later`). Qt is used under **your** Qt license terms (for example the open-source Qt LGPL/GPL offerings, or a commercial Qt license).
+
+**Documentation** in this repository (including this `README.md`) is licensed under the [**Creative Commons Attribution-ShareAlike 4.0 International** license](https://creativecommons.org/licenses/by-sa/4.0/) (`CC-BY-SA-4.0`). The full legal text is in [`LICENSE-CC-BY-SA-4.0.txt`](LICENSE-CC-BY-SA-4.0.txt).
