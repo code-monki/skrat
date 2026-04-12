@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QMainWindow>
 
+class QAction;
 class QFileSystemModel;
 class QLabel;
 class QPdfDocument;
@@ -10,6 +11,7 @@ class QPdfView;
 class QPlainTextEdit;
 class QSplitter;
 class QStackedWidget;
+class QToolBar;
 class QTreeView;
 
 class MainWindow final : public QMainWindow
@@ -28,6 +30,11 @@ private slots:
     void zoomInPdf();
     void zoomOutPdf();
     void pdfFitWidth();
+    void pdfGoFirstPage();
+    void pdfGoPrevPage();
+    void pdfGoNextPage();
+    void pdfGoLastPage();
+    void updatePdfPageUi();
 
 private:
     void setupUi();
@@ -44,4 +51,11 @@ private:
     QPdfDocument *m_pdfDocument = nullptr;
     QPlainTextEdit *m_textView = nullptr;
     QLabel *m_placeholder = nullptr;
+
+    QToolBar *m_pdfToolBar = nullptr;
+    QLabel *m_pdfPageLabel = nullptr;
+    QAction *m_pdfActFirst = nullptr;
+    QAction *m_pdfActPrev = nullptr;
+    QAction *m_pdfActNext = nullptr;
+    QAction *m_pdfActLast = nullptr;
 };

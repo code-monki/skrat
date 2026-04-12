@@ -10,16 +10,20 @@
 #include <QFont>
 #include <QLabel>
 #include <QKeySequence>
+#include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QModelIndex>
 #include <QPdfDocument>
+#include <QPdfPageNavigator>
 #include <QPdfView>
 #include <QPlainTextEdit>
 #include <QScreen>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QStandardPaths>
+#include <QStatusBar>
+#include <QToolBar>
 #include <QTreeView>
 
 namespace {
@@ -151,6 +155,39 @@ void MainWindow::setupUi()
     connect(actZoomOut, &QAction::triggered, this, &MainWindow::zoomOutPdf);
     viewMenu->addAction(actZoomOut);
 
+    viewMenu->addSeparator();
+    QMenu *const pdfPageMenu = viewMenu->addMenu(tr("PDF &pages"));
+
+    m_pdfActFirst = new QAction(tr("&First page"), this);
+    m_pdfActFirst->setShortcut(QKeySequence(QStringLiteral("Ctrl+Home")));
+    m_pdfActFirst->setToolTip(tr("Go to first page (Ctrl+Home)"));
+    connect(m_pdfActFirst, &QAction::triggered, this, &MainWindow::pdfGoFirstPage);
+
+    m_pdfActPrev = new QAction(tr("&Previous page"), this);
+    m_pdfActPrev->setShortcut(QKeySequence(QStringLiteral("Alt+PgUp")));
+    m_pdfActPrev->setToolTip(tr("Go to previous page (Alt+PgUp)"));
+    connect(m_pdfActPrev, &QAction::triggered, this, &MainWindow::pdfGoPrevPage);
+
+    m_pdfActNext = new QAction(tr("&Next page"), this);
+    m_pdfActNext->setShortcut(QKeySequence(QStringLiteral("Alt+PgDown")));
+    m_pdfActNext->setToolTip(tr("Go to next page (Alt+PgDown)"));
+    connect(m_pdfActNext, &QAction::triggered, this, &MainWindow::pdfGoNextPage);
+
+    m_pdfActLast = new QAction(tr("&Last page"), this);
+    m_pdfActLast->setShortcut(QKeySequence(QStringLiteral("Ctrl+End")));
+    m_pdfActLast->setToolTip(tr("Go to last page (Ctrl+End)"));
+    connect(m_pdfActLast, &QAction::triggered, this, &MainWindow::pdfGoLastPage);
+
+    pdfPageMenu->addAction(m_pdfActFirst);
+    pdfPageMenu->addAction(m_pdfActPrev);
+    pdfPageMenu->addAction(m_pdfActNext);
+    pdfPageMenu->addAction(m_pdfActLast);
+
+    addAction(m_pdfActFirst);
+    addAction(m_pdfActPrev);
+    addAction(m_pdfActNext);
+    addAction(m_pdfActLast);
+
     m_fsModel = new QFileSystemModel(this);
     m_fsModel->setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
     m_fsModel->setNameFilterDisables(false);
@@ -195,6 +232,25 @@ void MainWindow::setupUi()
     m_splitter->setStretchFactor(1, 1);
 
     setCentralWidget(m_splitter);
+
+    m_pdfToolBar = addToolBar(tr("PDF navigation"));
+    m_pdfToolBar->setMovable(false);
+    m_pdfToolBar->addAction(m_pdfActFirst);
+    m_pdfToolBar->addAction(m_pdfActPrev);
+    m_pdfToolBar->addAction(m_pdfActNext);
+    m_pdfToolBar->addAction(m_pdfActLast);
+    m_pdfPageLabel = new QLabel(tr("—"));
+    m_pdfPageLabel->setMinimumWidth(140);
+    m_pdfPageLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    m_pdfToolBar->addWidget(m_pdfPageLabel);
+
+    connect(m_pdfView->pageNavigator(),
+            &QPdfPageNavigator::currentPageChanged,
+            this,
+            &MainWindow::updatePdfPageUi);
+    connect(m_pdfDocument, &QPdfDocument::pageCountChanged, this, &MainWindow::updatePdfPageUi);
+
+    statusBar()->setSizeGripEnabled(true);
 
     showPlaceholder(tr("<p><b>skrat</b> — pick a file in the tree to preview PDFs and text.</p>"
                         "<p>Use <b>File → Open Folder…</b> to point the tree at a project directory.</p>"));
@@ -289,10 +345,110 @@ void MainWindow::pdfFitWidth()
     m_pdfView->setZoomMode(QPdfView::ZoomMode::FitToWidth);
 }
 
+void MainWindow::pdfGoFirstPage()
+{
+    if (m_stack->currentWidget() != m_pdfView || !m_pdfDocument) {
+        return;
+    }
+    const int pages = m_pdfDocument->pageCount();
+    if (pages <= 0) {
+        return;
+    }
+    m_pdfView->pageNavigator()->jump(0, QPointF(0, 0), 0);
+}
+
+void MainWindow::pdfGoPrevPage()
+{
+    if (m_stack->currentWidget() != m_pdfView || !m_pdfDocument) {
+        return;
+    }
+    QPdfPageNavigator *const nav = m_pdfView->pageNavigator();
+    const int cur = nav->currentPage();
+    if (cur > 0) {
+        nav->jump(cur - 1, QPointF(0, 0), 0);
+    }
+}
+
+void MainWindow::pdfGoNextPage()
+{
+    if (m_stack->currentWidget() != m_pdfView || !m_pdfDocument) {
+        return;
+    }
+    const int pages = m_pdfDocument->pageCount();
+    if (pages <= 0) {
+        return;
+    }
+    QPdfPageNavigator *const nav = m_pdfView->pageNavigator();
+    const int cur = nav->currentPage();
+    if (cur < pages - 1) {
+        nav->jump(cur + 1, QPointF(0, 0), 0);
+    }
+}
+
+void MainWindow::pdfGoLastPage()
+{
+    if (m_stack->currentWidget() != m_pdfView || !m_pdfDocument) {
+        return;
+    }
+    const int pages = m_pdfDocument->pageCount();
+    if (pages <= 0) {
+        return;
+    }
+    m_pdfView->pageNavigator()->jump(pages - 1, QPointF(0, 0), 0);
+}
+
+void MainWindow::updatePdfPageUi()
+{
+    const bool pdfActive = (m_stack->currentWidget() == m_pdfView);
+    const int pages = m_pdfDocument ? m_pdfDocument->pageCount() : 0;
+    const bool showBar = pdfActive && pages > 0;
+
+    if (m_pdfToolBar) {
+        m_pdfToolBar->setVisible(showBar);
+    }
+
+    if (!showBar) {
+        if (m_pdfPageLabel) {
+            m_pdfPageLabel->setText(tr("—"));
+        }
+        if (m_pdfActFirst) {
+            m_pdfActFirst->setEnabled(false);
+            m_pdfActPrev->setEnabled(false);
+            m_pdfActNext->setEnabled(false);
+            m_pdfActLast->setEnabled(false);
+        }
+        statusBar()->clearMessage();
+        return;
+    }
+
+    QPdfPageNavigator *const nav = m_pdfView->pageNavigator();
+    const int cur = nav->currentPage();
+    if (m_pdfPageLabel) {
+        m_pdfPageLabel->setText(tr("Page %1 of %2").arg(cur + 1).arg(pages));
+    }
+    m_pdfActFirst->setEnabled(cur > 0);
+    m_pdfActPrev->setEnabled(cur > 0);
+    m_pdfActNext->setEnabled(cur < pages - 1);
+    m_pdfActLast->setEnabled(cur < pages - 1);
+
+    if (pages > 1) {
+        statusBar()->showMessage(
+            tr("PDF: %1 pages — scroll for continuous view, or use toolbar / View → PDF pages "
+               "(Alt+PgUp / Alt+PgDown, Ctrl+Home / Ctrl+End).")
+                .arg(pages),
+            0);
+    } else {
+        statusBar()->showMessage(
+            tr("PDF: 1 page — use View → PDF pages or toolbar if you switch to single-page layout later."),
+            0);
+    }
+}
+
 void MainWindow::showPlaceholder(const QString &html)
 {
     m_placeholder->setText(html);
     m_stack->setCurrentIndex(kPlaceholderPage);
+    updatePdfPageUi();
 }
 
 void MainWindow::previewPath(const QString &absolutePath)
@@ -347,6 +503,7 @@ void MainWindow::previewPath(const QString &absolutePath)
 
         m_pdfView->setZoomMode(QPdfView::ZoomMode::FitToWidth);
         m_stack->setCurrentIndex(kPdfPage);
+        updatePdfPageUi();
         return;
     }
 
@@ -375,6 +532,7 @@ void MainWindow::previewPath(const QString &absolutePath)
 
         m_textView->setPlainText(text);
         m_stack->setCurrentIndex(kTextPage);
+        updatePdfPageUi();
         return;
     }
 

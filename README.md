@@ -13,6 +13,7 @@ This is **not** an editor.
 - **Menus**
   - **File → Open Folder…** sets the tree root.
   - **View → PDF Fit Width / Zoom In / Out** (shortcuts match the platform defaults where applicable).
+  - **View → PDF pages** (and the **PDF navigation** toolbar): first / previous / next / last page, a **page counter**, and shortcuts (**Ctrl+Home**, **Alt+PgUp**, **Alt+PgDown**, **Ctrl+End**). The status bar summarizes navigation when a PDF is open.
 
 ## Requirements
 
