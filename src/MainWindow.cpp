@@ -7,6 +7,7 @@
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QFileSystemModel>
+#include <QFileSystemWatcher>
 #include <QFont>
 #include <QLabel>
 #include <QKeySequence>
@@ -23,6 +24,7 @@
 #include <QStackedWidget>
 #include <QStandardPaths>
 #include <QStatusBar>
+#include <QTimer>
 #include <QToolBar>
 #include <QTreeView>
 
@@ -131,6 +133,13 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::setupUi()
 {
     setWindowTitle(tr("skrat — preview"));
+
+    m_fileWatcher = new QFileSystemWatcher(this);
+    connect(m_fileWatcher, &QFileSystemWatcher::fileChanged, this, &MainWindow::onWatchedFileChanged);
+    m_reloadDebounceTimer = new QTimer(this);
+    m_reloadDebounceTimer->setSingleShot(true);
+    m_reloadDebounceTimer->setInterval(300);
+    connect(m_reloadDebounceTimer, &QTimer::timeout, this, &MainWindow::onReloadDebounceTimeout);
 
     auto *fileMenu = menuBar()->addMenu(tr("&File"));
     auto *openFolder = new QAction(tr("&Open Folder…"), this);
@@ -446,14 +455,85 @@ void MainWindow::updatePdfPageUi()
 
 void MainWindow::showPlaceholder(const QString &html)
 {
+    setWatchedPreviewFile(QString());
     m_placeholder->setText(html);
     m_stack->setCurrentIndex(kPlaceholderPage);
     updatePdfPageUi();
 }
 
+void MainWindow::pauseWatching()
+{
+    if (!m_fileWatcher) {
+        return;
+    }
+    const QStringList watched = m_fileWatcher->files();
+    if (!watched.isEmpty()) {
+        m_fileWatcher->removePaths(watched);
+    }
+}
+
+void MainWindow::setWatchedPreviewFile(const QString &absoluteFilePath)
+{
+    pauseWatching();
+    m_previewFilePath = absoluteFilePath;
+    if (absoluteFilePath.isEmpty()) {
+        return;
+    }
+    const QFileInfo fi(absoluteFilePath);
+    if (!fi.exists() || !fi.isFile()) {
+        return;
+    }
+    if (!m_fileWatcher->addPath(absoluteFilePath)) {
+        qWarning() << "QFileSystemWatcher::addPath failed for" << absoluteFilePath;
+    }
+}
+
+void MainWindow::showPreviewFileUnavailable(const QString &lostPath)
+{
+    setWatchedPreviewFile(QString());
+    if (m_pdfDocument) {
+        m_pdfDocument->close();
+    }
+    m_placeholder->setText(
+        tr("<p><b>File no longer available</b></p><p>%1</p>"
+           "<p>It was removed or renamed on disk while the preview was open.</p>")
+            .arg(lostPath.toHtmlEscaped()));
+    m_stack->setCurrentIndex(kPlaceholderPage);
+    updatePdfPageUi();
+}
+
+void MainWindow::onWatchedFileChanged(const QString &path)
+{
+    Q_UNUSED(path);
+    if (m_previewFilePath.isEmpty()) {
+        return;
+    }
+    m_reloadDebounceTimer->start();
+}
+
+void MainWindow::onReloadDebounceTimeout()
+{
+    const QString path = m_previewFilePath;
+    if (path.isEmpty()) {
+        return;
+    }
+    if (!QFileInfo::exists(path)) {
+        showPreviewFileUnavailable(path);
+        return;
+    }
+    previewPath(path);
+}
+
 void MainWindow::previewPath(const QString &absolutePath)
 {
+    pauseWatching();
+
     const QFileInfo fi(absolutePath);
+
+    if (!fi.exists()) {
+        showPlaceholder(tr("<p><b>File not found</b></p><p>%1</p>").arg(absolutePath.toHtmlEscaped()));
+        return;
+    }
 
     if (fi.isDir()) {
         showPlaceholder(tr("<p><b>Folder</b></p><p>%1</p><p>Select a file to preview.</p>")
@@ -503,6 +583,7 @@ void MainWindow::previewPath(const QString &absolutePath)
 
         m_pdfView->setZoomMode(QPdfView::ZoomMode::FitToWidth);
         m_stack->setCurrentIndex(kPdfPage);
+        setWatchedPreviewFile(fi.absoluteFilePath());
         updatePdfPageUi();
         return;
     }
@@ -532,6 +613,7 @@ void MainWindow::previewPath(const QString &absolutePath)
 
         m_textView->setPlainText(text);
         m_stack->setCurrentIndex(kTextPage);
+        setWatchedPreviewFile(fi.absoluteFilePath());
         updatePdfPageUi();
         return;
     }

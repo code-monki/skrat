@@ -5,12 +5,14 @@
 
 class QAction;
 class QFileSystemModel;
+class QFileSystemWatcher;
 class QLabel;
 class QPdfDocument;
 class QPdfView;
 class QPlainTextEdit;
 class QSplitter;
 class QStackedWidget;
+class QTimer;
 class QToolBar;
 class QTreeView;
 
@@ -35,12 +37,17 @@ private slots:
     void pdfGoNextPage();
     void pdfGoLastPage();
     void updatePdfPageUi();
+    void onWatchedFileChanged(const QString &path);
+    void onReloadDebounceTimeout();
 
 private:
     void setupUi();
     void previewPath(const QString &absolutePath);
     void showPlaceholder(const QString &html);
     static bool isProbablyTextFile(const QFileInfo &fi);
+    void pauseWatching();
+    void setWatchedPreviewFile(const QString &absoluteFilePath);
+    void showPreviewFileUnavailable(const QString &lostPath);
 
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
@@ -58,4 +65,8 @@ private:
     QAction *m_pdfActPrev = nullptr;
     QAction *m_pdfActNext = nullptr;
     QAction *m_pdfActLast = nullptr;
+
+    QString m_previewFilePath;
+    QFileSystemWatcher *m_fileWatcher = nullptr;
+    QTimer *m_reloadDebounceTimer = nullptr;
 };
