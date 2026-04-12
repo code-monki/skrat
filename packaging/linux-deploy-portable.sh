@@ -24,9 +24,11 @@ fi
 WORKDIR="$(mktemp -d)"
 GEN_ICON=""
 cleanup() {
-  rm -rf "${WORKDIR}"
+  # Never fail the script from cleanup (set -e + EXIT trap would otherwise
+  # turn a harmless rm edge case into CI exit 1 after a successful bundle).
+  rm -rf "${WORKDIR}" || true
   if [[ -n "${GEN_ICON}" && -f "${GEN_ICON}" ]]; then
-    rm -f "${GEN_ICON}"
+    rm -f "${GEN_ICON}" || true
   fi
 }
 trap cleanup EXIT
