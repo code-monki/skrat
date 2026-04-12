@@ -193,7 +193,7 @@ open build/skrat.app --args "$(pwd)"
 
 ### Apple Developer + CI (keep credentials out of Git)
 
-Do **not** commit `.p12`, `.p8`, or passwords. Store them only as **GitHub Actions secrets** (Repository **Settings → Secrets and variables → Actions**). Optionally put those secrets on a protected **Environment** (e.g. only **`refs/tags/v*`** or manual approval) so ordinary branch runs never see them. See **`packaging/macos-ci-signing.md`** for suggested secret names and a high-level codesign / `notarytool` / stapler outline.
+Do **not** commit `.p12`, `.p8`, or passwords. Store them only as **GitHub Actions secrets** (Repository **Settings → Secrets and variables → Actions**). Optionally put those secrets on a protected **Environment** (e.g. only **`refs/tags/v*`** or manual approval) so ordinary branch runs never see them. When **all** required secrets are set, **`.github/workflows/ci.yml`** signs and notarizes **`skrat.app`** on the **macOS** job (see **`packaging/macos-ci-signing.md`** for exact secret names and troubleshooting).
 
 ### Command-line arguments
 

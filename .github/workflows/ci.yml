@@ -145,6 +145,45 @@ jobs:
           QT_ROOT="${QT_ROOT_DIR:-$(dirname "$(dirname "$(dirname "${Qt6_DIR}")")")}"
           MACDEPLOYQT="${QT_ROOT}/bin/macdeployqt"
           "${MACDEPLOYQT}" build/skrat.app -verbose=1 -always-overwrite
+      - name: Sign and notarize (Developer ID)
+        if: ${{ secrets.MACOS_CERTIFICATE != '' && secrets.MACOS_CERTIFICATE_PWD != '' && secrets.MACOS_CODESIGN_IDENTITY != '' && secrets.AC_API_KEY_ID != '' && secrets.AC_API_ISSUER_ID != '' && secrets.AC_API_KEY_CONTENT != '' }}
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          MACOS_CODESIGN_IDENTITY: ${{ secrets.MACOS_CODESIGN_IDENTITY }}
+          AC_API_KEY_ID: ${{ secrets.AC_API_KEY_ID }}
+          AC_API_ISSUER_ID: ${{ secrets.AC_API_ISSUER_ID }}
+          AC_API_KEY_CONTENT: ${{ secrets.AC_API_KEY_CONTENT }}
+        run: |
+          set -euo pipefail
+          APP="${GITHUB_WORKSPACE}/build/skrat.app"
+          ENTITLEMENTS="${GITHUB_WORKSPACE}/packaging/macos/Notarization.entitlements"
+          KEYCHAIN_PATH="${RUNNER_TEMP}/app-signing.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -base64 32)"
+          security create-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_PATH}"
+          security set-keychain-settings -lut 21600 "${KEYCHAIN_PATH}"
+          security list-keychains -d user -s "${KEYCHAIN_PATH}"
+          security default-keychain -s "${KEYCHAIN_PATH}"
+          security unlock-keychain -p "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_PATH}"
+          echo "${MACOS_CERTIFICATE}" | base64 -d > "${RUNNER_TEMP}/signing.p12"
+          security import "${RUNNER_TEMP}/signing.p12" -k "${KEYCHAIN_PATH}" -P "${MACOS_CERTIFICATE_PWD}" \
+            -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${KEYCHAIN_PASSWORD}" "${KEYCHAIN_PATH}"
+          rm -f "${RUNNER_TEMP}/signing.p12"
+          /usr/bin/codesign --force --deep --timestamp --options runtime \
+            --entitlements "${ENTITLEMENTS}" \
+            --sign "${MACOS_CODESIGN_IDENTITY}" "${APP}"
+          ditto -c -k --keepParent "${APP}" "${RUNNER_TEMP}/skrat-for-notary.zip"
+          printf '%s\n' "${AC_API_KEY_CONTENT}" > "${RUNNER_TEMP}/AuthKey.p8"
+          chmod 600 "${RUNNER_TEMP}/AuthKey.p8"
+          xcrun notarytool submit "${RUNNER_TEMP}/skrat-for-notary.zip" \
+            --key "${RUNNER_TEMP}/AuthKey.p8" \
+            --key-id "${AC_API_KEY_ID}" \
+            --issuer "${AC_API_ISSUER_ID}" \
+            --wait
+          rm -f "${RUNNER_TEMP}/AuthKey.p8" "${RUNNER_TEMP}/skrat-for-notary.zip"
+          xcrun stapler staple "${APP}"
+          /usr/bin/codesign --verify --deep --verbose=2 "${APP}"
       - name: Pack macOS app
         run: tar czf skrat-macos-universal-portable.tar.gz -C build skrat.app
       - name: Upload artifact
