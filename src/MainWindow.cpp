@@ -8,9 +8,8 @@
 #include <QFileInfo>
 #include <QFileSystemModel>
 #include <QFont>
-#include <QFrame>
-#include <QGuiApplication>
 #include <QLabel>
+#include <QKeySequence>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QModelIndex>
@@ -135,7 +134,7 @@ void MainWindow::setupUi()
     connect(openFolder, &QAction::triggered, this, &MainWindow::openFolderDialog);
     fileMenu->addAction(openFolder);
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("&Quit"), this, &QWidget::close, QKeySequence::Quit);
+    fileMenu->addAction(tr("&Quit"), QKeySequence::Quit, this, &QWidget::close);
 
     auto *viewMenu = menuBar()->addMenu(tr("&View"));
     auto *actFitWidth = new QAction(tr("PDF Fit &Width"), this);
@@ -267,7 +266,7 @@ void MainWindow::zoomInPdf()
     if (m_stack->currentWidget() != m_pdfView) {
         return;
     }
-    m_pdfView->setZoomMode(QPdfView::ZoomMode::CustomZoom);
+    m_pdfView->setZoomMode(QPdfView::ZoomMode::Custom);
     m_pdfView->setZoomFactor(m_pdfView->zoomFactor() * 1.15);
 }
 
@@ -276,7 +275,7 @@ void MainWindow::zoomOutPdf()
     if (m_stack->currentWidget() != m_pdfView) {
         return;
     }
-    m_pdfView->setZoomMode(QPdfView::ZoomMode::CustomZoom);
+    m_pdfView->setZoomMode(QPdfView::ZoomMode::Custom);
     m_pdfView->setZoomFactor(qMax(0.1, m_pdfView->zoomFactor() / 1.15));
 }
 
@@ -312,28 +311,35 @@ void MainWindow::previewPath(const QString &absolutePath)
     const QString suffix = fi.suffix().toLower();
     if (suffix == QStringLiteral("pdf")) {
         m_pdfDocument->close();
-        if (!m_pdfDocument->load(fi.absoluteFilePath())) {
-            QString statusStr;
-            switch (m_pdfDocument->status()) {
-            case QPdfDocument::Status::Null:
-                statusStr = QStringLiteral("Null");
+        const QPdfDocument::Error loadError = m_pdfDocument->load(fi.absoluteFilePath());
+        if (loadError != QPdfDocument::Error::None) {
+            QString errStr;
+            switch (loadError) {
+            case QPdfDocument::Error::Unknown:
+                errStr = QStringLiteral("Unknown");
                 break;
-            case QPdfDocument::Status::Loading:
-                statusStr = QStringLiteral("Loading");
+            case QPdfDocument::Error::DataNotYetAvailable:
+                errStr = QStringLiteral("DataNotYetAvailable");
                 break;
-            case QPdfDocument::Status::Ready:
-                statusStr = QStringLiteral("Ready");
+            case QPdfDocument::Error::FileNotFound:
+                errStr = QStringLiteral("FileNotFound");
                 break;
-            case QPdfDocument::Status::Error:
-                statusStr = QStringLiteral("Error");
+            case QPdfDocument::Error::InvalidFileFormat:
+                errStr = QStringLiteral("InvalidFileFormat");
+                break;
+            case QPdfDocument::Error::IncorrectPassword:
+                errStr = QStringLiteral("IncorrectPassword");
+                break;
+            case QPdfDocument::Error::UnsupportedSecurityScheme:
+                errStr = QStringLiteral("UnsupportedSecurityScheme");
                 break;
             default:
-                statusStr = QStringLiteral("Unknown");
+                errStr = QStringLiteral("Other");
                 break;
             }
-            showPlaceholder(tr("<p><b>Failed to load PDF</b></p><p>%1</p><p>Status: %2</p>")
-                                .arg(fi.absoluteFilePath().toHtmlEscaped(), statusStr.toHtmlEscaped()));
-            qWarning() << "QPdfDocument::load failed:" << fi.absoluteFilePath() << "status" << statusStr;
+            showPlaceholder(tr("<p><b>Failed to load PDF</b></p><p>%1</p><p>Error: %2</p>")
+                                .arg(fi.absoluteFilePath().toHtmlEscaped(), errStr.toHtmlEscaped()));
+            qWarning() << "QPdfDocument::load failed:" << fi.absoluteFilePath() << "error" << errStr;
             return;
         }
 
