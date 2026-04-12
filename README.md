@@ -59,15 +59,15 @@ make clean      # remove the build directory
 
 Each artifact zip often contains **two files** where applicable:
 
-- **`*-portable.tar.gz` / `*-portable.zip`**: Qt runtime bundled (**linuxdeploy** + Qt plugin on Ubuntu, **macdeployqt** on macOS, **windeployqt** on Windows). Use these on machines **without** a Qt SDK.
+- **`*-portable.tar.gz` / `*-portable.zip`**: Qt runtime bundled (**linuxdeploy** + Qt plugin on **Ubuntu** and **Fedora** CI, **macdeployqt** on macOS, **windeployqt** on Windows). Use these on machines **without** a Qt SDK.
 - **`skrat` / `skrat.exe`**: raw build output (still needs Qt libraries on the system, like a local compile).
 
 | Artifact | Portable bundle | Raw binary |
 |----------|-----------------|------------|
 | `skrat-ubuntu-x86_64` | `skrat-ubuntu-x86_64-portable.tar.gz` — extract, run `AppDir/AppRun` | `skrat` |
 | `skrat-ubuntu-aarch64` | same pattern | `skrat` |
-| `skrat-fedora-x86_64` | — (Fedora job ships raw binary only) | `skrat` |
-| `skrat-fedora-aarch64` | — | `skrat` |
+| `skrat-fedora-x86_64` | `skrat-fedora-x86_64-portable.tar.gz` — extract, run `AppDir/AppRun` | `skrat` |
+| `skrat-fedora-aarch64` | same pattern | `skrat` |
 | `skrat-macos-universal` | `skrat-macos-universal-portable.tar.gz` — extract `skrat.app` | — |
 | `skrat-windows-x86_64` | `skrat-windows-x86_64-portable.zip` — extract, run `skrat.exe` | `skrat.exe` |
 
