@@ -43,8 +43,6 @@ jobs:
             libgl1-mesa-dev \
             qt6-base-dev \
             qt6-pdf-dev \
-            imagemagick \
-            fonts-dejavu-core \
             curl \
             file \
             patchelf
@@ -95,8 +93,6 @@ jobs:
             ninja-build \
             qt6-qtbase-devel \
             qt6-qtpdf-devel \
-            ImageMagick \
-            dejavu-sans-fonts \
             curl \
             file \
             patchelf

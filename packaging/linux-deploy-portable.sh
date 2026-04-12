@@ -10,6 +10,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 DESKTOP="${SCRIPT_DIR}/skrat.desktop"
 OUT_TAR="${REPO_ROOT}/skrat-linux-portable-${LINUXDEPLOY_ARCH}.tar.gz"
+ICON_THEME="${SCRIPT_DIR}/icons/hicolor"
 
 if [[ ! -f "${BINARY}" ]]; then
   echo "Binary not found: ${BINARY}" >&2
@@ -20,33 +21,47 @@ if [[ ! -f "${DESKTOP}" ]]; then
   exit 1
 fi
 
-command -v convert >/dev/null 2>&1 || {
-  echo "ImageMagick 'convert' is required to build a desktop icon." >&2
-  exit 1
+WORKDIR="$(mktemp -d)"
+GEN_ICON=""
+cleanup() {
+  rm -rf "${WORKDIR}"
+  [[ -n "${GEN_ICON}" && -f "${GEN_ICON}" ]] && rm -f "${GEN_ICON}"
 }
+trap cleanup EXIT
 
-ICON="${SCRIPT_DIR}/skrat-icon-generated.png"
-# -annotate needs a real font; minimal CI images often have no ImageMagick default (font '(null)').
-ICON_FONT=""
-for candidate in \
-  /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf \
-  /usr/share/fonts/dejavu/DejaVuSans-Bold.ttf \
-  /usr/share/fonts/TTF/DejaVuSans-Bold.ttf; do
-  if [[ -f "${candidate}" ]]; then
-    ICON_FONT="${candidate}"
-    break
+# linuxdeploy matches --icon-file basename to the desktop Icon= key (Icon=skrat -> skrat.png).
+ICON_ARGS=()
+for s in 16 22 24 32 48 64 128 256 512; do
+  bundled="${ICON_THEME}/${s}x${s}/apps/skrat.png"
+  if [[ -f "${bundled}" ]]; then
+    ICON_ARGS+=(--icon-file "${bundled}")
   fi
 done
-if [[ -n "${ICON_FONT}" ]]; then
-  convert -size 256x256 'xc:#3d6a9e' -font "${ICON_FONT}" -pointsize 72 -fill white -gravity center \
-    -annotate +0+0 'S' "${ICON}"
-else
-  convert -size 256x256 'xc:#3d6a9e' "${ICON}"
-fi
 
-WORKDIR="$(mktemp -d)"
-cleanup() { rm -rf "${WORKDIR}" "${ICON}"; }
-trap cleanup EXIT
+if [[ ${#ICON_ARGS[@]} -eq 0 ]]; then
+  command -v convert >/dev/null 2>&1 || {
+    echo "ImageMagick 'convert' is required when packaging/icons/hicolor is missing." >&2
+    exit 1
+  }
+  GEN_ICON="${WORKDIR}/skrat.png"
+  ICON_FONT=""
+  for candidate in \
+    /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf \
+    /usr/share/fonts/dejavu/DejaVuSans-Bold.ttf \
+    /usr/share/fonts/TTF/DejaVuSans-Bold.ttf; do
+    if [[ -f "${candidate}" ]]; then
+      ICON_FONT="${candidate}"
+      break
+    fi
+  done
+  if [[ -n "${ICON_FONT}" ]]; then
+    convert -size 256x256 'xc:#3d6a9e' -font "${ICON_FONT}" -pointsize 72 -fill white -gravity center \
+      -annotate +0+0 'S' "${GEN_ICON}"
+  else
+    convert -size 256x256 'xc:#3d6a9e' "${GEN_ICON}"
+  fi
+  ICON_ARGS=(--icon-file "${GEN_ICON}")
+fi
 
 cd "${WORKDIR}"
 export APPIMAGE_EXTRACT_AND_RUN=1
@@ -63,7 +78,7 @@ chmod +x linuxdeploy.AppImage linuxdeploy-plugin-qt.AppImage
 rm -rf AppDir
 
 ./linuxdeploy.AppImage --appdir AppDir --executable "${BINARY}" --desktop-file "${DESKTOP}" \
-  --icon-file "${ICON}"
+  "${ICON_ARGS[@]}"
 ./linuxdeploy-plugin-qt.AppImage --appdir AppDir
 
 tar -czf "${OUT_TAR}" -C "${WORKDIR}" AppDir
