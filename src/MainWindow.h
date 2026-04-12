@@ -71,4 +71,7 @@ private:
     QString m_pendingReloadPath;
     QFileSystemWatcher *m_fileWatcher = nullptr;
     QTimer *m_reloadDebounceTimer = nullptr;
+
+    /** Set for the duration of destruction so slots ignore late PDF/signal callbacks. */
+    bool m_shuttingDown = false;
 };

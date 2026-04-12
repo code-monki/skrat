@@ -132,6 +132,8 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    m_shuttingDown = true;
+
     // QPdfDocument emits pageCountChanged while clearing in its destructor. If that runs
     // after QAction children have already been destroyed, updatePdfPageUi() crashes.
     if (m_pdfDocument) {
@@ -422,6 +424,10 @@ void MainWindow::pdfGoLastPage()
 
 void MainWindow::updatePdfPageUi()
 {
+    if (m_shuttingDown) {
+        return;
+    }
+
     const bool pdfActive = (m_stack->currentWidget() == m_pdfView);
     const int pages = m_pdfDocument ? m_pdfDocument->pageCount() : 0;
     const bool showBar = pdfActive && pages > 0;
