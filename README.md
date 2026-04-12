@@ -23,6 +23,18 @@ This is **not** an editor.
   - Qt **6.4+** is required by `CMakeLists.txt` (PDF APIs used here); some distributions package PDF widgets separately—if CMake cannot find `Qt6::PdfWidgets`, install your OS “Qt6 PDF” development packages or point `CMAKE_PREFIX_PATH` at a full Qt kit from the Qt Online Installer.
 - A **C++17** toolchain
 
+### Optional tooling (Homebrew, Chocolatey, npm)
+
+You can install **CMake**, **Ninja**, **Qt 6**, and compilers through a package manager instead of (or in addition to) distro installers or the Qt Online Installer:
+
+| Manager | Typical use | Notes |
+|--------|-------------|--------|
+| **[Homebrew](https://brew.sh/)** (macOS / Linux) | `brew install cmake ninja qt` (or `qt@6`), then set **`CMAKE_PREFIX_PATH`** to **`$(brew --prefix qt)`** (see [Platform notes](#platform-notes)) | A **`Brewfile`** can live in the repo for **`brew bundle`**. **`Brewfile.lock.json`** is **gitignored** here so it is not committed by default; remove that line from **`.gitignore`** if you want a pinned Homebrew snapshot in Git. |
+| **[Chocolatey](https://chocolatey.org/)** (Windows) | e.g. **`choco install cmake ninja visualstudio2022buildtools`** — match whatever matches your MSVC / Qt layout | Local **`choco pack`** output (**`*.nupkg`**) at the repo root is **gitignored**. |
+| **[npm](https://www.npmjs.com/)** | Only if you add **Node-based scripts** (release automation, lint, etc.) beside the Qt app | **`node_modules/`** and common npm/yarn/pnpm debug logs are **gitignored**. **`package.json` / `package-lock.json`** are not ignored so you can lock script dependencies when you add them. |
+
+The application itself stays **C++/Qt**; these entries are for **developer environments** and optional tooling, not runtime requirements for end users of the built app.
+
 ## Build (Makefile orchestration)
 
 The repository root **`Makefile`** is a thin wrapper around CMake.

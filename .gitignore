@@ -53,3 +53,18 @@ $RECYCLE.BIN/
 
 # Local Makefile overrides (paths to Qt / CMake on this machine)
 /config.local.mk
+
+# Homebrew Bundle — lockfile is machine-specific unless your team commits it on purpose
+/Brewfile.lock.json
+
+# Chocolatey — local `choco pack` output at repo root
+/*.nupkg
+
+# Node / npm (optional scripts or tooling alongside Qt/C++)
+node_modules/
+.npm/
+*.tgz
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
