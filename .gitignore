@@ -1,5 +1,7 @@
-# CMake
+# CMake / out-of-tree build trees
 /build/
+/out/
+/cmake-build-*/
 CMakeCache.txt
 CMakeFiles/
 cmake_install.cmake
@@ -8,8 +10,17 @@ compile_commands.json
 CTestTestfile.cmake
 _deps/
 
+# In-tree CMake configure leftovers (if someone configures in repo root)
+CMakeOutput.log
+CMakeError.log
+
+# Local build and tooling logs (repo root and typical names)
+/*.log
+build.log
+
 # Qt / IDE
 *.user
+CMakeLists.txt.user
 *.autosave
 *.qmlc
 *.jsc
@@ -18,8 +29,27 @@ ui_*.h
 qrc_*.cpp
 *~
 
+# Editors
+.idea/
+.vs/
+*.swp
+*.swo
+*.swn
+
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux / desktop environments
+.directory
 
 # Local Makefile overrides (paths to Qt / CMake on this machine)
 /config.local.mk
