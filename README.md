@@ -171,6 +171,26 @@ After a successful build, the binary is typically:
 
 The **`make run`** target opens **`build/skrat.app`** on macOS, else tries `build/skrat`, then `build/Release/skrat`, then `build/Debug/skrat`.
 
+### macOS Gatekeeper (unsigned / CI builds)
+
+CI and local builds are **not** signed with a **Developer ID** or **notarized**. Gatekeeper may show **“skrat.app” Not Opened** and *Apple could not verify … is free of malware*. That is normal for this distribution model until you add your own signing pipeline.
+
+**First launch:** In **Finder**, **Control‑click (right‑click)** `skrat.app` → **Open** → confirm **Open** once. Alternatively open **System Settings → Privacy & Security**, attempt launch once, then use **Open Anyway** when macOS offers it.
+
+**Downloads from GitHub** carry **quarantine** metadata. If you trust the artifact, you can clear it (advanced / at your own risk):
+
+```bash
+xattr -dr com.apple.quarantine /path/to/skrat.app
+```
+
+**Opening from Terminal:** use the **`.app` path**, not **`open -a skrat.app`** (the **`-a`** flag expects a registered **application name**, not a bundle filename). Examples:
+
+```bash
+open build/skrat.app
+open build/skrat.app --args .
+open build/skrat.app --args "$(pwd)"
+```
+
 ### Command-line arguments
 
 You may pass **one** optional path:
