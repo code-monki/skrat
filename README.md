@@ -43,18 +43,23 @@ make clean      # remove the build directory
 | Workflow runs (pick a green run) | [github.com/code-monki/skrat/actions/workflows/ci.yml](https://github.com/code-monki/skrat/actions/workflows/ci.yml) |
 | All Actions activity | [github.com/code-monki/skrat/actions](https://github.com/code-monki/skrat/actions) |
 
-**Pre-built executables** from routine CI are attached to each successful run as **Artifacts** (GitHub wraps each file in a `.zip`). Open a run, scroll to **Artifacts**, and download the name that matches your platform. **Tagged `v*` builds** additionally publish **`.tar.gz` / `.zip`** assets on the **Releases** page (same binaries, packaged for that tag).
+**Pre-built bundles** from CI are attached as **Artifacts** (GitHub may wrap each file in a `.zip`). Open a run, scroll to **Artifacts**, and download the name that matches your platform. **Tagged `v*` builds** also publish the same portable archives on **Releases**.
 
-| Artifact | Description |
-|----------|-------------|
-| `skrat-ubuntu-x86_64` | Ubuntu 24.04-style build, x86_64 |
-| `skrat-ubuntu-aarch64` | Ubuntu 24.04-style build, AArch64 |
-| `skrat-fedora-x86_64` | Fedora (container) build, x86_64 |
-| `skrat-fedora-aarch64` | Fedora (container) build, AArch64 |
-| `skrat-macos-universal` | macOS universal binary (`arm64` + `x86_64`) |
-| `skrat-windows-x86_64` | Windows x86_64 (`skrat.exe`, MSVC 2022) |
+Each artifact zip often contains **two files** where applicable:
 
-These are **CI convenience builds**, not installers: they expect **Qt 6** (and related) libraries to be available on the machine the same way a normal local compile would—use your distro packages, an official Qt kit, or Qt’s deployment tools (**`macdeployqt`**, **`windeployqt`**, etc.) if you need something self-contained. After unzipping, you may need **`chmod +x skrat`** on Unix.
+- **`*-portable.tar.gz` / `*-portable.zip`**: Qt runtime bundled (**linuxdeploy** + Qt plugin on Ubuntu, **macdeployqt** on macOS, **windeployqt** on Windows). Use these on machines **without** a Qt SDK.
+- **`skrat` / `skrat.exe`**: raw build output (still needs Qt libraries on the system, like a local compile).
+
+| Artifact | Portable bundle | Raw binary |
+|----------|-----------------|------------|
+| `skrat-ubuntu-x86_64` | `skrat-ubuntu-x86_64-portable.tar.gz` — extract, run `AppDir/AppRun` | `skrat` |
+| `skrat-ubuntu-aarch64` | same pattern | `skrat` |
+| `skrat-fedora-x86_64` | — (Fedora job ships raw binary only) | `skrat` |
+| `skrat-fedora-aarch64` | — | `skrat` |
+| `skrat-macos-universal` | `skrat-macos-universal-portable.tar.gz` — extract `skrat.app` | — |
+| `skrat-windows-x86_64` | `skrat-windows-x86_64-portable.zip` — extract, run `skrat.exe` | `skrat.exe` |
+
+**Linux portable:** run **`./AppDir/AppRun`** from the extracted tree. **macOS:** CI does **not** notarize; Gatekeeper may prompt the first open. **Windows:** **SmartScreen** may warn for unsigned builds. For raw Unix binaries after unzip, **`chmod +x skrat`** may be needed.
 
 ### Troubleshooting: `Could not find a package configuration file provided by "Qt6"`
 
@@ -131,7 +136,7 @@ You can also invoke CMake directly:
 
 ### Platform notes
 
-- **macOS (Homebrew Qt):** `brew install qt cmake` then use `-DCMAKE_PREFIX_PATH="$(brew --prefix qt)"` if `find_package(Qt6)` fails.
+- **macOS (Homebrew Qt):** `brew install qt cmake` then use `-DCMAKE_PREFIX_PATH="$(brew --prefix qt)"` if `find_package(Qt6)` fails. Release builds use a **`skrat.app`** bundle (see **Run** below).
 - **macOS (Qt Online Installer + Homebrew CMake):** use `-DCMAKE_PREFIX_PATH` pointing at `~/Qt/<ver>/<kit>` as above; use `config.local.mk` to avoid retyping.
 - **Linux:** install Qt6 base **and** Qt6 PDF development packages for your distribution (names vary: `qt6-pdf-dev`, `qt6-pdf-widgets`, etc.).
 - **Windows:** install Qt 6 with the **MSVC** or **MinGW** kit including **Qt PDF**; configure CMake from Qt Creator or a “x64 Native Tools” prompt with `CMAKE_PREFIX_PATH` pointing at your Qt `lib/cmake` parent (for example `...\6.x.x\msvc2019_64`).
@@ -140,10 +145,11 @@ You can also invoke CMake directly:
 
 After a successful build, the binary is typically:
 
-- **macOS / Linux:** `build/skrat`
+- **macOS:** `build/skrat.app` (bundle) — run **`open build/skrat.app`** or **`build/skrat.app/Contents/MacOS/skrat`**
+- **Linux:** `build/skrat`
 - **Windows (single-configuration generators):** `build/Release/skrat.exe` or `build/Debug/skrat.exe`
 
-The `make run` target tries `build/skrat`, then `build/Release/skrat`, then `build/Debug/skrat`.
+The **`make run`** target opens **`build/skrat.app`** on macOS, else tries `build/skrat`, then `build/Release/skrat`, then `build/Debug/skrat`.
 
 ### Command-line arguments
 

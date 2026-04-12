@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=skrat
+GenericName=File previewer
+Comment=Read-only preview of PDFs and plain text
+Exec=skrat %f
+Icon=skrat
+Categories=Utility;Viewer;
+MimeType=application/pdf;text/plain;
+Terminal=false

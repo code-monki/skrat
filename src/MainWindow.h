@@ -22,6 +22,7 @@ class MainWindow final : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override;
 
     void setRootFolder(const QString &absolutePath);
     void selectPath(const QString &absoluteFilePath);

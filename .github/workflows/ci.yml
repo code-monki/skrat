@@ -42,16 +42,32 @@ jobs:
             ninja-build \
             libgl1-mesa-dev \
             qt6-base-dev \
-            qt6-pdf-dev
+            qt6-pdf-dev \
+            imagemagick \
+            curl \
+            file \
+            patchelf
       - name: Configure
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: cmake --build build --parallel
+      - name: Build Linux portable bundle (Qt via linuxdeploy)
+        run: |
+          case "${{ matrix.arch }}" in
+            x86_64) LDARCH=x86_64 ;;
+            aarch64) LDARCH=aarch64 ;;
+            *) echo "unknown arch"; exit 1 ;;
+          esac
+          export PATH="/usr/lib/qt6/bin:/usr/bin:${PATH}"
+          bash packaging/linux-deploy-portable.sh "${LDARCH}" "$(pwd)/build/skrat"
+          mv -f "skrat-linux-portable-${LDARCH}.tar.gz" "skrat-${{ matrix.artifact }}-portable.tar.gz"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: skrat-${{ matrix.artifact }}
-          path: build/skrat
+          path: |
+            skrat-${{ matrix.artifact }}-portable.tar.gz
+            build/skrat
           if-no-files-found: error
 
   # Fedora in Docker: amd64 image on x64 runner, aarch64 image on ARM runner.
@@ -109,12 +125,19 @@ jobs:
       - name: Build
         run: cmake --build build --parallel
       - name: Verify Mach-O architectures
-        run: lipo -info build/skrat
+        run: lipo -info build/skrat.app/Contents/MacOS/skrat
+      - name: Deploy Qt (macOS)
+        run: |
+          QT_ROOT="${QT_ROOT_DIR:-$(dirname "$(dirname "$(dirname "${Qt6_DIR}")")")}"
+          MACDEPLOYQT="${QT_ROOT}/bin/macdeployqt"
+          "${MACDEPLOYQT}" build/skrat.app -verbose=1 -always-overwrite
+      - name: Pack macOS app
+        run: tar czf skrat-macos-universal-portable.tar.gz -C build skrat.app
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: skrat-macos-universal
-          path: build/skrat
+          path: skrat-macos-universal-portable.tar.gz
           if-no-files-found: error
 
   windows:
@@ -136,11 +159,19 @@ jobs:
         run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64
       - name: Build
         run: cmake --build build --config Release --parallel
+      - name: Deploy Qt (Windows)
+        run: |
+          WINQT="$(cygpath -u "${QT_ROOT_DIR}")/bin/windeployqt.exe"
+          "${WINQT}" build/Release/skrat.exe --release --compiler-runtime
+      - name: Pack Windows portable
+        run: python3 -c "import shutil; shutil.make_archive('skrat-windows-x86_64-portable', 'zip', root_dir='build/Release')"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: skrat-windows-x86_64
-          path: build/Release/skrat.exe
+          path: |
+            skrat-windows-x86_64-portable.zip
+            build/Release/skrat.exe
           if-no-files-found: error
 
   publish-release:
@@ -166,8 +197,13 @@ jobs:
           for d in release-assets/skrat-*; do
             [ -d "$d" ] || continue
             name=$(basename "$d")
+            portable=$(find "$d" -type f \( -name '*-portable.tar.gz' -o -name '*-portable.zip' \) -print -quit)
+            if [ -n "${portable}" ]; then
+              cp "${portable}" "upload/$(basename "${portable}")"
+              continue
+            fi
             exe=$(find "$d" -type f -name 'skrat.exe' -print -quit)
-            bin=$(find "$d" -type f -name 'skrat' -print -quit)
+            bin=$(find "$d" -maxdepth 1 -type f -name 'skrat' -print -quit)
             if [ -n "${exe}" ]; then
               zip -j "upload/${name}.zip" "${exe}"
             elif [ -n "${bin}" ]; then

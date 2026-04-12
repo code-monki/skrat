@@ -130,6 +130,20 @@ MainWindow::MainWindow(QWidget *parent)
     }
 }
 
+MainWindow::~MainWindow()
+{
+    // QPdfDocument emits pageCountChanged while clearing in its destructor. If that runs
+    // after QAction children have already been destroyed, updatePdfPageUi() crashes.
+    if (m_pdfDocument) {
+        m_pdfDocument->blockSignals(true);
+        QObject::disconnect(m_pdfDocument, nullptr, this, nullptr);
+    }
+    if (m_pdfView) {
+        QObject::disconnect(m_pdfView->pageNavigator(), nullptr, this, nullptr);
+        m_pdfView->setDocument(nullptr);
+    }
+}
+
 void MainWindow::setupUi()
 {
     setWindowTitle(tr("skrat — preview"));

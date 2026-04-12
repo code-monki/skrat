@@ -19,7 +19,7 @@ This folder documents how **versioned binaries** are published. The repository d
    ```
 3. The **CI** workflow runs for that tag, builds all platforms, then creates or updates a **GitHub Release** for that tag and uploads the packaged assets (`skrat-*.tar.gz` / `skrat-*.zip`).
 
-Release assets are the same **Qt-linked** executables described in the root **README** (not redistributable installers unless you bundle Qt yourself).
+Release assets include **portable** archives (names ending in **`-portable`**) where CI runs **`windeployqt`**, **`macdeployqt`**, or **linuxdeploy** so end users do **not** need Qt installed. Raw **`skrat` / `skrat.exe`** files may also be listed for debugging; those still expect Qt on the system. See the root **README** CI section for how to run each bundle.
 
 ## Forks
 

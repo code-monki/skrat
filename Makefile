@@ -61,7 +61,9 @@ clean distclean:
 	rm -rf "$(BUILD_DIR)"
 
 run: build
-	@if [ -x "$(BUILD_DIR)/skrat" ]; then \
+	@if [ -d "$(BUILD_DIR)/skrat.app" ]; then \
+		open "$(BUILD_DIR)/skrat.app" --args "$(ARGS)"; \
+	elif [ -x "$(BUILD_DIR)/skrat" ]; then \
 		"$(BUILD_DIR)/skrat" "$(ARGS)"; \
 	elif [ -x "$(BUILD_DIR)/Release/skrat" ]; then \
 		"$(BUILD_DIR)/Release/skrat" "$(ARGS)"; \

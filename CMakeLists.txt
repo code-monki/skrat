@@ -54,6 +54,21 @@ target_link_libraries(skrat PRIVATE
   Qt6::PdfWidgets
 )
 
+if(APPLE)
+  set_target_properties(skrat PROPERTIES
+    MACOSX_BUNDLE TRUE
+    MACOSX_BUNDLE_GUI_IDENTIFIER com.codemonki.skrat
+    MACOSX_BUNDLE_BUNDLE_NAME "skrat"
+    MACOSX_BUNDLE_COPYRIGHT "GPL-3.0-or-later"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+    MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+  )
+endif()
+
+if(WIN32)
+  set_target_properties(skrat PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
+
 if(MSVC)
   target_compile_definitions(skrat PRIVATE _CRT_SECURE_NO_WARNINGS)
 endif()
