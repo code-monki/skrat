@@ -4,6 +4,9 @@
 #   BUILD_DIR   build directory (default: build)
 #   GENERATOR   CMake generator, e.g. "Ninja" (default: platform default)
 #   CMAKE_ARGS  extra arguments passed to cmake -S . -B $(BUILD_DIR)
+#
+# Per-machine defaults (Qt path, cmake binary): copy config.local.mk.example
+# to config.local.mk (gitignored) or pass CMAKE / CMAKE_ARGS on the command line.
 
 BUILD_DIR ?= build
 CMAKE ?= cmake
@@ -12,6 +15,8 @@ CMAKE_FLAGS :=
 ifneq ($(strip $(GENERATOR)),)
 	CMAKE_FLAGS += -G "$(GENERATOR)"
 endif
+
+-include config.local.mk
 
 .PHONY: all help configure build clean run distclean
 
@@ -27,7 +32,9 @@ help:
 	@echo ""
 	@echo "Variables:"
 	@echo "  BUILD_DIR=$(BUILD_DIR)"
+	@echo "  CMAKE=/path/cmake   CMake binary (default: cmake from PATH)"
 	@echo "  CMAKE_ARGS='...'    Extra -D / toolchain flags for configure"
+	@echo "  (optional) config.local.mk — copy from config.local.mk.example"
 
 configure:
 	$(CMAKE) -S . -B "$(BUILD_DIR)" $(CMAKE_FLAGS) $(CMAKE_ARGS)

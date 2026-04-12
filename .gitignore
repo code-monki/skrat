@@ -20,3 +20,6 @@ qrc_*.cpp
 
 # macOS
 .DS_Store
+
+# Local Makefile overrides (paths to Qt / CMake on this machine)
+/config.local.mk

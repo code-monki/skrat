@@ -43,20 +43,45 @@ If CMake cannot find Qt6, pass your Qt installation prefix (examples):
 
 ```bash
 make CMAKE_ARGS='-DCMAKE_PREFIX_PATH=/opt/homebrew/opt/qt'
-# or (Qt installer layout, macOS example)
-make CMAKE_ARGS='-DCMAKE_PREFIX_PATH=$HOME/Qt/6.8.0/macos'
+# Qt Online Installer layout (version + kit directory, often `macos`)
+make CMAKE_ARGS='-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos'
 ```
+
+**Your setup (Qt 6.9.3 under `~/Qt`, CMake from Homebrew):** pick the kit folder that actually exists under `~/Qt/6.9.3/` (commonly `macos`; some installs use `macos_arm64`). It must be the directory that contains `lib/cmake/Qt6`.
+
+```bash
+ls "$HOME/Qt/6.9.3"
+```
+
+Then either pass flags once:
+
+```bash
+make CMAKE=/opt/homebrew/bin/cmake \
+  CMAKE_ARGS="-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos"
+```
+
+…or copy the template and build normally:
+
+```bash
+cp config.local.mk.example config.local.mk
+# edit CMAKE and CMAKE_PREFIX_PATH if your kit name or cmake path differs
+make
+```
+
+If your `cmake` binary is not on `PATH`, set **`CMAKE`** to the full path (for example `/opt/homebrew/bin/cmake`, or `.../cmake/bin/cmake` under a custom prefix).
 
 You can also invoke CMake directly:
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/path/to/Qt
-cmake --build build --parallel
+/opt/homebrew/bin/cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_PREFIX_PATH="$HOME/Qt/6.9.3/macos"
+/opt/homebrew/bin/cmake --build build --parallel
 ```
 
 ### Platform notes
 
-- **macOS (Homebrew):** `brew install qt cmake` then use `-DCMAKE_PREFIX_PATH="$(brew --prefix qt)"` if `find_package(Qt6)` fails.
+- **macOS (Homebrew Qt):** `brew install qt cmake` then use `-DCMAKE_PREFIX_PATH="$(brew --prefix qt)"` if `find_package(Qt6)` fails.
+- **macOS (Qt Online Installer + Homebrew CMake):** use `-DCMAKE_PREFIX_PATH` pointing at `~/Qt/<ver>/<kit>` as above; use `config.local.mk` to avoid retyping.
 - **Linux:** install Qt6 base **and** Qt6 PDF development packages for your distribution (names vary: `qt6-pdf-dev`, `qt6-pdf-widgets`, etc.).
 - **Windows:** install Qt 6 with the **MSVC** or **MinGW** kit including **Qt PDF**; configure CMake from Qt Creator or a “x64 Native Tools” prompt with `CMAKE_PREFIX_PATH` pointing at your Qt `lib/cmake` parent (for example `...\6.x.x\msvc2019_64`).
 

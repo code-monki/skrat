@@ -1,0 +1,12 @@
+# Copy to config.local.mk and adjust paths (config.local.mk is gitignored).
+#
+# Qt from the online installer is usually:
+#   $HOME/Qt/<version>/<kit>
+# where <kit> is often `macos` (Apple Silicon + Intel) or `macos_arm64`.
+# Pick the directory that contains lib/cmake/Qt6/Qt6Config.cmake.
+
+CMAKE ?= /opt/homebrew/bin/cmake
+# If your cmake binary lives elsewhere (for example under /opt/homebrew/cmake), set:
+# CMAKE ?= /opt/homebrew/cmake/bin/cmake
+
+CMAKE_ARGS += -DCMAKE_PREFIX_PATH=$(HOME)/Qt/6.9.3/macos
