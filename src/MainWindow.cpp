@@ -1,0 +1,378 @@
+#include "MainWindow.h"
+
+#include <QAction>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QFileSystemModel>
+#include <QFont>
+#include <QFrame>
+#include <QGuiApplication>
+#include <QLabel>
+#include <QMenuBar>
+#include <QMessageBox>
+#include <QModelIndex>
+#include <QPdfDocument>
+#include <QPdfView>
+#include <QPlainTextEdit>
+#include <QScreen>
+#include <QSplitter>
+#include <QStackedWidget>
+#include <QStandardPaths>
+#include <QTreeView>
+
+namespace {
+
+constexpr int kPlaceholderPage = 0;
+constexpr int kPdfPage = 1;
+constexpr int kTextPage = 2;
+
+bool hasTextualSuffix(const QString &suffixLower)
+{
+    static const QStringList kSuffixes = {
+        QStringLiteral("txt"),
+        QStringLiteral("text"),
+        QStringLiteral("md"),
+        QStringLiteral("markdown"),
+        QStringLiteral("log"),
+        QStringLiteral("csv"),
+        QStringLiteral("tsv"),
+        QStringLiteral("json"),
+        QStringLiteral("xml"),
+        QStringLiteral("html"),
+        QStringLiteral("htm"),
+        QStringLiteral("css"),
+        QStringLiteral("js"),
+        QStringLiteral("mjs"),
+        QStringLiteral("cjs"),
+        QStringLiteral("ts"),
+        QStringLiteral("tsx"),
+        QStringLiteral("jsx"),
+        QStringLiteral("c"),
+        QStringLiteral("cc"),
+        QStringLiteral("cpp"),
+        QStringLiteral("cxx"),
+        QStringLiteral("h"),
+        QStringLiteral("hh"),
+        QStringLiteral("hpp"),
+        QStringLiteral("hxx"),
+        QStringLiteral("py"),
+        QStringLiteral("sh"),
+        QStringLiteral("bash"),
+        QStringLiteral("zsh"),
+        QStringLiteral("yaml"),
+        QStringLiteral("yml"),
+        QStringLiteral("toml"),
+        QStringLiteral("ini"),
+        QStringLiteral("cfg"),
+        QStringLiteral("conf"),
+        QStringLiteral("properties"),
+        QStringLiteral("cmake"),
+        QStringLiteral("pro"),
+        QStringLiteral("pri"),
+        QStringLiteral("qml"),
+        QStringLiteral("rst"),
+        QStringLiteral("svg"),
+    };
+    return kSuffixes.contains(suffixLower);
+}
+
+bool looksLikeSourceSuffix(const QString &suffixLower)
+{
+    static const QStringList kCode = {
+        QStringLiteral("c"),   QStringLiteral("cc"), QStringLiteral("cpp"), QStringLiteral("cxx"),
+        QStringLiteral("h"),   QStringLiteral("hh"), QStringLiteral("hpp"), QStringLiteral("hxx"),
+        QStringLiteral("py"),  QStringLiteral("js"),  QStringLiteral("ts"),   QStringLiteral("tsx"),
+        QStringLiteral("jsx"), QStringLiteral("qml"), QStringLiteral("cmake"),
+    };
+    return kCode.contains(suffixLower);
+}
+
+} // namespace
+
+bool MainWindow::isProbablyTextFile(const QFileInfo &fi)
+{
+    if (!fi.isFile()) {
+        return false;
+    }
+    const QString suf = fi.suffix().toLower();
+    if (suf.isEmpty()) {
+        return false;
+    }
+    return hasTextualSuffix(suf);
+}
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    setupUi();
+
+    m_rootPath = QDir::homePath();
+    m_fsModel->setRootPath(m_rootPath);
+    m_tree->setRootIndex(m_fsModel->index(m_rootPath));
+
+    connect(m_tree->selectionModel(),
+            &QItemSelectionModel::currentChanged,
+            this,
+            &MainWindow::onTreeCurrentChanged);
+
+    resize(1280, 800);
+    if (QScreen *scr = screen()) {
+        const QRect avail = scr->availableGeometry();
+        move((avail.width() - width()) / 2, (avail.height() - height()) / 2);
+    }
+}
+
+void MainWindow::setupUi()
+{
+    setWindowTitle(tr("skrat — preview"));
+
+    auto *fileMenu = menuBar()->addMenu(tr("&File"));
+    auto *openFolder = new QAction(tr("&Open Folder…"), this);
+    openFolder->setShortcut(QKeySequence::Open);
+    connect(openFolder, &QAction::triggered, this, &MainWindow::openFolderDialog);
+    fileMenu->addAction(openFolder);
+    fileMenu->addSeparator();
+    fileMenu->addAction(tr("&Quit"), this, &QWidget::close, QKeySequence::Quit);
+
+    auto *viewMenu = menuBar()->addMenu(tr("&View"));
+    auto *actFitWidth = new QAction(tr("PDF Fit &Width"), this);
+    connect(actFitWidth, &QAction::triggered, this, &MainWindow::pdfFitWidth);
+    viewMenu->addAction(actFitWidth);
+
+    auto *actZoomIn = new QAction(tr("PDF Zoom &In"), this);
+    actZoomIn->setShortcut(QKeySequence::ZoomIn);
+    connect(actZoomIn, &QAction::triggered, this, &MainWindow::zoomInPdf);
+    viewMenu->addAction(actZoomIn);
+
+    auto *actZoomOut = new QAction(tr("PDF Zoom &Out"), this);
+    actZoomOut->setShortcut(QKeySequence::ZoomOut);
+    connect(actZoomOut, &QAction::triggered, this, &MainWindow::zoomOutPdf);
+    viewMenu->addAction(actZoomOut);
+
+    m_fsModel = new QFileSystemModel(this);
+    m_fsModel->setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
+    m_fsModel->setNameFilterDisables(false);
+
+    m_tree = new QTreeView;
+    m_tree->setModel(m_fsModel);
+    m_tree->setHeaderHidden(false);
+    m_tree->setAnimated(true);
+    m_tree->setSortingEnabled(true);
+    m_tree->sortByColumn(0, Qt::AscendingOrder);
+    m_tree->setColumnWidth(0, 320);
+    m_tree->setMinimumWidth(240);
+
+    m_pdfDocument = new QPdfDocument(this);
+    m_pdfView = new QPdfView;
+    m_pdfView->setDocument(m_pdfDocument);
+
+    m_textView = new QPlainTextEdit;
+    m_textView->setReadOnly(true);
+    m_textView->setLineWrapMode(QPlainTextEdit::WidgetWidth);
+    m_textView->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+
+    m_placeholder = new QLabel;
+    m_placeholder->setWordWrap(true);
+    m_placeholder->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_placeholder->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    m_placeholder->setOpenExternalLinks(true);
+    m_placeholder->setMargin(12);
+
+    m_stack = new QStackedWidget;
+    m_stack->addWidget(m_placeholder); // kPlaceholderPage
+    m_stack->addWidget(m_pdfView);     // kPdfPage
+    m_stack->addWidget(m_textView);    // kTextPage
+    m_stack->setCurrentIndex(kPlaceholderPage);
+
+    m_splitter = new QSplitter(Qt::Horizontal);
+    m_splitter->addWidget(m_tree);
+    m_splitter->addWidget(m_stack);
+    m_splitter->setStretchFactor(0, 0);
+    m_splitter->setStretchFactor(1, 1);
+
+    setCentralWidget(m_splitter);
+
+    showPlaceholder(tr("<p><b>skrat</b> — pick a file in the tree to preview PDFs and text.</p>"
+                        "<p>Use <b>File → Open Folder…</b> to point the tree at a project directory.</p>"));
+}
+
+void MainWindow::setRootFolder(const QString &absolutePath)
+{
+    const QFileInfo fi(absolutePath);
+    if (!fi.exists() || !fi.isDir()) {
+        QMessageBox::warning(this, tr("Open Folder"), tr("Not a directory: %1").arg(absolutePath));
+        return;
+    }
+
+    m_rootPath = fi.absoluteFilePath();
+    m_fsModel->setRootPath(m_rootPath);
+    m_tree->setRootIndex(m_fsModel->index(m_rootPath));
+}
+
+void MainWindow::selectPath(const QString &absoluteFilePath)
+{
+    const QFileInfo fi(absoluteFilePath);
+    if (!fi.exists()) {
+        return;
+    }
+
+    const QString abs = fi.absoluteFilePath();
+    const QModelIndex idx = m_fsModel->index(abs);
+    if (!idx.isValid()) {
+        QMessageBox::information(
+            this,
+            tr("Select File"),
+            tr("That path is not visible under the current tree root.\n"
+               "Use File → Open Folder… to choose a root that contains the file.\n\n%1")
+                .arg(abs));
+        return;
+    }
+
+    m_tree->setCurrentIndex(idx);
+    m_tree->scrollTo(idx, QAbstractItemView::PositionAtCenter);
+    previewPath(abs);
+}
+
+void MainWindow::onTreeCurrentChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    Q_UNUSED(previous);
+    if (!current.isValid()) {
+        showPlaceholder(tr("<p>No selection.</p>"));
+        return;
+    }
+
+    const QString path = m_fsModel->filePath(current);
+    previewPath(path);
+}
+
+void MainWindow::openFolderDialog()
+{
+    const QString dir = QFileDialog::getExistingDirectory(
+        this,
+        tr("Open Folder"),
+        m_rootPath.isEmpty() ? QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+                             : m_rootPath);
+
+    if (dir.isEmpty()) {
+        return;
+    }
+    setRootFolder(dir);
+}
+
+void MainWindow::zoomInPdf()
+{
+    if (m_stack->currentWidget() != m_pdfView) {
+        return;
+    }
+    m_pdfView->setZoomMode(QPdfView::ZoomMode::CustomZoom);
+    m_pdfView->setZoomFactor(m_pdfView->zoomFactor() * 1.15);
+}
+
+void MainWindow::zoomOutPdf()
+{
+    if (m_stack->currentWidget() != m_pdfView) {
+        return;
+    }
+    m_pdfView->setZoomMode(QPdfView::ZoomMode::CustomZoom);
+    m_pdfView->setZoomFactor(qMax(0.1, m_pdfView->zoomFactor() / 1.15));
+}
+
+void MainWindow::pdfFitWidth()
+{
+    if (m_stack->currentWidget() != m_pdfView) {
+        return;
+    }
+    m_pdfView->setZoomMode(QPdfView::ZoomMode::FitToWidth);
+}
+
+void MainWindow::showPlaceholder(const QString &html)
+{
+    m_placeholder->setText(html);
+    m_stack->setCurrentIndex(kPlaceholderPage);
+}
+
+void MainWindow::previewPath(const QString &absolutePath)
+{
+    const QFileInfo fi(absolutePath);
+
+    if (fi.isDir()) {
+        showPlaceholder(tr("<p><b>Folder</b></p><p>%1</p><p>Select a file to preview.</p>")
+                            .arg(fi.absoluteFilePath().toHtmlEscaped()));
+        return;
+    }
+
+    if (!fi.isFile()) {
+        showPlaceholder(tr("<p>Not a file: %1</p>").arg(absolutePath.toHtmlEscaped()));
+        return;
+    }
+
+    const QString suffix = fi.suffix().toLower();
+    if (suffix == QStringLiteral("pdf")) {
+        m_pdfDocument->close();
+        if (!m_pdfDocument->load(fi.absoluteFilePath())) {
+            QString statusStr;
+            switch (m_pdfDocument->status()) {
+            case QPdfDocument::Status::Null:
+                statusStr = QStringLiteral("Null");
+                break;
+            case QPdfDocument::Status::Loading:
+                statusStr = QStringLiteral("Loading");
+                break;
+            case QPdfDocument::Status::Ready:
+                statusStr = QStringLiteral("Ready");
+                break;
+            case QPdfDocument::Status::Error:
+                statusStr = QStringLiteral("Error");
+                break;
+            default:
+                statusStr = QStringLiteral("Unknown");
+                break;
+            }
+            showPlaceholder(tr("<p><b>Failed to load PDF</b></p><p>%1</p><p>Status: %2</p>")
+                                .arg(fi.absoluteFilePath().toHtmlEscaped(), statusStr.toHtmlEscaped()));
+            qWarning() << "QPdfDocument::load failed:" << fi.absoluteFilePath() << "status" << statusStr;
+            return;
+        }
+
+        m_pdfView->setZoomMode(QPdfView::ZoomMode::FitToWidth);
+        m_stack->setCurrentIndex(kPdfPage);
+        return;
+    }
+
+    if (isProbablyTextFile(fi)) {
+        QFile f(fi.absoluteFilePath());
+        if (!f.open(QIODevice::ReadOnly)) {
+            showPlaceholder(tr("<p><b>Could not open file</b></p><p>%1</p>")
+                                .arg(fi.absoluteFilePath().toHtmlEscaped()));
+            return;
+        }
+
+        const QByteArray bytes = f.readAll();
+        f.close();
+
+        // Prefer UTF-8; invalid sequences become replacement characters.
+        const QString text = QString::fromUtf8(bytes);
+
+        QFont font = m_textView->font();
+        if (looksLikeSourceSuffix(suffix)) {
+            const QFont fixed = QFont(QStringLiteral("Monospace"));
+            if (fixed.exactMatch() || !fixed.family().isEmpty()) {
+                font = fixed;
+            }
+        }
+        m_textView->setFont(font);
+
+        m_textView->setPlainText(text);
+        m_stack->setCurrentIndex(kTextPage);
+        return;
+    }
+
+    showPlaceholder(
+        tr("<p><b>Unsupported file type</b> for preview.</p>"
+           "<p>%1</p>"
+           "<p>Supported: <b>PDF</b> and common <b>text</b> extensions (txt, md, json, code, …).</p>")
+            .arg(fi.absoluteFilePath().toHtmlEscaped()));
+}

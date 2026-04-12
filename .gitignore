@@ -1,0 +1,22 @@
+# CMake
+/build/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps/
+
+# Qt / IDE
+*.user
+*.autosave
+*.qmlc
+*.jsc
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+*~
+
+# macOS
+.DS_Store
