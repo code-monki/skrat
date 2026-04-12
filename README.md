@@ -31,6 +31,22 @@ make run        # build, then launch the app
 make clean      # remove the build directory
 ```
 
+### Troubleshooting: `Could not find a package configuration file provided by "Qt6"`
+
+CMake only finds Qt when **`CMAKE_PREFIX_PATH`** points at a **Qt kit directory** (the folder that contains `lib/cmake/Qt6/Qt6Config.cmake`), for example **`$HOME/Qt/6.9.3/macos`**.
+
+Fix it in one of these ways:
+
+1. **Recommended:** copy `config.local.mk.example` to **`config.local.mk`** in the repo root (that file is **gitignored**) and set **`CMAKE_PREFIX_PATH`** there. Then run **`make`** again.
+2. **One-shot:**  
+   `make CMAKE_ARGS="-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos"`  
+   (change **`macos`** to your real kit name if different; use **`ls "$HOME/Qt/6.9.3"`** to list kits.)
+3. **Environment:**  
+   `export CMAKE_PREFIX_PATH="$HOME/Qt/6.9.3/macos"`  
+   then **`make`** (CMake reads this variable).
+
+If you already configured without Qt, remove the stale build tree before reconfiguring: **`make clean`**, then **`make`**.
+
 Optional knobs:
 
 ```bash

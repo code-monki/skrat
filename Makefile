@@ -45,7 +45,14 @@ help:
 	@echo "  (optional) config.local.mk — copy from config.local.mk.example"
 
 configure:
-	$(CMAKE) -S . -B "$(BUILD_DIR)" $(CMAKE_FLAGS) $(CMAKE_ARGS)
+	$(CMAKE) -S . -B "$(BUILD_DIR)" $(CMAKE_FLAGS) $(CMAKE_ARGS) || { \
+		echo ""; \
+		echo "CMake configure failed (see errors above)."; \
+		echo "If Qt6 was not found, point CMake at your Qt kit, for example:"; \
+		echo "  make CMAKE_ARGS=\"-DCMAKE_PREFIX_PATH=\$$HOME/Qt/6.9.3/macos\""; \
+		echo "Or create ./config.local.mk from config.local.mk.example (see README)."; \
+		exit 1; \
+	}
 
 build: configure
 	$(CMAKE) --build "$(BUILD_DIR)" --parallel
