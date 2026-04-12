@@ -25,7 +25,9 @@ WORKDIR="$(mktemp -d)"
 GEN_ICON=""
 cleanup() {
   rm -rf "${WORKDIR}"
-  [[ -n "${GEN_ICON}" && -f "${GEN_ICON}" ]] && rm -f "${GEN_ICON}"
+  if [[ -n "${GEN_ICON}" && -f "${GEN_ICON}" ]]; then
+    rm -f "${GEN_ICON}"
+  fi
 }
 trap cleanup EXIT
 
