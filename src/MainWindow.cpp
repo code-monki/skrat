@@ -167,6 +167,8 @@ void MainWindow::setupUi()
     m_pdfDocument = new QPdfDocument(this);
     m_pdfView = new QPdfView;
     m_pdfView->setDocument(m_pdfDocument);
+    // Default is SinglePage (one page, no vertical scroll through the document).
+    m_pdfView->setPageMode(QPdfView::PageMode::MultiPage);
 
     m_textView = new QPlainTextEdit;
     m_textView->setReadOnly(true);
