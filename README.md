@@ -18,7 +18,7 @@ This is **not** an editor.
 
 - **CMake** 3.16 or newer  
 - **Qt 6** with these modules available to CMake: **Core**, **Gui**, **Widgets**, **Pdf**, **PdfWidgets**  
-  - Qt **6.2+** is the project’s stated minimum; some distributions package PDF widgets separately—if CMake cannot find `Qt6::PdfWidgets`, install your OS “Qt6 PDF” development packages or point `CMAKE_PREFIX_PATH` at a full Qt kit from the Qt Online Installer.
+  - Qt **6.4+** is required by `CMakeLists.txt` (PDF APIs used here); some distributions package PDF widgets separately—if CMake cannot find `Qt6::PdfWidgets`, install your OS “Qt6 PDF” development packages or point `CMAKE_PREFIX_PATH` at a full Qt kit from the Qt Online Installer.
 - A **C++17** toolchain
 
 ## Build (Makefile orchestration)
