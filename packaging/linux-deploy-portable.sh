@@ -26,8 +26,23 @@ command -v convert >/dev/null 2>&1 || {
 }
 
 ICON="${SCRIPT_DIR}/skrat-icon-generated.png"
-convert -size 256x256 'xc:#3d6a9e' -pointsize 72 -fill white -gravity center \
-  -annotate +0+0 'S' "${ICON}"
+# -annotate needs a real font; minimal CI images often have no ImageMagick default (font '(null)').
+ICON_FONT=""
+for candidate in \
+  /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf \
+  /usr/share/fonts/dejavu/DejaVuSans-Bold.ttf \
+  /usr/share/fonts/TTF/DejaVuSans-Bold.ttf; do
+  if [[ -f "${candidate}" ]]; then
+    ICON_FONT="${candidate}"
+    break
+  fi
+done
+if [[ -n "${ICON_FONT}" ]]; then
+  convert -size 256x256 'xc:#3d6a9e' -font "${ICON_FONT}" -pointsize 72 -fill white -gravity center \
+    -annotate +0+0 'S' "${ICON}"
+else
+  convert -size 256x256 'xc:#3d6a9e' "${ICON}"
+fi
 
 WORKDIR="$(mktemp -d)"
 cleanup() { rm -rf "${WORKDIR}" "${ICON}"; }
@@ -35,6 +50,8 @@ trap cleanup EXIT
 
 cd "${WORKDIR}"
 export APPIMAGE_EXTRACT_AND_RUN=1
+# Bundled strip in linuxdeploy AppImage is too old for RELR (.relr.dyn) in modern glibc/Qt ELFs (e.g. Fedora).
+export NO_STRIP=1
 
 LD_URL="https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${LINUXDEPLOY_ARCH}.AppImage"
 LDQT_URL="https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-${LINUXDEPLOY_ARCH}.AppImage"
