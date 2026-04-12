@@ -508,12 +508,14 @@ void MainWindow::onWatchedFileChanged(const QString &path)
     if (m_previewFilePath.isEmpty()) {
         return;
     }
+    m_pendingReloadPath = m_previewFilePath;
     m_reloadDebounceTimer->start();
 }
 
 void MainWindow::onReloadDebounceTimeout()
 {
-    const QString path = m_previewFilePath;
+    const QString path = m_pendingReloadPath;
+    m_pendingReloadPath.clear();
     if (path.isEmpty()) {
         return;
     }
@@ -526,6 +528,8 @@ void MainWindow::onReloadDebounceTimeout()
 
 void MainWindow::previewPath(const QString &absolutePath)
 {
+    m_reloadDebounceTimer->stop();
+    m_pendingReloadPath.clear();
     pauseWatching();
 
     const QFileInfo fi(absolutePath);

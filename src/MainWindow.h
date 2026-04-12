@@ -67,6 +67,7 @@ private:
     QAction *m_pdfActLast = nullptr;
 
     QString m_previewFilePath;
+    QString m_pendingReloadPath;
     QFileSystemWatcher *m_fileWatcher = nullptr;
     QTimer *m_reloadDebounceTimer = nullptr;
 };
