@@ -3,20 +3,27 @@
 # Variables (optional):
 #   BUILD_DIR   build directory (default: build)
 #   GENERATOR   CMake generator, e.g. "Ninja" (default: platform default)
+#   NINJA       Full path to ninja (only used when GENERATOR=Ninja); passes
+#               -DCMAKE_MAKE_PROGRAM=... so CMake need not find ninja on PATH
 #   CMAKE_ARGS  extra arguments passed to cmake -S . -B $(BUILD_DIR)
 #
-# Per-machine defaults (Qt path, cmake binary): copy config.local.mk.example
-# to config.local.mk (gitignored) or pass CMAKE / CMAKE_ARGS on the command line.
+# Per-machine defaults (Qt path, cmake binary, Ninja): copy config.local.mk.example
+# to config.local.mk (gitignored) or pass variables on the command line.
 
 BUILD_DIR ?= build
 CMAKE ?= cmake
+
+-include config.local.mk
 
 CMAKE_FLAGS :=
 ifneq ($(strip $(GENERATOR)),)
 	CMAKE_FLAGS += -G "$(GENERATOR)"
 endif
-
--include config.local.mk
+ifeq ($(GENERATOR),Ninja)
+ifneq ($(strip $(NINJA)),)
+	CMAKE_FLAGS += -DCMAKE_MAKE_PROGRAM="$(NINJA)"
+endif
+endif
 
 .PHONY: all help configure build clean run distclean
 
@@ -33,6 +40,7 @@ help:
 	@echo "Variables:"
 	@echo "  BUILD_DIR=$(BUILD_DIR)"
 	@echo "  CMAKE=/path/cmake   CMake binary (default: cmake from PATH)"
+	@echo "  GENERATOR=Ninja     Use Ninja; optional NINJA=/path/to/ninja if not on PATH"
 	@echo "  CMAKE_ARGS='...'    Extra -D / toolchain flags for configure"
 	@echo "  (optional) config.local.mk — copy from config.local.mk.example"
 

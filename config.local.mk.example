@@ -10,3 +10,10 @@ CMAKE ?= /opt/homebrew/bin/cmake
 # CMAKE ?= /opt/homebrew/cmake/bin/cmake
 
 CMAKE_ARGS += -DCMAKE_PREFIX_PATH=$(HOME)/Qt/6.9.3/macos
+
+# Optional: Ninja generator + explicit ninja binary (CMake’s Ninja generator
+# respects CMAKE_MAKE_PROGRAM). Typical Homebrew: /opt/homebrew/bin/ninja
+# If your layout is under /opt/homebrew/ninja, try .../bin/ninja there.
+# GENERATOR := Ninja
+# NINJA ?= /opt/homebrew/bin/ninja
+# NINJA ?= /opt/homebrew/ninja/bin/ninja

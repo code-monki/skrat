@@ -39,6 +39,14 @@ make GENERATOR=Ninja
 make CMAKE_ARGS='-DCMAKE_BUILD_TYPE=Debug'
 ```
 
+With **Ninja**, if the `ninja` binary is not on your `PATH`, point CMake at it (used only when `GENERATOR=Ninja`):
+
+```bash
+make GENERATOR=Ninja NINJA=/opt/homebrew/bin/ninja
+# or, if your install keeps the binary under /opt/homebrew/ninja:
+make GENERATOR=Ninja NINJA=/opt/homebrew/ninja/bin/ninja
+```
+
 If CMake cannot find Qt6, pass your Qt installation prefix (examples):
 
 ```bash
@@ -69,6 +77,8 @@ make
 ```
 
 If your `cmake` binary is not on `PATH`, set **`CMAKE`** to the full path (for example `/opt/homebrew/bin/cmake`, or `.../cmake/bin/cmake` under a custom prefix).
+
+If you use **`GENERATOR=Ninja`** and **`ninja`** is not on `PATH`, set **`NINJA`** to the full path to the `ninja` executable (for example under `/opt/homebrew/bin` or `/opt/homebrew/ninja/bin`). Uncomment the `GENERATOR` / `NINJA` lines in `config.local.mk.example` when you copy it to `config.local.mk`.
 
 You can also invoke CMake directly:
 
