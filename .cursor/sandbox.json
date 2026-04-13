@@ -1,0 +1,12 @@
+{
+  "type": "workspace_readwrite",
+  "enableSharedBuildCache": true,
+  "additionalReadwritePaths": [
+    "/private/tmp",
+    "/tmp"
+  ],
+  "additionalReadonlyPaths": [
+    "/usr/bin",
+    "/System/Library"
+  ]
+}

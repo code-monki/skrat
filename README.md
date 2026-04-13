@@ -35,6 +35,10 @@ You can install **CMake**, **Ninja**, **Qt 6**, and compilers through a package 
 
 The application itself stays **C++/Qt**; these entries are for **developer environments** and optional tooling, not runtime requirements for end users of the built app.
 
+### Cursor agent sandbox (optional)
+
+The repo ships **`.cursor/sandbox.json`**: **`workspace_readwrite`**, **`enableSharedBuildCache`**, extra **read/write** on **`/private/tmp`** and **`/tmp`**, and **read-only** **`/usr/bin`** + **`/System/Library`** so **`packaging/macos/build-icns.sh`** (**`sips`** / **`iconutil`**) can run under a sandboxed agent. If icon generation still fails, temporarily set **`"type": "insecure_none"`** in that file (see [Cursor sandbox docs](https://cursor.com/docs/reference/sandbox)).
+
 ## Build (Makefile orchestration)
 
 The repository root **`Makefile`** is a thin wrapper around CMake.
