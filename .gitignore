@@ -18,6 +18,9 @@ CMakeError.log
 /*.log
 build.log
 
+# macOS iconutil scratch dir (skrat.icns is committed; iconset is not)
+packaging/macos/skrat.iconset/
+
 # Qt / IDE
 *.user
 CMakeLists.txt.user

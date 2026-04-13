@@ -1,5 +1,8 @@
 #include <QApplication>
 #include <QFileInfo>
+#if defined(Q_OS_MACOS)
+#include <QIcon>
+#endif
 
 #include "MainWindow.h"
 
@@ -7,8 +10,18 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(QStringLiteral("skrat"));
-    QCoreApplication::setApplicationVersion(QStringLiteral("0.1.0"));
+    QCoreApplication::setApplicationVersion(QStringLiteral(SKRAT_APP_VERSION));
     QCoreApplication::setOrganizationName(QStringLiteral("CodeMonki"));
+
+#if defined(Q_OS_MACOS)
+    {
+        const QFileInfo bundleIcns(
+            QCoreApplication::applicationDirPath() + QStringLiteral("/../Resources/skrat.icns"));
+        if (bundleIcns.isFile()) {
+            app.setWindowIcon(QIcon(bundleIcns.absoluteFilePath()));
+        }
+    }
+#endif
 
     MainWindow window;
 

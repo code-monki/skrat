@@ -153,6 +153,14 @@ You can also invoke CMake directly:
 - **Linux:** install Qt6 base **and** Qt6 PDF development packages for your distribution (names vary: `qt6-pdf-dev`, `qt6-pdf-widgets`, etc.).
 - **Windows:** install Qt 6 with the **MSVC** or **MinGW** kit including **Qt PDF**; configure CMake from Qt Creator or a “x64 Native Tools” prompt with `CMAKE_PREFIX_PATH` pointing at your Qt `lib/cmake` parent (for example `...\6.x.x\msvc2019_64`).
 
+### macOS app icon
+
+The Dock / Finder icon comes from **`packaging/macos/skrat.icns`**, bundled via **`MACOSX_BUNDLE_ICON_FILE`** in **`CMakeLists.txt`**. After changing **`packaging/icons/`** artwork, regenerate the **`.icns`** on a Mac:
+
+```bash
+./packaging/macos/build-icns.sh
+```
+
 ### Linux portable icon
 
 The vector source is **`packaging/icons/skrat.svg`** (acorn with two circular “tooth” bites—an homage to the Ice Age squirrel). CI bundles the pre-rendered **`packaging/icons/hicolor/*/apps/skrat.png`** tree. After editing the SVG, refresh the PNGs (needs **`rsvg-convert`** from librsvg, or **ImageMagick** `convert` / **`magick`** on `PATH`):

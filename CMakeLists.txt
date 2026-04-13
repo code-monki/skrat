@@ -54,8 +54,11 @@ target_link_libraries(skrat PRIVATE
   Qt6::PdfWidgets
 )
 
+target_compile_definitions(skrat PRIVATE "SKRAT_APP_VERSION=\"${PROJECT_VERSION}\"")
+
 if(APPLE)
-  set_target_properties(skrat PROPERTIES
+  set(_skrat_icns "${CMAKE_CURRENT_SOURCE_DIR}/packaging/macos/skrat.icns")
+  set(_skrat_bundle_props
     MACOSX_BUNDLE TRUE
     MACOSX_BUNDLE_GUI_IDENTIFIER com.codemonki.skrat
     MACOSX_BUNDLE_BUNDLE_NAME "skrat"
@@ -63,6 +66,12 @@ if(APPLE)
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
     MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
   )
+  if(EXISTS "${_skrat_icns}")
+    set_source_files_properties("${_skrat_icns}" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    target_sources(skrat PRIVATE "${_skrat_icns}")
+    list(APPEND _skrat_bundle_props MACOSX_BUNDLE_ICON_FILE skrat)
+  endif()
+  set_target_properties(skrat PROPERTIES ${_skrat_bundle_props})
 endif()
 
 if(WIN32)
