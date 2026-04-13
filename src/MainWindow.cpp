@@ -9,6 +9,7 @@
 #include <QFileSystemModel>
 #include <QFileSystemWatcher>
 #include <QFont>
+#include <QInputDialog>
 #include <QLabel>
 #include <QKeySequence>
 #include <QMenu>
@@ -24,6 +25,9 @@
 #include <QStackedWidget>
 #include <QStandardPaths>
 #include <QStatusBar>
+#include <QTextBlock>
+#include <QTextCursor>
+#include <QTextDocument>
 #include <QTimer>
 #include <QToolBar>
 #include <QTreeView>
@@ -181,6 +185,15 @@ void MainWindow::setupUi()
     viewMenu->addAction(actZoomOut);
 
     viewMenu->addSeparator();
+    m_actGoToPageOrLine = new QAction(tr("&Go to page / line…"), this);
+    m_actGoToPageOrLine->setShortcut(QKeySequence(QStringLiteral("Ctrl+G")));
+    m_actGoToPageOrLine->setToolTip(
+        tr("In a PDF: jump to a page by number. In a text file: jump to a line (there are no PDF-style pages)."));
+    connect(m_actGoToPageOrLine, &QAction::triggered, this, &MainWindow::goToPageOrLine);
+    viewMenu->addAction(m_actGoToPageOrLine);
+    addAction(m_actGoToPageOrLine);
+
+    viewMenu->addSeparator();
     QMenu *const pdfPageMenu = viewMenu->addMenu(tr("PDF &pages"));
 
     m_pdfActFirst = new QAction(tr("&First page"), this);
@@ -207,6 +220,8 @@ void MainWindow::setupUi()
     pdfPageMenu->addAction(m_pdfActPrev);
     pdfPageMenu->addAction(m_pdfActNext);
     pdfPageMenu->addAction(m_pdfActLast);
+    pdfPageMenu->addSeparator();
+    pdfPageMenu->addAction(m_actGoToPageOrLine);
 
     addAction(m_pdfActFirst);
     addAction(m_pdfActPrev);
@@ -264,6 +279,7 @@ void MainWindow::setupUi()
     m_pdfToolBar->addAction(m_pdfActPrev);
     m_pdfToolBar->addAction(m_pdfActNext);
     m_pdfToolBar->addAction(m_pdfActLast);
+    m_pdfToolBar->addAction(m_actGoToPageOrLine);
     m_pdfPageLabel = new QLabel(tr("—"));
     m_pdfPageLabel->setMinimumWidth(140);
     m_pdfPageLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
@@ -422,6 +438,64 @@ void MainWindow::pdfGoLastPage()
     m_pdfView->pageNavigator()->jump(pages - 1, QPointF(0, 0), 0);
 }
 
+void MainWindow::goToPageOrLine()
+{
+    if (m_stack->currentWidget() == m_pdfView && m_pdfDocument) {
+        const int pages = m_pdfDocument->pageCount();
+        if (pages <= 0) {
+            return;
+        }
+        QPdfPageNavigator *const nav = m_pdfView->pageNavigator();
+        const int cur = nav->currentPage();
+        bool ok = false;
+        const int pageOneBased = QInputDialog::getInt(
+            this,
+            tr("Go to Page"),
+            tr("Page number (1–%1):").arg(pages),
+            cur + 1,
+            1,
+            pages,
+            1,
+            &ok);
+        if (!ok) {
+            return;
+        }
+        nav->jump(pageOneBased - 1, QPointF(0, 0), 0);
+        return;
+    }
+
+    if (m_stack->currentWidget() == m_textView && m_textView) {
+        QTextDocument *const doc = m_textView->document();
+        const int lineCount = doc->blockCount();
+        if (lineCount <= 0) {
+            return;
+        }
+        const int currentLine = m_textView->textCursor().block().blockNumber() + 1;
+        bool ok = false;
+        const int lineOneBased = QInputDialog::getInt(
+            this,
+            tr("Go to Line"),
+            tr("Plain text has no fixed pages; enter a line number (1–%1):").arg(lineCount),
+            qBound(1, currentLine, lineCount),
+            1,
+            lineCount,
+            1,
+            &ok);
+        if (!ok) {
+            return;
+        }
+        const QTextBlock block = doc->findBlockByNumber(lineOneBased - 1);
+        if (!block.isValid()) {
+            return;
+        }
+        QTextCursor cursor(block);
+        cursor.movePosition(QTextCursor::StartOfLine);
+        m_textView->setTextCursor(cursor);
+        m_textView->centerCursor();
+        m_textView->setFocus(Qt::OtherFocusReason);
+    }
+}
+
 void MainWindow::updatePdfPageUi()
 {
     if (m_shuttingDown) {
@@ -447,6 +521,7 @@ void MainWindow::updatePdfPageUi()
             m_pdfActLast->setEnabled(false);
         }
         statusBar()->clearMessage();
+        updateGoToNavigationAction();
         return;
     }
 
@@ -471,6 +546,27 @@ void MainWindow::updatePdfPageUi()
             tr("PDF: 1 page — use View → PDF pages or toolbar if you switch to single-page layout later."),
             0);
     }
+
+    updateGoToNavigationAction();
+}
+
+void MainWindow::updateGoToNavigationAction()
+{
+    if (!m_actGoToPageOrLine) {
+        return;
+    }
+
+    if (m_stack->currentWidget() == m_pdfView && m_pdfDocument && m_pdfDocument->pageCount() > 0) {
+        m_actGoToPageOrLine->setEnabled(true);
+        return;
+    }
+    if (m_stack->currentWidget() == m_textView && m_textView && m_textView->document()
+        && m_textView->document()->blockCount() > 0) {
+        m_actGoToPageOrLine->setEnabled(true);
+        return;
+    }
+
+    m_actGoToPageOrLine->setEnabled(false);
 }
 
 void MainWindow::showPlaceholder(const QString &html)

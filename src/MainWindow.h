@@ -37,6 +37,7 @@ private slots:
     void pdfGoPrevPage();
     void pdfGoNextPage();
     void pdfGoLastPage();
+    void goToPageOrLine();
     void updatePdfPageUi();
     void onWatchedFileChanged(const QString &path);
     void onReloadDebounceTimeout();
@@ -49,6 +50,7 @@ private:
     void pauseWatching();
     void setWatchedPreviewFile(const QString &absoluteFilePath);
     void showPreviewFileUnavailable(const QString &lostPath);
+    void updateGoToNavigationAction();
 
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
@@ -66,6 +68,7 @@ private:
     QAction *m_pdfActPrev = nullptr;
     QAction *m_pdfActNext = nullptr;
     QAction *m_pdfActLast = nullptr;
+    QAction *m_actGoToPageOrLine = nullptr;
 
     QString m_previewFilePath;
     QString m_pendingReloadPath;

@@ -13,7 +13,7 @@ This is **not** an editor.
 - **Menus**
   - **File → Open Folder…** sets the tree root.
   - **View → PDF Fit Width / Zoom In / Out** (shortcuts match the platform defaults where applicable).
-  - **View → PDF pages** (and the **PDF navigation** toolbar): first / previous / next / last page, a **page counter**, and shortcuts (**Ctrl+Home**, **Alt+PgUp**, **Alt+PgDown**, **Ctrl+End**). The status bar summarizes navigation when a PDF is open.
+  - **View → PDF pages** (and the **PDF navigation** toolbar): first / previous / next / last page, a **page counter**, **Go to page / line…** (**Ctrl+G**), and shortcuts (**Ctrl+Home**, **Alt+PgUp**, **Alt+PgDown**, **Ctrl+End**). **Ctrl+G** on a PDF asks for a **page number**; on plain text it asks for a **line number** (text previews do not have PDF-style pages). The status bar summarizes navigation when a PDF is open.
   - **Disk changes:** the file shown in the preview (PDF or text) is watched with **`QFileSystemWatcher`**. If it changes on disk, the preview **reloads** after a short debounce. If it **disappears** (deleted or renamed away), the preview shows that the file is **no longer available**.
 
 ## Requirements
