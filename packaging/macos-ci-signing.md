@@ -4,7 +4,7 @@
 
 ## Secrets wired in CI (`.github/workflows/ci.yml`)
 
-The **Sign and notarize (Developer ID)** step runs only when **all** of these repository secrets are non-empty:
+The **Sign and notarize (Developer ID)** step runs only when **all** of these repository secrets are non-empty (detected via a **Probe** step: GitHub does not allow the `secrets` context inside `if:` expressions).
 
 | Secret | Contents |
 |--------|----------|

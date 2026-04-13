@@ -145,8 +145,25 @@ jobs:
           QT_ROOT="${QT_ROOT_DIR:-$(dirname "$(dirname "$(dirname "${Qt6_DIR}")")")}"
           MACDEPLOYQT="${QT_ROOT}/bin/macdeployqt"
           "${MACDEPLOYQT}" build/skrat.app -verbose=1 -always-overwrite
+      # secrets cannot be used in `if:`; probe via env + step output (GitHub docs).
+      - name: Probe macOS signing secrets
+        id: macos_signing
+        env:
+          MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+          MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
+          MACOS_CODESIGN_IDENTITY: ${{ secrets.MACOS_CODESIGN_IDENTITY }}
+          AC_API_KEY_ID: ${{ secrets.AC_API_KEY_ID }}
+          AC_API_ISSUER_ID: ${{ secrets.AC_API_ISSUER_ID }}
+          AC_API_KEY_CONTENT: ${{ secrets.AC_API_KEY_CONTENT }}
+        run: |
+          if [ -n "${MACOS_CERTIFICATE}" ] && [ -n "${MACOS_CERTIFICATE_PWD}" ] && [ -n "${MACOS_CODESIGN_IDENTITY}" ] \
+            && [ -n "${AC_API_KEY_ID}" ] && [ -n "${AC_API_ISSUER_ID}" ] && [ -n "${AC_API_KEY_CONTENT}" ]; then
+            echo "enabled=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "enabled=false" >> "${GITHUB_OUTPUT}"
+          fi
       - name: Sign and notarize (Developer ID)
-        if: ${{ secrets.MACOS_CERTIFICATE != '' && secrets.MACOS_CERTIFICATE_PWD != '' && secrets.MACOS_CODESIGN_IDENTITY != '' && secrets.AC_API_KEY_ID != '' && secrets.AC_API_ISSUER_ID != '' && secrets.AC_API_KEY_CONTENT != '' }}
+        if: steps.macos_signing.outputs.enabled == 'true'
         env:
           MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
           MACOS_CERTIFICATE_PWD: ${{ secrets.MACOS_CERTIFICATE_PWD }}
