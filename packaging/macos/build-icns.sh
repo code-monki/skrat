@@ -33,4 +33,4 @@ for entry in "${specs[@]}"; do
 done
 iconutil -c icns "${ICONSET}" -o "${OUT}"
 rm -rf "${ICONSET}"
-echo "Wrote ${OUT}"
+echo "Wrote ${OUT} — run ./packaging/macos/install-bundle-icon.sh build/skrat.app to refresh an existing bundle."

@@ -155,11 +155,20 @@ You can also invoke CMake directly:
 
 ### macOS app icon
 
-The Dock / Finder icon comes from **`packaging/macos/skrat.icns`**, bundled via **`MACOSX_BUNDLE_ICON_FILE`** in **`CMakeLists.txt`**. After changing **`packaging/icons/`** artwork, regenerate the **`.icns`** on a Mac:
+The Dock / Finder icon comes from **`packaging/macos/skrat.icns`** and **`CFBundleIconFile`** in **`Info.plist`**. CMake runs **`packaging/macos/install-bundle-icon.sh`** on each link so **`Contents/Resources/skrat.icns`** exists and the plist is set (CMake’s default plist often left **`CFBundleIconFile`** empty). **`macdeployqt`** can strip that again — re-run:
+
+```bash
+bash packaging/macos/install-bundle-icon.sh build/skrat.app
+```
+
+After changing **`packaging/icons/`**, regenerate **`.icns`** on a Mac, then reinstall the icon:
 
 ```bash
 ./packaging/macos/build-icns.sh
+bash packaging/macos/install-bundle-icon.sh build/skrat.app
 ```
+
+If Finder still shows a generic icon, **`touch build/skrat.app`** or toggle the folder view so LaunchServices refreshes its cache.
 
 ### Linux portable icon
 

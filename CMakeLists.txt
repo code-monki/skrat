@@ -58,20 +58,25 @@ target_compile_definitions(skrat PRIVATE "SKRAT_APP_VERSION=\"${PROJECT_VERSION}
 
 if(APPLE)
   set(_skrat_icns "${CMAKE_CURRENT_SOURCE_DIR}/packaging/macos/skrat.icns")
-  set(_skrat_bundle_props
+  if(NOT EXISTS "${_skrat_icns}")
+    message(FATAL_ERROR "Missing ${_skrat_icns} — run ./packaging/macos/build-icns.sh on macOS.")
+  endif()
+  set_target_properties(skrat PROPERTIES
     MACOSX_BUNDLE TRUE
     MACOSX_BUNDLE_GUI_IDENTIFIER com.codemonki.skrat
     MACOSX_BUNDLE_BUNDLE_NAME "skrat"
     MACOSX_BUNDLE_COPYRIGHT "GPL-3.0-or-later"
     MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
     MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+    MACOSX_BUNDLE_ICON_FILE skrat
   )
-  if(EXISTS "${_skrat_icns}")
-    set_source_files_properties("${_skrat_icns}" PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-    target_sources(skrat PRIVATE "${_skrat_icns}")
-    list(APPEND _skrat_bundle_props MACOSX_BUNDLE_ICON_FILE skrat)
-  endif()
-  set_target_properties(skrat PROPERTIES ${_skrat_bundle_props})
+  # CMake often leaves CFBundleIconFile empty / omits Resources; macdeployqt can strip them too.
+  add_custom_command(TARGET skrat POST_BUILD
+    COMMAND /bin/bash "${CMAKE_CURRENT_SOURCE_DIR}/packaging/macos/install-bundle-icon.sh"
+            "$<TARGET_FILE_DIR:skrat>/../.."
+    VERBATIM
+    COMMENT "Install skrat.icns and CFBundleIconFile into bundle"
+  )
 endif()
 
 if(WIN32)

@@ -145,6 +145,8 @@ jobs:
           QT_ROOT="${QT_ROOT_DIR:-$(dirname "$(dirname "$(dirname "${Qt6_DIR}")")")}"
           MACDEPLOYQT="${QT_ROOT}/bin/macdeployqt"
           "${MACDEPLOYQT}" build/skrat.app -verbose=1 -always-overwrite
+      - name: Restore bundle icon (after macdeployqt)
+        run: bash packaging/macos/install-bundle-icon.sh "$(pwd)/build/skrat.app"
       # secrets cannot be used in `if:`; probe via env + step output (GitHub docs).
       - name: Probe macOS signing secrets
         id: macos_signing
