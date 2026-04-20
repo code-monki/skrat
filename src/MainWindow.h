@@ -18,6 +18,10 @@ class QTimer;
 class QToolBar;
 class QTreeView;
 
+namespace skrat {
+class PdfDocumentRibbon;
+}
+
 class MainWindow final : public QMainWindow
 {
     Q_OBJECT
@@ -76,6 +80,8 @@ private:
     QLabel *m_placeholder = nullptr;
 
     QToolBar *m_pdfToolBar = nullptr;
+    skrat::PdfDocumentRibbon *m_pdfDocumentRibbon = nullptr;
+    QWidget *m_previewPane = nullptr;
     QLabel *m_pdfPageLabel = nullptr;
     QAction *m_pdfActFirst = nullptr;
     QAction *m_pdfActPrev = nullptr;

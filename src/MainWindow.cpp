@@ -3,6 +3,7 @@
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
+#include <QFrame>
 #include <QDebug>
 #include <QDir>
 #include <QFile>
@@ -17,6 +18,7 @@
 #include <QLabel>
 #include <QKeySequence>
 #include <QLineEdit>
+#include <QResizeEvent>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -37,6 +39,7 @@
 #include <QSizePolicy>
 #include <QStatusBar>
 #include <QStyle>
+#include <QVBoxLayout>
 #include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextCursor>
@@ -150,6 +153,78 @@ QString stripBackgroundStyles(QString html)
 }
 
 } // namespace
+
+namespace skrat {
+
+class PdfDocumentRibbon final : public QFrame
+{
+public:
+    explicit PdfDocumentRibbon(QToolBar *toolBar, QLabel *pageLabel, QWidget *parent = nullptr)
+        : QFrame(parent)
+        , m_toolBar(toolBar)
+        , m_pageLabel(pageLabel)
+    {
+        setFrameShape(QFrame::NoFrame);
+        setObjectName(QStringLiteral("pdfDocumentRibbon"));
+        if (m_toolBar) {
+            m_toolBar->setParent(this);
+        }
+        if (m_pageLabel) {
+            m_pageLabel->setParent(this);
+            m_pageLabel->setAlignment(Qt::AlignCenter);
+            m_pageLabel->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+        }
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    }
+
+    void recenter() { doLayout(); }
+
+protected:
+    void resizeEvent(QResizeEvent *event) override
+    {
+        QFrame::resizeEvent(event);
+        doLayout();
+    }
+
+    QSize sizeHint() const override
+    {
+        int h = 34;
+        if (m_toolBar) {
+            h = qMax(h, m_toolBar->sizeHint().height() + 6);
+        }
+        if (m_pageLabel) {
+            h = qMax(h, m_pageLabel->sizeHint().height() + 6);
+        }
+        return QSize(0, h);
+    }
+
+private:
+    void doLayout()
+    {
+        if (!m_toolBar || !m_pageLabel) {
+            return;
+        }
+        const int rowH = qMax(1, height());
+        m_toolBar->adjustSize();
+        const int tw = m_toolBar->sizeHint().width();
+        const int th = m_toolBar->sizeHint().height();
+        const int ty = qMax(0, (rowH - th) / 2);
+        m_toolBar->setGeometry(0, ty, tw, th);
+
+        m_pageLabel->adjustSize();
+        const int lw = m_pageLabel->sizeHint().width();
+        const int lh = m_pageLabel->sizeHint().height();
+        const int lx = qMax(0, (width() - lw) / 2);
+        const int ly = qMax(0, (rowH - lh) / 2);
+        m_pageLabel->setGeometry(lx, ly, lw, lh);
+        m_pageLabel->raise();
+    }
+
+    QToolBar *m_toolBar = nullptr;
+    QLabel *m_pageLabel = nullptr;
+};
+
+} // namespace skrat
 
 bool MainWindow::isProbablyTextFile(const QFileInfo &fi)
 {
@@ -389,15 +464,17 @@ void MainWindow::setupUi()
     m_stack->addWidget(m_textView);    // kTextPage
     m_stack->setCurrentIndex(kPlaceholderPage);
 
-    m_splitter = new QSplitter(Qt::Horizontal);
-    m_splitter->addWidget(m_tree);
-    m_splitter->addWidget(m_stack);
-    m_splitter->setStretchFactor(0, 0);
-    m_splitter->setStretchFactor(1, 1);
+    m_previewPane = new QWidget;
+    auto *previewLayout = new QVBoxLayout(m_previewPane);
+    previewLayout->setContentsMargins(0, 0, 0, 0);
+    previewLayout->setSpacing(0);
 
-    setCentralWidget(m_splitter);
+    m_pdfPageLabel = new QLabel(tr("—"));
+    m_pdfPageLabel->setMinimumWidth(120);
+    m_pdfPageLabel->setToolTip(
+        tr("Current page and page count, centered over the preview. Use the icons on the left to move between pages or go to a page."));
 
-    m_pdfToolBar = addToolBar(tr("PDF"));
+    m_pdfToolBar = new QToolBar;
     applyToolbarChrome(m_pdfToolBar, 22);
     m_pdfToolBar->addAction(m_pdfActFirst);
     m_pdfToolBar->addAction(m_pdfActPrev);
@@ -407,18 +484,12 @@ void MainWindow::setupUi()
     m_pdfToolBar->addAction(m_actGoToPageOrLine);
     m_pdfToolBar->addSeparator();
     m_pdfToolBar->addAction(m_actPdfPrint);
-    m_pdfToolBar->addSeparator();
-    auto *pdfBarSpacer = new QWidget;
-    pdfBarSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    m_pdfToolBar->addWidget(pdfBarSpacer);
-    m_pdfPageLabel = new QLabel(tr("—"));
-    m_pdfPageLabel->setMinimumWidth(140);
-    m_pdfPageLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-    m_pdfPageLabel->setToolTip(
-        tr("Page position in the current PDF. Use the icons to the left to move between pages, or go to a page."));
-    m_pdfToolBar->addWidget(m_pdfPageLabel);
 
-    m_pdfFindToolBar = addToolBar(tr("Find"));
+    m_pdfDocumentRibbon = new skrat::PdfDocumentRibbon(m_pdfToolBar, m_pdfPageLabel, m_previewPane);
+    previewLayout->addWidget(m_pdfDocumentRibbon);
+
+    m_pdfFindToolBar = new QToolBar(m_previewPane);
+    m_pdfFindToolBar->setWindowTitle(tr("Find"));
     applyToolbarChrome(m_pdfFindToolBar, 22);
     m_pdfFindToolBar->addAction(m_actPdfFind);
     m_pdfFindToolBar->addSeparator();
@@ -440,6 +511,17 @@ void MainWindow::setupUi()
         tr("Number of the active match and the total number of matches for the current search."));
     m_pdfFindToolBar->addWidget(m_pdfFindCountLabel);
     m_pdfFindToolBar->setVisible(false);
+
+    previewLayout->addWidget(m_pdfFindToolBar);
+    previewLayout->addWidget(m_stack, 1);
+
+    m_splitter = new QSplitter(Qt::Horizontal);
+    m_splitter->addWidget(m_tree);
+    m_splitter->addWidget(m_previewPane);
+    m_splitter->setStretchFactor(0, 0);
+    m_splitter->setStretchFactor(1, 1);
+
+    setCentralWidget(m_splitter);
 
     connect(m_pdfView->pageNavigator(),
             &QPdfPageNavigator::currentPageChanged,
@@ -866,13 +948,16 @@ void MainWindow::updatePdfPageUi()
     const int pages = m_pdfDocument ? m_pdfDocument->pageCount() : 0;
     const bool showBar = pdfActive && pages > 0;
 
-    if (m_pdfToolBar) {
-        m_pdfToolBar->setVisible(showBar);
+    if (m_pdfDocumentRibbon) {
+        m_pdfDocumentRibbon->setVisible(showBar);
     }
 
     if (!showBar) {
         if (m_pdfPageLabel) {
             m_pdfPageLabel->setText(tr("—"));
+        }
+        if (m_pdfDocumentRibbon) {
+            m_pdfDocumentRibbon->recenter();
         }
         if (m_pdfFindToolBar) {
             m_pdfFindToolBar->setVisible(false);
@@ -894,6 +979,9 @@ void MainWindow::updatePdfPageUi()
     const int cur = nav->currentPage();
     if (m_pdfPageLabel) {
         m_pdfPageLabel->setText(tr("Page %1 of %2").arg(cur + 1).arg(pages));
+    }
+    if (m_pdfDocumentRibbon) {
+        m_pdfDocumentRibbon->recenter();
     }
     m_pdfActFirst->setEnabled(cur > 0);
     m_pdfActPrev->setEnabled(cur > 0);
