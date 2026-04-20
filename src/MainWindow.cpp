@@ -34,7 +34,9 @@
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QStandardPaths>
+#include <QSizePolicy>
 #include <QStatusBar>
+#include <QStyle>
 #include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextCursor>
@@ -42,6 +44,7 @@
 #include <QTimer>
 #include <QToolBar>
 #include <QTreeView>
+#include <QWidget>
 
 namespace {
 
@@ -108,6 +111,30 @@ bool looksLikeSourceSuffix(const QString &suffixLower)
         QStringLiteral("jsx"), QStringLiteral("qml"), QStringLiteral("cmake"),
     };
     return kCode.contains(suffixLower);
+}
+
+QIcon iconThemedOrStandard(const QString &themeName, QStyle::StandardPixmap fallback)
+{
+    const QIcon fromTheme = QIcon::fromTheme(themeName);
+    if (!fromTheme.isNull()) {
+        return fromTheme;
+    }
+    if (QApplication::style() != nullptr) {
+        return QApplication::style()->standardIcon(fallback);
+    }
+    return {};
+}
+
+void applyToolbarChrome(QToolBar *bar, int iconSize)
+{
+    if (!bar) {
+        return;
+    }
+    bar->setIconSize(QSize(iconSize, iconSize));
+    bar->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    bar->setMovable(false);
+    bar->setFloatable(false);
+    bar->setContentsMargins(4, 2, 4, 2);
 }
 
 QString stripBackgroundStyles(QString html)
@@ -191,6 +218,11 @@ void MainWindow::setupUi()
     fileMenu->addAction(openFolder);
     m_actPdfPrint = new QAction(tr("&Print PDF…"), this);
     m_actPdfPrint->setShortcut(QKeySequence::Print);
+    m_actPdfPrint->setIcon(
+        iconThemedOrStandard(QStringLiteral("document-print"), QStyle::SP_DialogSaveButton));
+    m_actPdfPrint->setToolTip(tr("Print the current PDF (%1)")
+                                  .arg(QKeySequence(QKeySequence::Print)
+                                           .toString(QKeySequence::NativeText)));
     connect(m_actPdfPrint, &QAction::triggered, this, &MainWindow::printCurrentPdf);
     fileMenu->addAction(m_actPdfPrint);
     fileMenu->addSeparator();
@@ -205,16 +237,31 @@ void MainWindow::setupUi()
 
     m_actPdfFind = new QAction(tr("&Find in PDF…"), this);
     m_actPdfFind->setShortcut(QKeySequence::Find);
+    m_actPdfFind->setIcon(
+        iconThemedOrStandard(QStringLiteral("edit-find"), QStyle::SP_FileDialogContentsView));
+    m_actPdfFind->setToolTip(
+        tr("Show the find bar and search in the PDF (%1)")
+            .arg(QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     connect(m_actPdfFind, &QAction::triggered, this, &MainWindow::openPdfFind);
     editMenu->addAction(m_actPdfFind);
 
     m_actPdfFindNext = new QAction(tr("Find &Next"), this);
     m_actPdfFindNext->setShortcut(QKeySequence::FindNext);
+    m_actPdfFindNext->setIcon(
+        iconThemedOrStandard(QStringLiteral("go-down"), QStyle::SP_ArrowDown));
+    m_actPdfFindNext->setToolTip(
+        tr("Find next match (%1)")
+            .arg(QKeySequence(QKeySequence::FindNext).toString(QKeySequence::NativeText)));
     connect(m_actPdfFindNext, &QAction::triggered, this, &MainWindow::pdfFindNext);
     editMenu->addAction(m_actPdfFindNext);
 
     m_actPdfFindPrev = new QAction(tr("Find &Previous"), this);
     m_actPdfFindPrev->setShortcut(QKeySequence::FindPrevious);
+    m_actPdfFindPrev->setIcon(
+        iconThemedOrStandard(QStringLiteral("go-up"), QStyle::SP_ArrowUp));
+    m_actPdfFindPrev->setToolTip(
+        tr("Find previous match (%1)")
+            .arg(QKeySequence(QKeySequence::FindPrevious).toString(QKeySequence::NativeText)));
     connect(m_actPdfFindPrev, &QAction::triggered, this, &MainWindow::pdfFindPrev);
     editMenu->addAction(m_actPdfFindPrev);
 
@@ -241,8 +288,12 @@ void MainWindow::setupUi()
     viewMenu->addSeparator();
     m_actGoToPageOrLine = new QAction(tr("&Go to page / line…"), this);
     m_actGoToPageOrLine->setShortcut(QKeySequence(QStringLiteral("Ctrl+G")));
-    m_actGoToPageOrLine->setToolTip(
-        tr("In a PDF: jump to a page by number. In a text file: jump to a line (there are no PDF-style pages)."));
+    m_actGoToPageOrLine->setIcon(
+        iconThemedOrStandard(QStringLiteral("go-jump"), QStyle::SP_FileDialogInfoView));
+    m_actGoToPageOrLine->setToolTip(tr("In a PDF, jump to a page by number; in a text file, jump to a line. "
+                                        "Shortcut: %1")
+                                        .arg(QKeySequence(QStringLiteral("Ctrl+G"))
+                                                 .toString(QKeySequence::NativeText)));
     connect(m_actGoToPageOrLine, &QAction::triggered, this, &MainWindow::goToPageOrLine);
     viewMenu->addAction(m_actGoToPageOrLine);
     addAction(m_actGoToPageOrLine);
@@ -252,22 +303,38 @@ void MainWindow::setupUi()
 
     m_pdfActFirst = new QAction(tr("&First page"), this);
     m_pdfActFirst->setShortcut(QKeySequence(QStringLiteral("Ctrl+Home")));
-    m_pdfActFirst->setToolTip(tr("Go to first page (Ctrl+Home)"));
+    m_pdfActFirst->setIcon(
+        iconThemedOrStandard(QStringLiteral("go-first"), QStyle::SP_MediaSkipBackward));
+    m_pdfActFirst->setToolTip(
+        tr("First page (%1)").arg(QKeySequence(QStringLiteral("Ctrl+Home"))
+                                      .toString(QKeySequence::NativeText)));
     connect(m_pdfActFirst, &QAction::triggered, this, &MainWindow::pdfGoFirstPage);
 
     m_pdfActPrev = new QAction(tr("&Previous page"), this);
     m_pdfActPrev->setShortcut(QKeySequence(QStringLiteral("Alt+PgUp")));
-    m_pdfActPrev->setToolTip(tr("Go to previous page (Alt+PgUp)"));
+    m_pdfActPrev->setIcon(
+        iconThemedOrStandard(QStringLiteral("go-previous"), QStyle::SP_MediaSeekBackward));
+    m_pdfActPrev->setToolTip(
+        tr("Previous page (%1)").arg(QKeySequence(QStringLiteral("Alt+PgUp"))
+                                         .toString(QKeySequence::NativeText)));
     connect(m_pdfActPrev, &QAction::triggered, this, &MainWindow::pdfGoPrevPage);
 
     m_pdfActNext = new QAction(tr("&Next page"), this);
     m_pdfActNext->setShortcut(QKeySequence(QStringLiteral("Alt+PgDown")));
-    m_pdfActNext->setToolTip(tr("Go to next page (Alt+PgDown)"));
+    m_pdfActNext->setIcon(
+        iconThemedOrStandard(QStringLiteral("go-next"), QStyle::SP_MediaSeekForward));
+    m_pdfActNext->setToolTip(
+        tr("Next page (%1)").arg(QKeySequence(QStringLiteral("Alt+PgDown"))
+                                     .toString(QKeySequence::NativeText)));
     connect(m_pdfActNext, &QAction::triggered, this, &MainWindow::pdfGoNextPage);
 
     m_pdfActLast = new QAction(tr("&Last page"), this);
     m_pdfActLast->setShortcut(QKeySequence(QStringLiteral("Ctrl+End")));
-    m_pdfActLast->setToolTip(tr("Go to last page (Ctrl+End)"));
+    m_pdfActLast->setIcon(
+        iconThemedOrStandard(QStringLiteral("go-last"), QStyle::SP_MediaSkipForward));
+    m_pdfActLast->setToolTip(
+        tr("Last page (%1)").arg(QKeySequence(QStringLiteral("Ctrl+End"))
+                                     .toString(QKeySequence::NativeText)));
     connect(m_pdfActLast, &QAction::triggered, this, &MainWindow::pdfGoLastPage);
 
     pdfPageMenu->addAction(m_pdfActFirst);
@@ -330,30 +397,47 @@ void MainWindow::setupUi()
 
     setCentralWidget(m_splitter);
 
-    m_pdfToolBar = addToolBar(tr("PDF navigation"));
-    m_pdfToolBar->setMovable(false);
+    m_pdfToolBar = addToolBar(tr("PDF"));
+    applyToolbarChrome(m_pdfToolBar, 22);
     m_pdfToolBar->addAction(m_pdfActFirst);
     m_pdfToolBar->addAction(m_pdfActPrev);
     m_pdfToolBar->addAction(m_pdfActNext);
     m_pdfToolBar->addAction(m_pdfActLast);
+    m_pdfToolBar->addSeparator();
     m_pdfToolBar->addAction(m_actGoToPageOrLine);
+    m_pdfToolBar->addSeparator();
+    m_pdfToolBar->addAction(m_actPdfPrint);
+    m_pdfToolBar->addSeparator();
+    auto *pdfBarSpacer = new QWidget;
+    pdfBarSpacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    m_pdfToolBar->addWidget(pdfBarSpacer);
     m_pdfPageLabel = new QLabel(tr("—"));
     m_pdfPageLabel->setMinimumWidth(140);
     m_pdfPageLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+    m_pdfPageLabel->setToolTip(
+        tr("Page position in the current PDF. Use the icons to the left to move between pages, or go to a page."));
     m_pdfToolBar->addWidget(m_pdfPageLabel);
 
-    m_pdfFindToolBar = addToolBar(tr("PDF find"));
-    m_pdfFindToolBar->setMovable(false);
-    m_pdfFindToolBar->addWidget(new QLabel(tr("Find:")));
+    m_pdfFindToolBar = addToolBar(tr("Find"));
+    applyToolbarChrome(m_pdfFindToolBar, 22);
+    m_pdfFindToolBar->addAction(m_actPdfFind);
+    m_pdfFindToolBar->addSeparator();
+    m_pdfFindToolBar->addAction(m_actPdfFindPrev);
+    m_pdfFindToolBar->addAction(m_actPdfFindNext);
+    m_pdfFindToolBar->addSeparator();
     m_pdfFindEdit = new QLineEdit;
     m_pdfFindEdit->setClearButtonEnabled(true);
     m_pdfFindEdit->setPlaceholderText(tr("Search text in the active PDF"));
+    m_pdfFindEdit->setToolTip(
+        tr("Type your search, then use the arrows to step between matches. Press Return to jump to the next one."));
     m_pdfFindEdit->setMinimumWidth(280);
+    m_pdfFindEdit->setMinimumHeight(24);
     m_pdfFindToolBar->addWidget(m_pdfFindEdit);
-    m_pdfFindToolBar->addAction(m_actPdfFindPrev);
-    m_pdfFindToolBar->addAction(m_actPdfFindNext);
+    m_pdfFindToolBar->addSeparator();
     m_pdfFindCountLabel = new QLabel(tr("—"));
     m_pdfFindCountLabel->setMinimumWidth(140);
+    m_pdfFindCountLabel->setToolTip(
+        tr("Number of the active match and the total number of matches for the current search."));
     m_pdfFindToolBar->addWidget(m_pdfFindCountLabel);
     m_pdfFindToolBar->setVisible(false);
 
