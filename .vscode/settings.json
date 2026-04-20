@@ -1,0 +1,5 @@
+{
+  "cmake.configureSettings": {
+    "CMAKE_PREFIX_PATH": "/Users/chuck/Qt/6.9.3/macos"
+  }
+}
