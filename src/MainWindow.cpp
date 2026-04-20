@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 
 #include <QAction>
+#include <QApplication>
+#include <QClipboard>
 #include <QDebug>
 #include <QDir>
 #include <QFile>
@@ -9,22 +11,31 @@
 #include <QFileSystemModel>
 #include <QFileSystemWatcher>
 #include <QFont>
+#include <QGuiApplication>
 #include <QInputDialog>
+#include <QKeyEvent>
 #include <QLabel>
 #include <QKeySequence>
+#include <QLineEdit>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QMimeData>
 #include <QModelIndex>
 #include <QPdfDocument>
 #include <QPdfPageNavigator>
+#include <QPdfSearchModel>
 #include <QPdfView>
+#include <QPainter>
 #include <QPlainTextEdit>
+#include <QPrintDialog>
+#include <QPrinter>
 #include <QScreen>
 #include <QSplitter>
 #include <QStackedWidget>
 #include <QStandardPaths>
 #include <QStatusBar>
+#include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -99,6 +110,18 @@ bool looksLikeSourceSuffix(const QString &suffixLower)
     return kCode.contains(suffixLower);
 }
 
+QString stripBackgroundStyles(QString html)
+{
+    // Remove inline background styling while keeping other formatting.
+    html.remove(QRegularExpression(
+        QStringLiteral(R"((?:^|;)\s*background(?:-color)?\s*:\s*[^;\"']+\s*;?)"),
+        QRegularExpression::CaseInsensitiveOption));
+    html.remove(QRegularExpression(
+        QStringLiteral(R"(background(?:-color)?\s*=\s*["'][^"']*["'])"),
+        QRegularExpression::CaseInsensitiveOption));
+    return html;
+}
+
 } // namespace
 
 bool MainWindow::isProbablyTextFile(const QFileInfo &fi)
@@ -166,8 +189,39 @@ void MainWindow::setupUi()
     openFolder->setShortcut(QKeySequence::Open);
     connect(openFolder, &QAction::triggered, this, &MainWindow::openFolderDialog);
     fileMenu->addAction(openFolder);
+    m_actPdfPrint = new QAction(tr("&Print PDF…"), this);
+    m_actPdfPrint->setShortcut(QKeySequence::Print);
+    connect(m_actPdfPrint, &QAction::triggered, this, &MainWindow::printCurrentPdf);
+    fileMenu->addAction(m_actPdfPrint);
     fileMenu->addSeparator();
     fileMenu->addAction(tr("&Quit"), QKeySequence::Quit, this, &QWidget::close);
+
+    auto *editMenu = menuBar()->addMenu(tr("&Edit"));
+    m_actCopy = new QAction(tr("&Copy"), this);
+    m_actCopy->setShortcut(QKeySequence::Copy);
+    connect(m_actCopy, &QAction::triggered, this, &MainWindow::copyCurrentSelection);
+    editMenu->addAction(m_actCopy);
+    editMenu->addSeparator();
+
+    m_actPdfFind = new QAction(tr("&Find in PDF…"), this);
+    m_actPdfFind->setShortcut(QKeySequence::Find);
+    connect(m_actPdfFind, &QAction::triggered, this, &MainWindow::openPdfFind);
+    editMenu->addAction(m_actPdfFind);
+
+    m_actPdfFindNext = new QAction(tr("Find &Next"), this);
+    m_actPdfFindNext->setShortcut(QKeySequence::FindNext);
+    connect(m_actPdfFindNext, &QAction::triggered, this, &MainWindow::pdfFindNext);
+    editMenu->addAction(m_actPdfFindNext);
+
+    m_actPdfFindPrev = new QAction(tr("Find &Previous"), this);
+    m_actPdfFindPrev->setShortcut(QKeySequence::FindPrevious);
+    connect(m_actPdfFindPrev, &QAction::triggered, this, &MainWindow::pdfFindPrev);
+    editMenu->addAction(m_actPdfFindPrev);
+
+    addAction(m_actCopy);
+    addAction(m_actPdfFind);
+    addAction(m_actPdfFindNext);
+    addAction(m_actPdfFindPrev);
 
     auto *viewMenu = menuBar()->addMenu(tr("&View"));
     auto *actFitWidth = new QAction(tr("PDF Fit &Width"), this);
@@ -242,8 +296,11 @@ void MainWindow::setupUi()
     m_tree->setMinimumWidth(240);
 
     m_pdfDocument = new QPdfDocument(this);
+    m_pdfSearchModel = new QPdfSearchModel(this);
+    m_pdfSearchModel->setDocument(m_pdfDocument);
     m_pdfView = new QPdfView;
     m_pdfView->setDocument(m_pdfDocument);
+    m_pdfView->setSearchModel(m_pdfSearchModel);
     // Default is SinglePage (one page, no vertical scroll through the document).
     m_pdfView->setPageMode(QPdfView::PageMode::MultiPage);
 
@@ -285,11 +342,36 @@ void MainWindow::setupUi()
     m_pdfPageLabel->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
     m_pdfToolBar->addWidget(m_pdfPageLabel);
 
+    m_pdfFindToolBar = addToolBar(tr("PDF find"));
+    m_pdfFindToolBar->setMovable(false);
+    m_pdfFindToolBar->addWidget(new QLabel(tr("Find:")));
+    m_pdfFindEdit = new QLineEdit;
+    m_pdfFindEdit->setClearButtonEnabled(true);
+    m_pdfFindEdit->setPlaceholderText(tr("Search text in the active PDF"));
+    m_pdfFindEdit->setMinimumWidth(280);
+    m_pdfFindToolBar->addWidget(m_pdfFindEdit);
+    m_pdfFindToolBar->addAction(m_actPdfFindPrev);
+    m_pdfFindToolBar->addAction(m_actPdfFindNext);
+    m_pdfFindCountLabel = new QLabel(tr("—"));
+    m_pdfFindCountLabel->setMinimumWidth(140);
+    m_pdfFindToolBar->addWidget(m_pdfFindCountLabel);
+    m_pdfFindToolBar->setVisible(false);
+
     connect(m_pdfView->pageNavigator(),
             &QPdfPageNavigator::currentPageChanged,
             this,
             &MainWindow::updatePdfPageUi);
     connect(m_pdfDocument, &QPdfDocument::pageCountChanged, this, &MainWindow::updatePdfPageUi);
+    connect(m_pdfSearchModel,
+            &QPdfSearchModel::countChanged,
+            this,
+            &MainWindow::onPdfSearchResultsChanged);
+    connect(m_pdfView,
+            &QPdfView::currentSearchResultIndexChanged,
+            this,
+            &MainWindow::onPdfSearchResultsChanged);
+    connect(m_pdfFindEdit, &QLineEdit::textChanged, this, &MainWindow::onPdfFindTextChanged);
+    connect(m_pdfFindEdit, &QLineEdit::returnPressed, this, &MainWindow::pdfFindNext);
 
     statusBar()->setSizeGripEnabled(true);
 
@@ -438,6 +520,200 @@ void MainWindow::pdfGoLastPage()
     m_pdfView->pageNavigator()->jump(pages - 1, QPointF(0, 0), 0);
 }
 
+void MainWindow::openPdfFind()
+{
+    if (m_stack->currentWidget() != m_pdfView) {
+        return;
+    }
+    if (m_pdfFindToolBar) {
+        m_pdfFindToolBar->setVisible(true);
+    }
+    if (m_pdfFindEdit) {
+        m_pdfFindEdit->setFocus(Qt::ShortcutFocusReason);
+        m_pdfFindEdit->selectAll();
+    }
+    updatePdfFindActions();
+}
+
+void MainWindow::onPdfFindTextChanged(const QString &text)
+{
+    if (!m_pdfSearchModel) {
+        return;
+    }
+    m_pdfSearchModel->setSearchString(text);
+    if (m_pdfView) {
+        m_pdfView->setCurrentSearchResultIndex(-1);
+    }
+    updatePdfFindActions();
+    updatePdfSearchStatus();
+}
+
+void MainWindow::onPdfSearchResultsChanged()
+{
+    updatePdfFindActions();
+    updatePdfSearchStatus();
+}
+
+int MainWindow::pdfSearchResultCount() const
+{
+    if (!m_pdfSearchModel) {
+        return 0;
+    }
+    return m_pdfSearchModel->rowCount(QModelIndex());
+}
+
+void MainWindow::selectPdfSearchResult(int index)
+{
+    if (!m_pdfView || !m_pdfSearchModel) {
+        return;
+    }
+    const int total = pdfSearchResultCount();
+    if (index < 0 || index >= total) {
+        return;
+    }
+    m_pdfView->setCurrentSearchResultIndex(index);
+    const QPdfLink link = m_pdfSearchModel->resultAtIndex(index);
+    if (link.isValid()) {
+        m_pdfView->pageNavigator()->jump(link.page(), link.location(), link.zoom());
+    }
+}
+
+void MainWindow::pdfFindNext()
+{
+    if (m_stack->currentWidget() != m_pdfView || !m_pdfSearchModel || !m_pdfView) {
+        return;
+    }
+    const int total = pdfSearchResultCount();
+    if (total <= 0) {
+        return;
+    }
+    const int current = m_pdfView->currentSearchResultIndex();
+    const int next = (current + 1 + total) % total;
+    selectPdfSearchResult(next);
+}
+
+void MainWindow::pdfFindPrev()
+{
+    if (m_stack->currentWidget() != m_pdfView || !m_pdfSearchModel || !m_pdfView) {
+        return;
+    }
+    const int total = pdfSearchResultCount();
+    if (total <= 0) {
+        return;
+    }
+    const int current = m_pdfView->currentSearchResultIndex();
+    const int prev = (current - 1 + total) % total;
+    selectPdfSearchResult(prev);
+}
+
+void MainWindow::printCurrentPdf()
+{
+    if (m_stack->currentWidget() != m_pdfView || !m_pdfDocument || m_pdfDocument->pageCount() <= 0) {
+        return;
+    }
+
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setDocName(QFileInfo(m_previewFilePath).fileName());
+    QPrintDialog dialog(&printer, this);
+    dialog.setWindowTitle(tr("Print PDF"));
+    if (dialog.exec() != QDialog::Accepted) {
+        statusBar()->showMessage(tr("Print canceled."), 2000);
+        return;
+    }
+
+    QPainter painter(&printer);
+    if (!painter.isActive()) {
+        QMessageBox::warning(this, tr("Print PDF"), tr("Could not start printing."));
+        statusBar()->showMessage(tr("Print failed."), 3000);
+        return;
+    }
+
+    const int pages = m_pdfDocument->pageCount();
+    for (int page = 0; page < pages; ++page) {
+        if (page > 0) {
+            printer.newPage();
+        }
+        const QSize pagePx = m_pdfDocument->pagePointSize(page).toSize();
+        if (pagePx.isEmpty()) {
+            continue;
+        }
+        const QImage image = m_pdfDocument->render(page, pagePx);
+        if (image.isNull()) {
+            continue;
+        }
+        const QRect target = painter.viewport();
+        const QSize scaled = image.size().scaled(target.size(), Qt::KeepAspectRatio);
+        const QRect centered((target.width() - scaled.width()) / 2,
+                             (target.height() - scaled.height()) / 2,
+                             scaled.width(),
+                             scaled.height());
+        painter.drawImage(centered, image);
+    }
+    statusBar()->showMessage(tr("Sent PDF to printer."), 3000);
+}
+
+void MainWindow::copyCurrentSelection()
+{
+    QWidget *target = QApplication::focusWidget();
+    if (!target) {
+        target = m_stack->currentWidget();
+    }
+    if (!target) {
+        statusBar()->showMessage(tr("Nothing to copy."), 2000);
+        return;
+    }
+
+    bool attemptedCopy = false;
+    if (target == m_textView || m_textView->isAncestorOf(target)) {
+        m_textView->copy();
+        attemptedCopy = true;
+    } else if ((target == m_pdfView || m_pdfView->isAncestorOf(target))
+               && m_stack->currentWidget() == m_pdfView) {
+        if (!m_pdfView->hasFocus()) {
+            m_pdfView->setFocus(Qt::ShortcutFocusReason);
+        }
+        QKeyEvent press(QEvent::KeyPress, Qt::Key_C, Qt::ControlModifier, QStringLiteral("c"));
+        QKeyEvent release(QEvent::KeyRelease, Qt::Key_C, Qt::ControlModifier, QStringLiteral("c"));
+        QApplication::sendEvent(m_pdfView, &press);
+        QApplication::sendEvent(m_pdfView, &release);
+        attemptedCopy = true;
+    } else if (target) {
+        if (auto *plain = qobject_cast<QPlainTextEdit *>(target)) {
+            plain->copy();
+            attemptedCopy = true;
+        } else {
+            attemptedCopy = QMetaObject::invokeMethod(target, "copy", Qt::DirectConnection);
+        }
+    }
+
+    QClipboard *const clipboard = QGuiApplication::clipboard();
+    if (!clipboard || !clipboard->mimeData()) {
+        if (attemptedCopy) {
+            statusBar()->showMessage(tr("Copied selection."), 2000);
+        }
+        return;
+    }
+    const QMimeData *const src = clipboard->mimeData();
+    if (!src->hasHtml()) {
+        if (attemptedCopy) {
+            statusBar()->showMessage(tr("Copied selection."), 2000);
+        }
+        return;
+    }
+    auto *clean = new QMimeData;
+    clean->setHtml(stripBackgroundStyles(src->html()));
+    if (src->hasText()) {
+        clean->setText(src->text());
+    }
+    if (src->hasImage()) {
+        clean->setImageData(src->imageData());
+    }
+    clipboard->setMimeData(clean);
+    if (attemptedCopy) {
+        statusBar()->showMessage(tr("Copied selection (background colors removed)."), 2500);
+    }
+}
+
 void MainWindow::goToPageOrLine()
 {
     if (m_stack->currentWidget() == m_pdfView && m_pdfDocument) {
@@ -514,6 +790,9 @@ void MainWindow::updatePdfPageUi()
         if (m_pdfPageLabel) {
             m_pdfPageLabel->setText(tr("—"));
         }
+        if (m_pdfFindToolBar) {
+            m_pdfFindToolBar->setVisible(false);
+        }
         if (m_pdfActFirst) {
             m_pdfActFirst->setEnabled(false);
             m_pdfActPrev->setEnabled(false);
@@ -522,6 +801,8 @@ void MainWindow::updatePdfPageUi()
         }
         statusBar()->clearMessage();
         updateGoToNavigationAction();
+        updatePdfFindActions();
+        updatePdfSearchStatus();
         return;
     }
 
@@ -547,7 +828,12 @@ void MainWindow::updatePdfPageUi()
             0);
     }
 
+    if (m_actPdfPrint) {
+        m_actPdfPrint->setEnabled(showBar);
+    }
     updateGoToNavigationAction();
+    updatePdfFindActions();
+    updatePdfSearchStatus();
 }
 
 void MainWindow::updateGoToNavigationAction()
@@ -567,6 +853,50 @@ void MainWindow::updateGoToNavigationAction()
     }
 
     m_actGoToPageOrLine->setEnabled(false);
+}
+
+void MainWindow::updatePdfFindActions()
+{
+    const bool pdfActive = (m_stack->currentWidget() == m_pdfView);
+    const bool hasDocument = pdfActive && m_pdfDocument && m_pdfDocument->pageCount() > 0;
+    const bool hasQuery = m_pdfFindEdit && !m_pdfFindEdit->text().trimmed().isEmpty();
+    const bool hasResults = (pdfSearchResultCount() > 0);
+
+    if (m_actPdfFind) {
+        m_actPdfFind->setEnabled(hasDocument);
+    }
+    if (m_actPdfFindNext) {
+        m_actPdfFindNext->setEnabled(hasDocument && hasQuery && hasResults);
+    }
+    if (m_actPdfFindPrev) {
+        m_actPdfFindPrev->setEnabled(hasDocument && hasQuery && hasResults);
+    }
+    if (m_actPdfPrint) {
+        m_actPdfPrint->setEnabled(hasDocument);
+    }
+    if (m_actCopy) {
+        m_actCopy->setEnabled(m_stack->currentWidget() == m_pdfView || m_stack->currentWidget() == m_textView);
+    }
+}
+
+void MainWindow::updatePdfSearchStatus()
+{
+    if (!m_pdfFindCountLabel || !m_pdfView || !m_pdfSearchModel) {
+        return;
+    }
+    const QString query = m_pdfFindEdit ? m_pdfFindEdit->text().trimmed() : QString();
+    const int total = pdfSearchResultCount();
+    if (query.isEmpty()) {
+        m_pdfFindCountLabel->setText(tr("Type to search"));
+        return;
+    }
+    if (total <= 0) {
+        m_pdfFindCountLabel->setText(tr("No matches"));
+        return;
+    }
+    const int current = m_pdfView->currentSearchResultIndex();
+    const int oneBased = (current >= 0 && current < total) ? current + 1 : 0;
+    m_pdfFindCountLabel->setText(tr("Match %1 of %2").arg(oneBased).arg(total));
 }
 
 void MainWindow::showPlaceholder(const QString &html)

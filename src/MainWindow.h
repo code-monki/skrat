@@ -7,7 +7,9 @@ class QAction;
 class QFileSystemModel;
 class QFileSystemWatcher;
 class QLabel;
+class QLineEdit;
 class QPdfDocument;
+class QPdfSearchModel;
 class QPdfView;
 class QPlainTextEdit;
 class QSplitter;
@@ -37,6 +39,13 @@ private slots:
     void pdfGoPrevPage();
     void pdfGoNextPage();
     void pdfGoLastPage();
+    void openPdfFind();
+    void pdfFindNext();
+    void pdfFindPrev();
+    void onPdfFindTextChanged(const QString &text);
+    void onPdfSearchResultsChanged();
+    void printCurrentPdf();
+    void copyCurrentSelection();
     void goToPageOrLine();
     void updatePdfPageUi();
     void onWatchedFileChanged(const QString &path);
@@ -51,6 +60,10 @@ private:
     void setWatchedPreviewFile(const QString &absoluteFilePath);
     void showPreviewFileUnavailable(const QString &lostPath);
     void updateGoToNavigationAction();
+    void updatePdfFindActions();
+    void updatePdfSearchStatus();
+    int pdfSearchResultCount() const;
+    void selectPdfSearchResult(int index);
 
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
@@ -68,7 +81,16 @@ private:
     QAction *m_pdfActPrev = nullptr;
     QAction *m_pdfActNext = nullptr;
     QAction *m_pdfActLast = nullptr;
+    QAction *m_actPdfFind = nullptr;
+    QAction *m_actPdfFindNext = nullptr;
+    QAction *m_actPdfFindPrev = nullptr;
+    QAction *m_actPdfPrint = nullptr;
+    QAction *m_actCopy = nullptr;
     QAction *m_actGoToPageOrLine = nullptr;
+    QToolBar *m_pdfFindToolBar = nullptr;
+    QLineEdit *m_pdfFindEdit = nullptr;
+    QLabel *m_pdfFindCountLabel = nullptr;
+    QPdfSearchModel *m_pdfSearchModel = nullptr;
 
     QString m_previewFilePath;
     QString m_pendingReloadPath;

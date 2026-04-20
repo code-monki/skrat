@@ -12,6 +12,9 @@ This is **not** an editor.
   - **Text** for common extensions (UTF-8; see `MainWindow.cpp` for the allowlist).
 - **Menus**
   - **File → Open Folder…** sets the tree root.
+  - **File → Print PDF…** prints the currently selected/open PDF (**Ctrl+P**).
+  - **Edit → Copy** copies selection from text/PDF; HTML payloads are sanitized to remove background color styling before paste (**Ctrl+C**).
+  - **Edit → Find in PDF… / Find Next / Find Previous** searches in the active PDF (**Ctrl+F**, **F3**, **Shift+F3**). A compact find toolbar shows the query and match count.
   - **View → PDF Fit Width / Zoom In / Out** (shortcuts match the platform defaults where applicable).
   - **View → PDF pages** (and the **PDF navigation** toolbar): first / previous / next / last page, a **page counter**, **Go to page / line…** (**Ctrl+G**), and shortcuts (**Ctrl+Home**, **Alt+PgUp**, **Alt+PgDown**, **Ctrl+End**). **Ctrl+G** on a PDF asks for a **page number**; on plain text it asks for a **line number** (text previews do not have PDF-style pages). The status bar summarizes navigation when a PDF is open.
   - **Disk changes:** the file shown in the preview (PDF or text) is watched with **`QFileSystemWatcher`**. If it changes on disk, the preview **reloads** after a short debounce. If it **disappears** (deleted or renamed away), the preview shows that the file is **no longer available**.
@@ -19,8 +22,8 @@ This is **not** an editor.
 ## Requirements
 
 - **CMake** 3.16 or newer  
-- **Qt 6** with these modules available to CMake: **Core**, **Gui**, **Widgets**, **Pdf**, **PdfWidgets**  
-  - Qt **6.4+** is required by `CMakeLists.txt` (PDF APIs used here); some distributions package PDF widgets separately—if CMake cannot find `Qt6::PdfWidgets`, install your OS “Qt6 PDF” development packages or point `CMAKE_PREFIX_PATH` at a full Qt kit from the Qt Online Installer.
+- **Qt 6** with these modules available to CMake: **Core**, **Gui**, **Widgets**, **PrintSupport**, **Pdf**, **PdfWidgets**  
+  - Qt **6.4+** is required by `CMakeLists.txt` (PDF APIs used here); some distributions package PDF/print modules separately—if CMake cannot find `Qt6::PdfWidgets` or `Qt6::PrintSupport`, install your OS Qt6 PDF/print development packages or point `CMAKE_PREFIX_PATH` at a full Qt kit from the Qt Online Installer.
 - A **C++17** toolchain
 
 ### Optional tooling (Homebrew, Chocolatey, npm)
