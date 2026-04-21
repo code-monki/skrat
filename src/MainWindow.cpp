@@ -1147,6 +1147,8 @@ void MainWindow::showAboutDialog()
            "<p>Read-only desktop viewer for PDFs and text files.</p>"
            "<p><b>Author / Maintainer:</b> CodeMonki</p>"
            "<p><b>License:</b> GPL-3.0-or-later (code), CC-BY-SA-4.0 (docs)</p>"
+           "<p><b>Third-party:</b> Uses Qt framework under LGPLv3/GPL/commercial terms as applicable "
+           "(see <a href='https://www.qt.io/licensing'>qt.io/licensing</a>).</p>"
            "<p>Project: <a href='https://github.com/code-monki/skrat'>github.com/code-monki/skrat</a></p>")
             .arg(QString::fromUtf8(SKRAT_APP_VERSION)));
 }
