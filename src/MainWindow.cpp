@@ -474,14 +474,16 @@ void MainWindow::setupUi()
     QMenu *const pdfPageMenu = viewMenu->addMenu(tr("PDF &pages"));
 
     m_pdfActFirst = new QAction(tr("&First page"), this);
-    m_pdfActFirst->setShortcut(QKeySequence(QStringLiteral("Ctrl+Home")));
+    m_pdfActFirst->setShortcuts(
+        {QKeySequence(QStringLiteral("Ctrl+Home")), QKeySequence(QStringLiteral("Meta+Up"))});
     m_pdfActFirst->setIcon(navIcon(QStringLiteral("media-skip-backward"),
                                    QStyle::SP_MediaSkipBackward,
                                    false,
                                    true));
     m_pdfActFirst->setToolTip(
-        tr("First page (%1)").arg(QKeySequence(QStringLiteral("Ctrl+Home"))
-                                      .toString(QKeySequence::NativeText)));
+        tr("First page (%1 / %2)")
+            .arg(QKeySequence(QStringLiteral("Ctrl+Home")).toString(QKeySequence::NativeText),
+                 QKeySequence(QStringLiteral("Meta+Up")).toString(QKeySequence::NativeText)));
     connect(m_pdfActFirst, &QAction::triggered, this, &MainWindow::pdfGoFirstPage);
 
     m_pdfActPrev = new QAction(tr("&Previous page"), this);
@@ -503,12 +505,14 @@ void MainWindow::setupUi()
     connect(m_pdfActNext, &QAction::triggered, this, &MainWindow::pdfGoNextPage);
 
     m_pdfActLast = new QAction(tr("&Last page"), this);
-    m_pdfActLast->setShortcut(QKeySequence(QStringLiteral("Ctrl+End")));
+    m_pdfActLast->setShortcuts(
+        {QKeySequence(QStringLiteral("Ctrl+End")), QKeySequence(QStringLiteral("Meta+Down"))});
     m_pdfActLast->setIcon(
         navIcon(QStringLiteral("media-skip-forward"), QStyle::SP_MediaSkipForward, true, true));
     m_pdfActLast->setToolTip(
-        tr("Last page (%1)").arg(QKeySequence(QStringLiteral("Ctrl+End"))
-                                     .toString(QKeySequence::NativeText)));
+        tr("Last page (%1 / %2)")
+            .arg(QKeySequence(QStringLiteral("Ctrl+End")).toString(QKeySequence::NativeText),
+                 QKeySequence(QStringLiteral("Meta+Down")).toString(QKeySequence::NativeText)));
     connect(m_pdfActLast, &QAction::triggered, this, &MainWindow::pdfGoLastPage);
 
     pdfPageMenu->addAction(m_pdfActFirst);
@@ -1196,7 +1200,7 @@ void MainWindow::showHelpDialog()
            "<li><b>Find next / previous:</b> %4 / %5</li>"
            "<li><b>Copy:</b> %6</li>"
            "<li><b>Go to page / line:</b> Ctrl+G</li>"
-           "<li><b>First / Last page:</b> Ctrl+Home / Ctrl+End</li>"
+           "<li><b>First / Last page:</b> Ctrl+Home or Cmd+Up / Ctrl+End or Cmd+Down</li>"
            "<li><b>Prev / Next page:</b> Alt+PgUp / Alt+PgDown</li>"
            "<li><b>Zoom in / out:</b> %7 / %8</li>"
            "</ul>"
