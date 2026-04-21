@@ -12,11 +12,11 @@ This is **not** an editor.
   - **Text** for common extensions (UTF-8; see `MainWindow.cpp` for the allowlist).
 - **Menus**
   - **File → Open Folder…** sets the tree root.
-  - **File → Print PDF…** prints the currently selected/open PDF (**Ctrl+P**).
+  - **File → Print PDF…** prints the currently selected/open PDF (**Ctrl+P**), with a pre-print options dialog: **Native PDF (vector via system print queue)** or **Rasterized by skrat** at **300/600 DPI**.
   - **Edit → Copy** copies selection from text/PDF; HTML payloads are sanitized to remove background color styling before paste (**Ctrl+C**).
   - **Edit → Find in PDF… / Find Next / Find Previous** searches in the active PDF (**Ctrl+F**, **F3**, **Shift+F3**). A **Find** toolbar (icon buttons + search field) shows the query and match count; hover for shortcuts and hints.
   - **View → PDF Fit Width / Zoom In / Out** (shortcuts match the platform defaults where applicable).
-  - **View → PDF pages** (and the **PDF** toolbars): **icon-only** controls with tooltips for page navigation (first / previous / next / last), **go to page / line**, **print**, and **find**; the **page counter** is centered in the main bar over the **preview** (right) column so it lines up with the document, not the file tree. **Ctrl+G** on a PDF asks for a **page number**; on plain text it asks for a **line number** (text previews do not have PDF-style pages). The status bar summarizes navigation when a PDF is open.
+  - **View → PDF pages** (and the **PDF** toolbars): **icon-only** controls with tooltips for page navigation (first / previous / next / last) plus a **page number input** between previous/next (press **Return** to jump; out-of-range values show a warning), along with **print** and **find**. The **page counter** is centered in the main bar over the **preview** (right) column so it lines up with the document, not the file tree. **Ctrl+G** on a PDF asks for a **page number**; on plain text it asks for a **line number** (text previews do not have PDF-style pages). The status bar summarizes navigation when a PDF is open.
   - **Disk changes:** the file shown in the preview (PDF or text) is watched with **`QFileSystemWatcher`**. If it changes on disk, the preview **reloads** after a short debounce. If it **disappears** (deleted or renamed away), the preview shows that the file is **no longer available**.
 
 ## Requirements

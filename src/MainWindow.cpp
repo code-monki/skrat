@@ -5,6 +5,8 @@
 #include <QClipboard>
 #include <QFrame>
 #include <QDebug>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QDir>
 #include <QFile>
 #include <QFileDialog>
@@ -12,12 +14,15 @@
 #include <QFileSystemModel>
 #include <QFileSystemWatcher>
 #include <QFont>
+#include <QFormLayout>
 #include <QGuiApplication>
 #include <QInputDialog>
+#include <QIntValidator>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QKeySequence>
 #include <QLineEdit>
+#include <QComboBox>
 #include <QResizeEvent>
 #include <QMenu>
 #include <QMenuBar>
@@ -29,6 +34,7 @@
 #include <QPdfSearchModel>
 #include <QPdfView>
 #include <QPainter>
+#include <QPen>
 #include <QPlainTextEdit>
 #include <QPrintDialog>
 #include <QPrinter>
@@ -41,6 +47,7 @@
 #include <QStyle>
 #include <QVBoxLayout>
 #include <QRegularExpression>
+#include <QProcess>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -54,6 +61,12 @@ namespace {
 constexpr int kPlaceholderPage = 0;
 constexpr int kPdfPage = 1;
 constexpr int kTextPage = 2;
+constexpr int kRasterDpiDefault = 300;
+
+enum class PrintOutputMode : int {
+    VectorNative = 0,
+    RasterQt = 1,
+};
 
 bool hasTextualSuffix(const QString &suffixLower)
 {
@@ -128,6 +141,50 @@ QIcon iconThemedOrStandard(const QString &themeName, QStyle::StandardPixmap fall
     return {};
 }
 
+QIcon chevronFallbackIcon(bool forward, bool doubled)
+{
+    QPixmap pm(22, 22);
+    pm.fill(Qt::transparent);
+    QPainter p(&pm);
+    p.setRenderHint(QPainter::Antialiasing, true);
+    QPen pen(QApplication::palette().buttonText().color());
+    pen.setWidth(2);
+    pen.setCapStyle(Qt::RoundCap);
+    pen.setJoinStyle(Qt::RoundJoin);
+    p.setPen(pen);
+
+    const int cy = 11;
+    auto drawChevron = [&](int x) {
+        if (forward) {
+            p.drawLine(x - 3, cy - 5, x + 2, cy);
+            p.drawLine(x + 2, cy, x - 3, cy + 5);
+        } else {
+            p.drawLine(x + 3, cy - 5, x - 2, cy);
+            p.drawLine(x - 2, cy, x + 3, cy + 5);
+        }
+    };
+
+    if (doubled) {
+        drawChevron(forward ? 8 : 14);
+        drawChevron(forward ? 14 : 8);
+    } else {
+        drawChevron(11);
+    }
+    return QIcon(pm);
+}
+
+QIcon navIcon(const QString &themeName,
+              QStyle::StandardPixmap fallback,
+              bool forward,
+              bool doubled)
+{
+    QIcon icon = iconThemedOrStandard(themeName, fallback);
+    if (icon.isNull()) {
+        icon = chevronFallbackIcon(forward, doubled);
+    }
+    return icon;
+}
+
 void applyToolbarChrome(QToolBar *bar, int iconSize)
 {
     if (!bar) {
@@ -150,6 +207,47 @@ QString stripBackgroundStyles(QString html)
         QStringLiteral(R"(background(?:-color)?\s*=\s*["'][^"']*["'])"),
         QRegularExpression::CaseInsensitiveOption));
     return html;
+}
+
+bool supportsNativeVectorPrinting()
+{
+#if defined(Q_OS_WIN)
+    return !QStandardPaths::findExecutable(QStringLiteral("powershell.exe")).isEmpty();
+#elif defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
+    return !QStandardPaths::findExecutable(QStringLiteral("lp")).isEmpty();
+#else
+    return false;
+#endif
+}
+
+bool runNativeVectorPrint(const QString &filePath)
+{
+#if defined(Q_OS_WIN)
+    if (filePath.isEmpty()) {
+        return false;
+    }
+    const QString powershell = QStandardPaths::findExecutable(QStringLiteral("powershell.exe"));
+    if (powershell.isEmpty()) {
+        return false;
+    }
+    QString escaped = filePath;
+    escaped.replace('\'', QStringLiteral("''"));
+    const QString script =
+        QStringLiteral("Start-Process -FilePath '%1' -Verb Print").arg(escaped);
+    return QProcess::execute(powershell, {QStringLiteral("-NoProfile"), QStringLiteral("-Command"), script}) == 0;
+#elif defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
+    if (filePath.isEmpty()) {
+        return false;
+    }
+    const QString lp = QStandardPaths::findExecutable(QStringLiteral("lp"));
+    if (lp.isEmpty()) {
+        return false;
+    }
+    return QProcess::execute(lp, {filePath}) == 0;
+#else
+    Q_UNUSED(filePath);
+    return false;
+#endif
 }
 
 } // namespace
@@ -378,8 +476,10 @@ void MainWindow::setupUi()
 
     m_pdfActFirst = new QAction(tr("&First page"), this);
     m_pdfActFirst->setShortcut(QKeySequence(QStringLiteral("Ctrl+Home")));
-    m_pdfActFirst->setIcon(
-        iconThemedOrStandard(QStringLiteral("go-first"), QStyle::SP_MediaSkipBackward));
+    m_pdfActFirst->setIcon(navIcon(QStringLiteral("media-skip-backward"),
+                                   QStyle::SP_MediaSkipBackward,
+                                   false,
+                                   true));
     m_pdfActFirst->setToolTip(
         tr("First page (%1)").arg(QKeySequence(QStringLiteral("Ctrl+Home"))
                                       .toString(QKeySequence::NativeText)));
@@ -388,7 +488,7 @@ void MainWindow::setupUi()
     m_pdfActPrev = new QAction(tr("&Previous page"), this);
     m_pdfActPrev->setShortcut(QKeySequence(QStringLiteral("Alt+PgUp")));
     m_pdfActPrev->setIcon(
-        iconThemedOrStandard(QStringLiteral("go-previous"), QStyle::SP_MediaSeekBackward));
+        navIcon(QStringLiteral("go-previous"), QStyle::SP_MediaSeekBackward, false, false));
     m_pdfActPrev->setToolTip(
         tr("Previous page (%1)").arg(QKeySequence(QStringLiteral("Alt+PgUp"))
                                          .toString(QKeySequence::NativeText)));
@@ -397,7 +497,7 @@ void MainWindow::setupUi()
     m_pdfActNext = new QAction(tr("&Next page"), this);
     m_pdfActNext->setShortcut(QKeySequence(QStringLiteral("Alt+PgDown")));
     m_pdfActNext->setIcon(
-        iconThemedOrStandard(QStringLiteral("go-next"), QStyle::SP_MediaSeekForward));
+        navIcon(QStringLiteral("go-next"), QStyle::SP_MediaSeekForward, true, false));
     m_pdfActNext->setToolTip(
         tr("Next page (%1)").arg(QKeySequence(QStringLiteral("Alt+PgDown"))
                                      .toString(QKeySequence::NativeText)));
@@ -406,7 +506,7 @@ void MainWindow::setupUi()
     m_pdfActLast = new QAction(tr("&Last page"), this);
     m_pdfActLast->setShortcut(QKeySequence(QStringLiteral("Ctrl+End")));
     m_pdfActLast->setIcon(
-        iconThemedOrStandard(QStringLiteral("go-last"), QStyle::SP_MediaSkipForward));
+        navIcon(QStringLiteral("media-skip-forward"), QStyle::SP_MediaSkipForward, true, true));
     m_pdfActLast->setToolTip(
         tr("Last page (%1)").arg(QKeySequence(QStringLiteral("Ctrl+End"))
                                      .toString(QKeySequence::NativeText)));
@@ -480,10 +580,17 @@ void MainWindow::setupUi()
     applyToolbarChrome(m_pdfToolBar, 22);
     m_pdfToolBar->addAction(m_pdfActFirst);
     m_pdfToolBar->addAction(m_pdfActPrev);
+    m_pdfPageEdit = new QLineEdit;
+    m_pdfPageEdit->setMinimumWidth(64);
+    m_pdfPageEdit->setMaximumWidth(84);
+    m_pdfPageEdit->setAlignment(Qt::AlignCenter);
+    m_pdfPageEdit->setPlaceholderText(tr("Page"));
+    m_pdfPageEdit->setToolTip(tr("Enter a page number and press Return to jump."));
+    m_pdfPageValidator = new QIntValidator(1, 1, m_pdfPageEdit);
+    m_pdfPageEdit->setValidator(m_pdfPageValidator);
+    m_pdfToolBar->addWidget(m_pdfPageEdit);
     m_pdfToolBar->addAction(m_pdfActNext);
     m_pdfToolBar->addAction(m_pdfActLast);
-    m_pdfToolBar->addSeparator();
-    m_pdfToolBar->addAction(m_actGoToPageOrLine);
     m_pdfToolBar->addSeparator();
     m_pdfToolBar->addAction(m_actPdfPrint);
 
@@ -547,6 +654,7 @@ void MainWindow::setupUi()
 #endif
     connect(m_pdfFindEdit, &QLineEdit::textChanged, this, &MainWindow::onPdfFindTextChanged);
     connect(m_pdfFindEdit, &QLineEdit::returnPressed, this, &MainWindow::pdfFindNext);
+    connect(m_pdfPageEdit, &QLineEdit::returnPressed, this, &MainWindow::onPdfPageEditReturnPressed);
 
     statusBar()->setSizeGripEnabled(true);
 
@@ -805,16 +913,82 @@ void MainWindow::printCurrentPdf()
         return;
     }
 
+    PrintOutputMode outputMode = PrintOutputMode::RasterQt;
+    int rasterDpi = kRasterDpiDefault;
+    {
+        QDialog optionsDialog(this);
+        optionsDialog.setWindowTitle(tr("Print Options"));
+
+        auto *layout = new QFormLayout(&optionsDialog);
+        auto *modeCombo = new QComboBox(&optionsDialog);
+        const bool nativeVectorSupported = supportsNativeVectorPrinting();
+        if (nativeVectorSupported) {
+            modeCombo->addItem(tr("Native PDF (vector, system print queue)"),
+                               static_cast<int>(PrintOutputMode::VectorNative));
+        }
+        modeCombo->addItem(tr("Rasterized by skrat (Qt renderer)"),
+                           static_cast<int>(PrintOutputMode::RasterQt));
+        modeCombo->setToolTip(
+            tr("Native PDF keeps vector sharpness; rasterized mode provides cross-platform fallback."));
+
+        auto *dpiCombo = new QComboBox(&optionsDialog);
+        dpiCombo->addItem(tr("300 DPI"), 300);
+        dpiCombo->addItem(tr("600 DPI"), 600);
+        dpiCombo->setCurrentIndex(0);
+        dpiCombo->setToolTip(tr("Used only when rasterized printing is selected."));
+
+        layout->addRow(tr("Output mode:"), modeCombo);
+        layout->addRow(tr("Raster DPI:"), dpiCombo);
+
+        auto *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+                                             Qt::Horizontal,
+                                             &optionsDialog);
+        layout->addWidget(buttons);
+        connect(buttons, &QDialogButtonBox::accepted, &optionsDialog, &QDialog::accept);
+        connect(buttons, &QDialogButtonBox::rejected, &optionsDialog, &QDialog::reject);
+        connect(modeCombo,
+                &QComboBox::currentIndexChanged,
+                &optionsDialog,
+                [modeCombo, dpiCombo](int) {
+                    const auto mode =
+                        static_cast<PrintOutputMode>(modeCombo->currentData().toInt());
+                    dpiCombo->setEnabled(mode == PrintOutputMode::RasterQt);
+                });
+        dpiCombo->setEnabled(true);
+
+        if (optionsDialog.exec() != QDialog::Accepted) {
+            statusBar()->showMessage(tr("Print canceled."), 2000);
+            return;
+        }
+
+        outputMode = static_cast<PrintOutputMode>(modeCombo->currentData().toInt());
+        rasterDpi = dpiCombo->currentData().toInt();
+    }
+
+    if (outputMode == PrintOutputMode::VectorNative) {
+        if (runNativeVectorPrint(m_previewFilePath)) {
+            statusBar()->showMessage(tr("Sent PDF to system print queue (vector mode)."), 3000);
+        } else {
+            QMessageBox::warning(this,
+                                 tr("Print PDF"),
+                                 tr("Vector print mode is not available on this system."));
+            statusBar()->showMessage(tr("Vector print failed."), 3000);
+        }
+        return;
+    }
+
     QPrinter printer(QPrinter::HighResolution);
     printer.setDocName(QFileInfo(m_previewFilePath).fileName());
+    printer.setResolution(qMax(kRasterDpiDefault, rasterDpi));
     QPrintDialog dialog(&printer, this);
-    dialog.setWindowTitle(tr("Print PDF"));
+    dialog.setWindowTitle(tr("Print PDF (Raster)"));
     if (dialog.exec() != QDialog::Accepted) {
         statusBar()->showMessage(tr("Print canceled."), 2000);
         return;
     }
 
     QPainter painter(&printer);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
     if (!painter.isActive()) {
         QMessageBox::warning(this, tr("Print PDF"), tr("Could not start printing."));
         statusBar()->showMessage(tr("Print failed."), 3000);
@@ -826,7 +1000,10 @@ void MainWindow::printCurrentPdf()
         if (page > 0) {
             printer.newPage();
         }
-        const QSize pagePx = m_pdfDocument->pagePointSize(page).toSize();
+        const QSizeF pagePt = m_pdfDocument->pagePointSize(page);
+        const qreal scale = static_cast<qreal>(printer.resolution()) / 72.0;
+        const QSize pagePx(qMax(1, qRound(pagePt.width() * scale)),
+                           qMax(1, qRound(pagePt.height() * scale)));
         if (pagePx.isEmpty()) {
             continue;
         }
@@ -842,7 +1019,7 @@ void MainWindow::printCurrentPdf()
                              scaled.height());
         painter.drawImage(centered, image);
     }
-    statusBar()->showMessage(tr("Sent PDF to printer."), 3000);
+    statusBar()->showMessage(tr("Sent PDF to printer (raster mode)."), 3000);
 }
 
 void MainWindow::copyCurrentSelection()
@@ -905,6 +1082,34 @@ void MainWindow::copyCurrentSelection()
     if (attemptedCopy) {
         statusBar()->showMessage(tr("Copied selection (background colors removed)."), 2500);
     }
+}
+
+void MainWindow::onPdfPageEditReturnPressed()
+{
+    if (!m_pdfPageEdit || !m_pdfDocument || !m_pdfView || m_stack->currentWidget() != m_pdfView) {
+        return;
+    }
+    if (m_updatingPdfPageEdit) {
+        return;
+    }
+    const int pages = m_pdfDocument->pageCount();
+    if (pages <= 0) {
+        return;
+    }
+
+    bool ok = false;
+    const int pageOneBased = m_pdfPageEdit->text().trimmed().toInt(&ok);
+    if (!ok || pageOneBased < 1 || pageOneBased > pages) {
+        QMessageBox::warning(this,
+                             tr("Go to Page"),
+                             tr("Page number out of range. Enter a value between 1 and %1.").arg(pages));
+        m_updatingPdfPageEdit = true;
+        m_pdfPageEdit->setText(QString::number(m_pdfView->pageNavigator()->currentPage() + 1));
+        m_updatingPdfPageEdit = false;
+        m_pdfPageEdit->selectAll();
+        return;
+    }
+    m_pdfView->pageNavigator()->jump(pageOneBased - 1, QPointF(0, 0), 0);
 }
 
 void MainWindow::goToPageOrLine()
@@ -983,6 +1188,12 @@ void MainWindow::updatePdfPageUi()
         if (m_pdfPageLabel) {
             m_pdfPageLabel->setText(tr("—"));
         }
+        if (m_pdfPageEdit) {
+            m_updatingPdfPageEdit = true;
+            m_pdfPageEdit->clear();
+            m_pdfPageEdit->setEnabled(false);
+            m_updatingPdfPageEdit = false;
+        }
         if (m_pdfDocumentRibbon) {
             m_pdfDocumentRibbon->recenter();
         }
@@ -1006,6 +1217,15 @@ void MainWindow::updatePdfPageUi()
     const int cur = nav->currentPage();
     if (m_pdfPageLabel) {
         m_pdfPageLabel->setText(tr("Page %1 of %2").arg(cur + 1).arg(pages));
+    }
+    if (m_pdfPageEdit) {
+        m_updatingPdfPageEdit = true;
+        m_pdfPageEdit->setEnabled(true);
+        m_pdfPageEdit->setText(QString::number(cur + 1));
+        if (m_pdfPageValidator) {
+            m_pdfPageValidator->setRange(1, pages);
+        }
+        m_updatingPdfPageEdit = false;
     }
     if (m_pdfDocumentRibbon) {
         m_pdfDocumentRibbon->recenter();

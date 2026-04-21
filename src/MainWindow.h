@@ -8,6 +8,7 @@ class QFileSystemModel;
 class QFileSystemWatcher;
 class QLabel;
 class QLineEdit;
+class QIntValidator;
 class QPdfDocument;
 class QPdfSearchModel;
 class QPdfView;
@@ -50,6 +51,7 @@ private slots:
     void onPdfSearchResultsChanged();
     void printCurrentPdf();
     void copyCurrentSelection();
+    void onPdfPageEditReturnPressed();
     void goToPageOrLine();
     void updatePdfPageUi();
     void onWatchedFileChanged(const QString &path);
@@ -96,6 +98,8 @@ private:
     QAction *m_actCopy = nullptr;
     QAction *m_actGoToPageOrLine = nullptr;
     QToolBar *m_pdfFindToolBar = nullptr;
+    QLineEdit *m_pdfPageEdit = nullptr;
+    QIntValidator *m_pdfPageValidator = nullptr;
     QLineEdit *m_pdfFindEdit = nullptr;
     QLabel *m_pdfFindCountLabel = nullptr;
     QPdfSearchModel *m_pdfSearchModel = nullptr;
@@ -103,6 +107,7 @@ private:
     QString m_previewFilePath;
     QString m_pendingReloadPath;
     int m_pdfSearchCurrentIndex = -1;
+    bool m_updatingPdfPageEdit = false;
     QFileSystemWatcher *m_fileWatcher = nullptr;
     QTimer *m_reloadDebounceTimer = nullptr;
 
