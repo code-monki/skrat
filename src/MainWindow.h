@@ -118,6 +118,7 @@ private:
     QString m_pendingReloadPath;
     int m_pdfSearchCurrentIndex = -1;
     bool m_updatingPdfPageEdit = false;
+    bool m_pdfAutoSelectingFirstResult = false;
     QFileSystemWatcher *m_fileWatcher = nullptr;
     QTimer *m_reloadDebounceTimer = nullptr;
 

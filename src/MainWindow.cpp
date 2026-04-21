@@ -848,6 +848,16 @@ void MainWindow::onPdfFindTextChanged(const QString &text)
 
 void MainWindow::onPdfSearchResultsChanged()
 {
+    if (!m_pdfAutoSelectingFirstResult && m_pdfFindEdit
+        && !m_pdfFindEdit->text().trimmed().isEmpty()) {
+        const int total = pdfSearchResultCount();
+        const int current = currentPdfSearchResultIndex();
+        if (total > 0 && (current < 0 || current >= total)) {
+            m_pdfAutoSelectingFirstResult = true;
+            selectPdfSearchResult(0);
+            m_pdfAutoSelectingFirstResult = false;
+        }
+    }
     updatePdfFindActions();
     updatePdfSearchStatus();
 }
@@ -874,8 +884,10 @@ void MainWindow::setCurrentPdfSearchResultIndexCompat(int index)
 {
     m_pdfSearchCurrentIndex = index;
 #if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+    // Keep Qt's bright cyan "current result" frame disabled; we use the softer
+    // rectangular background boxes that QPdfView draws for all matches.
     if (m_pdfView) {
-        m_pdfView->setCurrentSearchResultIndex(index);
+        m_pdfView->setCurrentSearchResultIndex(-1);
     }
 #endif
 }
