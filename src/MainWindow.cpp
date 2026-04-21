@@ -8,6 +8,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QDir>
+#include <QDesktopServices>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -30,6 +31,7 @@
 #include <QMimeData>
 #include <QModelIndex>
 #include <QPdfDocument>
+#include <QPdfBookmarkModel>
 #include <QPdfPageNavigator>
 #include <QPdfSearchModel>
 #include <QPdfView>
@@ -45,9 +47,9 @@
 #include <QSizePolicy>
 #include <QStatusBar>
 #include <QStyle>
+#include <QTabWidget>
 #include <QVBoxLayout>
 #include <QRegularExpression>
-#include <QProcess>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -55,6 +57,7 @@
 #include <QToolBar>
 #include <QTreeView>
 #include <QWidget>
+#include <QUrl>
 
 namespace {
 
@@ -222,28 +225,11 @@ bool supportsNativeVectorPrinting()
 
 bool runNativeVectorPrint(const QString &filePath)
 {
-#if defined(Q_OS_WIN)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
     if (filePath.isEmpty()) {
         return false;
     }
-    const QString powershell = QStandardPaths::findExecutable(QStringLiteral("powershell.exe"));
-    if (powershell.isEmpty()) {
-        return false;
-    }
-    QString escaped = filePath;
-    escaped.replace('\'', QStringLiteral("''"));
-    const QString script =
-        QStringLiteral("Start-Process -FilePath '%1' -Verb Print").arg(escaped);
-    return QProcess::execute(powershell, {QStringLiteral("-NoProfile"), QStringLiteral("-Command"), script}) == 0;
-#elif defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
-    if (filePath.isEmpty()) {
-        return false;
-    }
-    const QString lp = QStandardPaths::findExecutable(QStringLiteral("lp"));
-    if (lp.isEmpty()) {
-        return false;
-    }
-    return QProcess::execute(lp, {filePath}) == 0;
+    return QDesktopServices::openUrl(QUrl::fromLocalFile(filePath));
 #else
     Q_UNUSED(filePath);
     return false;
@@ -538,6 +524,8 @@ void MainWindow::setupUi()
     m_tree->setMinimumWidth(240);
 
     m_pdfDocument = new QPdfDocument(this);
+    m_pdfBookmarkModel = new QPdfBookmarkModel(this);
+    m_pdfBookmarkModel->setDocument(m_pdfDocument);
     m_pdfSearchModel = new QPdfSearchModel(this);
     m_pdfSearchModel->setDocument(m_pdfDocument);
     m_pdfView = new QPdfView;
@@ -560,11 +548,35 @@ void MainWindow::setupUi()
     m_placeholder->setOpenExternalLinks(true);
     m_placeholder->setMargin(12);
 
+    m_tocView = new QTreeView;
+    m_tocView->setModel(m_pdfBookmarkModel);
+    m_tocView->setHeaderHidden(true);
+    m_tocView->setRootIsDecorated(true);
+    m_tocView->setItemsExpandable(true);
+    m_tocView->setUniformRowHeights(true);
+
+    m_tocPlaceholder = new QLabel;
+    m_tocPlaceholder->setWordWrap(true);
+    m_tocPlaceholder->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    m_tocPlaceholder->setMargin(8);
+    m_tocPlaceholder->setText(tr("<b>Table of contents</b><br/>Open a PDF with bookmarks to view outline entries."));
+
+    m_tocStack = new QStackedWidget;
+    m_tocStack->addWidget(m_tocPlaceholder);
+    m_tocStack->addWidget(m_tocView);
+    m_tocStack->setCurrentWidget(m_tocPlaceholder);
+
     m_stack = new QStackedWidget;
     m_stack->addWidget(m_placeholder); // kPlaceholderPage
     m_stack->addWidget(m_pdfView);     // kPdfPage
     m_stack->addWidget(m_textView);    // kTextPage
     m_stack->setCurrentIndex(kPlaceholderPage);
+
+    m_leftTabs = new QTabWidget;
+    m_leftTabs->addTab(m_tree, tr("Files"));
+    m_leftTabs->addTab(m_tocStack, tr("TOC"));
+    m_leftTabs->setTabEnabled(1, false);
+    m_leftTabs->setCurrentWidget(m_tree);
 
     m_previewPane = new QWidget;
     auto *previewLayout = new QVBoxLayout(m_previewPane);
@@ -625,7 +637,7 @@ void MainWindow::setupUi()
     previewLayout->addWidget(m_stack, 1);
 
     m_splitter = new QSplitter(Qt::Horizontal);
-    m_splitter->addWidget(m_tree);
+    m_splitter->addWidget(m_leftTabs);
     m_splitter->addWidget(m_previewPane);
     m_splitter->setStretchFactor(0, 0);
     m_splitter->setStretchFactor(1, 1);
@@ -655,6 +667,11 @@ void MainWindow::setupUi()
     connect(m_pdfFindEdit, &QLineEdit::textChanged, this, &MainWindow::onPdfFindTextChanged);
     connect(m_pdfFindEdit, &QLineEdit::returnPressed, this, &MainWindow::pdfFindNext);
     connect(m_pdfPageEdit, &QLineEdit::returnPressed, this, &MainWindow::onPdfPageEditReturnPressed);
+    connect(m_tocView, &QTreeView::activated, this, &MainWindow::onTocActivated);
+    connect(m_tocView, &QTreeView::clicked, this, &MainWindow::onTocActivated);
+    connect(m_pdfBookmarkModel, &QAbstractItemModel::modelReset, this, &MainWindow::onPdfBookmarksChanged);
+    connect(m_pdfBookmarkModel, &QAbstractItemModel::rowsInserted, this, &MainWindow::onPdfBookmarksChanged);
+    connect(m_pdfBookmarkModel, &QAbstractItemModel::rowsRemoved, this, &MainWindow::onPdfBookmarksChanged);
 
     statusBar()->setSizeGripEnabled(true);
 
@@ -922,14 +939,15 @@ void MainWindow::printCurrentPdf()
         auto *layout = new QFormLayout(&optionsDialog);
         auto *modeCombo = new QComboBox(&optionsDialog);
         const bool nativeVectorSupported = supportsNativeVectorPrinting();
+        modeCombo->addItem(tr("Rasterized by skrat (Qt print dialog)"),
+                           static_cast<int>(PrintOutputMode::RasterQt));
         if (nativeVectorSupported) {
-            modeCombo->addItem(tr("Native PDF (vector, system print queue)"),
+            modeCombo->addItem(tr("Native PDF (vector, open in system viewer to print)"),
                                static_cast<int>(PrintOutputMode::VectorNative));
         }
-        modeCombo->addItem(tr("Rasterized by skrat (Qt renderer)"),
-                           static_cast<int>(PrintOutputMode::RasterQt));
         modeCombo->setToolTip(
-            tr("Native PDF keeps vector sharpness; rasterized mode provides cross-platform fallback."));
+            tr("Raster mode prints in-app. Native mode opens the PDF in your system viewer so you can use native print options, including page ranges."));
+        modeCombo->setCurrentIndex(0);
 
         auto *dpiCombo = new QComboBox(&optionsDialog);
         dpiCombo->addItem(tr("300 DPI"), 300);
@@ -967,7 +985,7 @@ void MainWindow::printCurrentPdf()
 
     if (outputMode == PrintOutputMode::VectorNative) {
         if (runNativeVectorPrint(m_previewFilePath)) {
-            statusBar()->showMessage(tr("Sent PDF to system print queue (vector mode)."), 3000);
+            statusBar()->showMessage(tr("Opened PDF in system viewer for vector print."), 3500);
         } else {
             QMessageBox::warning(this,
                                  tr("Print PDF"),
@@ -982,6 +1000,7 @@ void MainWindow::printCurrentPdf()
     printer.setResolution(qMax(kRasterDpiDefault, rasterDpi));
     QPrintDialog dialog(&printer, this);
     dialog.setWindowTitle(tr("Print PDF (Raster)"));
+    dialog.setOption(QAbstractPrintDialog::PrintPageRange, true);
     if (dialog.exec() != QDialog::Accepted) {
         statusBar()->showMessage(tr("Print canceled."), 2000);
         return;
@@ -996,10 +1015,22 @@ void MainWindow::printCurrentPdf()
     }
 
     const int pages = m_pdfDocument->pageCount();
-    for (int page = 0; page < pages; ++page) {
-        if (page > 0) {
+    int startPage = 0;
+    int endPage = pages - 1;
+    if (printer.printRange() == QPrinter::PageRange) {
+        startPage = qMax(0, printer.fromPage() - 1);
+        endPage = qMin(pages - 1, printer.toPage() - 1);
+        if (startPage > endPage) {
+            std::swap(startPage, endPage);
+        }
+    }
+
+    bool firstPrinted = true;
+    for (int page = startPage; page <= endPage; ++page) {
+        if (!firstPrinted) {
             printer.newPage();
         }
+        firstPrinted = false;
         const QSizeF pagePt = m_pdfDocument->pagePointSize(page);
         const qreal scale = static_cast<qreal>(printer.resolution()) / 72.0;
         const QSize pagePx(qMax(1, qRound(pagePt.width() * scale)),
@@ -1112,6 +1143,56 @@ void MainWindow::onPdfPageEditReturnPressed()
     m_pdfView->pageNavigator()->jump(pageOneBased - 1, QPointF(0, 0), 0);
 }
 
+void MainWindow::onTocActivated(const QModelIndex &index)
+{
+    if (!index.isValid() || !m_pdfView || !m_pdfBookmarkModel || m_stack->currentWidget() != m_pdfView) {
+        return;
+    }
+    const QVariant pageVar = m_pdfBookmarkModel->data(index, static_cast<int>(QPdfBookmarkModel::Role::Page));
+    if (!pageVar.isValid()) {
+        return;
+    }
+    const int page = pageVar.toInt();
+    const QVariant locVar =
+        m_pdfBookmarkModel->data(index, static_cast<int>(QPdfBookmarkModel::Role::Location));
+    const QVariant zoomVar = m_pdfBookmarkModel->data(index, static_cast<int>(QPdfBookmarkModel::Role::Zoom));
+    const QPointF location = locVar.isValid() ? locVar.toPointF() : QPointF(0, 0);
+    const qreal zoom = zoomVar.isValid() ? zoomVar.toReal() : 0.0;
+    m_pdfView->pageNavigator()->jump(page, location, zoom);
+}
+
+void MainWindow::onPdfBookmarksChanged()
+{
+    if (m_tocView) {
+        m_tocView->expandToDepth(1);
+    }
+    updateTocPaneUi();
+}
+
+void MainWindow::updateTocPaneUi()
+{
+    if (!m_leftTabs || !m_tocStack || !m_tocPlaceholder || !m_tocView || !m_pdfBookmarkModel) {
+        return;
+    }
+    const bool pdfActive = (m_stack && m_stack->currentWidget() == m_pdfView);
+    const int bookmarks = m_pdfBookmarkModel->rowCount(QModelIndex());
+    if (!pdfActive) {
+        m_tocPlaceholder->setText(
+            tr("<b>Table of contents</b><br/>Open a PDF with bookmarks to view outline entries."));
+        m_tocStack->setCurrentWidget(m_tocPlaceholder);
+        m_leftTabs->setTabEnabled(1, false);
+        return;
+    }
+    m_leftTabs->setTabEnabled(1, true);
+    if (bookmarks <= 0) {
+        m_tocPlaceholder->setText(
+            tr("<b>Table of contents</b><br/>No outline entries were found in this PDF."));
+        m_tocStack->setCurrentWidget(m_tocPlaceholder);
+        return;
+    }
+    m_tocStack->setCurrentWidget(m_tocView);
+}
+
 void MainWindow::goToPageOrLine()
 {
     if (m_stack->currentWidget() == m_pdfView && m_pdfDocument) {
@@ -1210,6 +1291,7 @@ void MainWindow::updatePdfPageUi()
         updateGoToNavigationAction();
         updatePdfFindActions();
         updatePdfSearchStatus();
+        updateTocPaneUi();
         return;
     }
 
@@ -1253,6 +1335,7 @@ void MainWindow::updatePdfPageUi()
     updateGoToNavigationAction();
     updatePdfFindActions();
     updatePdfSearchStatus();
+    updateTocPaneUi();
 }
 
 void MainWindow::updateGoToNavigationAction()

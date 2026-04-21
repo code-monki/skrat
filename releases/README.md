@@ -12,6 +12,7 @@ This folder documents how **versioned binaries** are published. The repository d
 ## Cutting a new release
 
 1. Ensure **`master`** (or **`main`**) is green in Actions.
+   - If any matrix job fails, fix on `master` and cut a new tag (for example `v0.1.8`) rather than reusing the failed tag.
 2. Create and push an annotated tag whose name starts with **`v`** (Semantic Versioning is recommended), for example:
    ```bash
    git tag -a v0.2.0 -m "Release v0.2.0"

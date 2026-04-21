@@ -6,13 +6,13 @@ This is **not** an editor.
 
 ## Features
 
-- **Left pane:** `QTreeView` backed by `QFileSystemModel` (navigate folders, select files).
+- **Left tabbed view:** `Files` tab is the `QTreeView` file tree (`QFileSystemModel`); `TOC` tab shows PDF **Table of contents** (outline/bookmarks when available; placeholder when unavailable). The TOC tab is enabled only while previewing a PDF.
 - **Right pane:** preview stack
   - **PDF** via Qt’s **`QtPdf` / `QPdfView`** (PDFium-based rendering).
   - **Text** for common extensions (UTF-8; see `MainWindow.cpp` for the allowlist).
 - **Menus**
   - **File → Open Folder…** sets the tree root.
-  - **File → Print PDF…** prints the currently selected/open PDF (**Ctrl+P**), with a pre-print options dialog: **Native PDF (vector via system print queue)** or **Rasterized by skrat** at **300/600 DPI**.
+  - **File → Print PDF…** prints the currently selected/open PDF (**Ctrl+P**), with a pre-print options dialog: **Native PDF (vector, opened in system viewer for native print controls)** or **Rasterized by skrat** at **300/600 DPI**. Raster mode honors print dialog page ranges.
   - **Edit → Copy** copies selection from text/PDF; HTML payloads are sanitized to remove background color styling before paste (**Ctrl+C**).
   - **Edit → Find in PDF… / Find Next / Find Previous** searches in the active PDF (**Ctrl+F**, **F3**, **Shift+F3**). A **Find** toolbar (icon buttons + search field) shows the query and match count; hover for shortcuts and hints.
   - **View → PDF Fit Width / Zoom In / Out** (shortcuts match the platform defaults where applicable).

@@ -9,12 +9,14 @@ class QFileSystemWatcher;
 class QLabel;
 class QLineEdit;
 class QIntValidator;
+class QPdfBookmarkModel;
 class QPdfDocument;
 class QPdfSearchModel;
 class QPdfView;
 class QPlainTextEdit;
 class QSplitter;
 class QStackedWidget;
+class QTabWidget;
 class QTimer;
 class QToolBar;
 class QTreeView;
@@ -52,6 +54,8 @@ private slots:
     void printCurrentPdf();
     void copyCurrentSelection();
     void onPdfPageEditReturnPressed();
+    void onTocActivated(const QModelIndex &index);
+    void onPdfBookmarksChanged();
     void goToPageOrLine();
     void updatePdfPageUi();
     void onWatchedFileChanged(const QString &path);
@@ -72,10 +76,12 @@ private:
     void selectPdfSearchResult(int index);
     int currentPdfSearchResultIndex() const;
     void setCurrentPdfSearchResultIndexCompat(int index);
+    void updateTocPaneUi();
 
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
     QTreeView *m_tree = nullptr;
+    QTabWidget *m_leftTabs = nullptr;
     QSplitter *m_splitter = nullptr;
     QStackedWidget *m_stack = nullptr;
     QPdfView *m_pdfView = nullptr;
@@ -103,6 +109,10 @@ private:
     QLineEdit *m_pdfFindEdit = nullptr;
     QLabel *m_pdfFindCountLabel = nullptr;
     QPdfSearchModel *m_pdfSearchModel = nullptr;
+    QPdfBookmarkModel *m_pdfBookmarkModel = nullptr;
+    QTreeView *m_tocView = nullptr;
+    QStackedWidget *m_tocStack = nullptr;
+    QLabel *m_tocPlaceholder = nullptr;
 
     QString m_previewFilePath;
     QString m_pendingReloadPath;
