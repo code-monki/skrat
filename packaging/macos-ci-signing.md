@@ -6,14 +6,14 @@
 
 The **Sign and notarize (Developer ID)** step runs only when **all** of these repository secrets are non-empty (detected via a **Probe** step: GitHub does not allow the `secrets` context inside `if:` expressions).
 
-| Secret | Contents |
-|--------|----------|
-| `MACOS_CERTIFICATE` | Base64-encoded **entire** `.p12` (Developer ID Application + private key) |
-| `MACOS_CERTIFICATE_PWD` | `.p12` export password |
+| Secret                    | Contents                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------ |
+| `MACOS_CERTIFICATE`       | Base64-encoded **entire** `.p12` (Developer ID Application + private key)      |
+| `MACOS_CERTIFICATE_PWD`   | `.p12` export password                                                         |
 | `MACOS_CODESIGN_IDENTITY` | Full string from Keychain, e.g. `Developer ID Application: Your Name (TEAMID)` |
-| `AC_API_KEY_ID` | App Store Connect API key id (10 characters) |
-| `AC_API_ISSUER_ID` | Issuer UUID from App Store Connect |
-| `AC_API_KEY_CONTENT` | Full **`.p8`** PEM text (including `BEGIN`/`END` lines) |
+| `AC_API_KEY_ID`           | App Store Connect API key id (10 characters)                                   |
+| `AC_API_ISSUER_ID`        | Issuer UUID from App Store Connect                                             |
+| `AC_API_KEY_CONTENT`      | Full **`.p8`** PEM text (including `BEGIN`/`END` lines)                        |
 
 Encode the certificate for `MACOS_CERTIFICATE`:
 

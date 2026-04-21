@@ -6,6 +6,23 @@
 
 #include "MainWindow.h"
 
+/**
+ * @file main.cpp
+ * @brief Application bootstrap entry point for skrat.
+ *
+ * Responsibilities:
+ * - Initialize QApplication metadata.
+ * - Apply platform-specific app icon behavior (macOS bundle icon).
+ * - Create/show MainWindow.
+ * - Optionally open an initial directory or file from argv[1].
+ */
+
+/**
+ * @brief Application entry point.
+ * @param argc Command-line argument count.
+ * @param argv Command-line argument vector.
+ * @return QApplication event-loop exit code.
+ */
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);

@@ -239,3 +239,12 @@ Examples:
 This application’s **source code** is licensed under the **GNU General Public License v3.0 or later** (`GPL-3.0-or-later`). Qt is used under **your** Qt license terms (for example the open-source Qt LGPL/GPL offerings, or a commercial Qt license).
 
 **Documentation** in this repository (including this `README.md`) is licensed under the [**Creative Commons Attribution-ShareAlike 4.0 International** license](https://creativecommons.org/licenses/by-sa/4.0/) (`CC-BY-SA-4.0`). The full legal text is in [`LICENSE-CC-BY-SA-4.0.txt`](LICENSE-CC-BY-SA-4.0.txt).
+
+## System Documentation
+
+Project system/design/test documents live under [`docs/`](docs/README.md), including:
+- SRS (with acceptance criteria)
+- HLA
+- DD
+- RTM
+- Test Plan

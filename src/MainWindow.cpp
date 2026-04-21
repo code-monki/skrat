@@ -1,3 +1,14 @@
+/**
+ * @file MainWindow.cpp
+ * @brief Main window implementation for skrat.
+ *
+ * This translation unit implements:
+ * - File-tree selection and preview routing (PDF/text/placeholder).
+ * - PDF navigation/search/print behavior.
+ * - Toolbar + tabbed pane wiring and state updates.
+ * - File-system watcher based reload handling.
+ */
+
 #include "MainWindow.h"
 
 #include <QAction>
@@ -72,6 +83,7 @@ enum class PrintOutputMode : int {
     RasterQt = 1,
 };
 
+/** Return true when suffix belongs to allowlisted textual extensions. */
 bool hasTextualSuffix(const QString &suffixLower)
 {
     static const QStringList kSuffixes = {
