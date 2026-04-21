@@ -53,6 +53,8 @@ private slots:
     void onPdfSearchResultsChanged();
     void printCurrentPdf();
     void copyCurrentSelection();
+    void showAboutDialog();
+    void showHelpDialog();
     void onPdfPageEditReturnPressed();
     void onTocActivated(const QModelIndex &index);
     void onPdfBookmarksChanged();

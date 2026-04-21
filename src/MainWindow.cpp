@@ -48,6 +48,7 @@
 #include <QStatusBar>
 #include <QStyle>
 #include <QTabWidget>
+#include <QTextBrowser>
 #include <QVBoxLayout>
 #include <QRegularExpression>
 #include <QTextBlock>
@@ -509,6 +510,16 @@ void MainWindow::setupUi()
     addAction(m_pdfActPrev);
     addAction(m_pdfActNext);
     addAction(m_pdfActLast);
+
+    auto *helpMenu = menuBar()->addMenu(tr("&Help"));
+    auto *actHelp = new QAction(tr("&Help / Shortcuts…"), this);
+    actHelp->setShortcut(QKeySequence::HelpContents);
+    connect(actHelp, &QAction::triggered, this, &MainWindow::showHelpDialog);
+    helpMenu->addAction(actHelp);
+
+    auto *actAbout = new QAction(tr("&About skrat…"), this);
+    connect(actAbout, &QAction::triggered, this, &MainWindow::showAboutDialog);
+    helpMenu->addAction(actAbout);
 
     m_fsModel = new QFileSystemModel(this);
     m_fsModel->setFilter(QDir::AllDirs | QDir::Files | QDir::NoDotAndDotDot);
@@ -1125,6 +1136,71 @@ void MainWindow::copyCurrentSelection()
     if (attemptedCopy) {
         statusBar()->showMessage(tr("Copied selection (background colors removed)."), 2500);
     }
+}
+
+void MainWindow::showAboutDialog()
+{
+    QMessageBox::about(
+        this,
+        tr("About skrat"),
+        tr("<p><b>skrat</b> %1</p>"
+           "<p>Read-only desktop viewer for PDFs and text files.</p>"
+           "<p><b>Author / Maintainer:</b> CodeMonki</p>"
+           "<p><b>License:</b> GPL-3.0-or-later (code), CC-BY-SA-4.0 (docs)</p>"
+           "<p>Project: <a href='https://github.com/code-monki/skrat'>github.com/code-monki/skrat</a></p>")
+            .arg(QString::fromUtf8(SKRAT_APP_VERSION)));
+}
+
+void MainWindow::showHelpDialog()
+{
+    QDialog dlg(this);
+    dlg.setWindowTitle(tr("skrat Help"));
+    dlg.resize(760, 560);
+    auto *layout = new QVBoxLayout(&dlg);
+    auto *browser = new QTextBrowser(&dlg);
+    browser->setOpenExternalLinks(true);
+    browser->setHtml(
+        tr("<h2>skrat Help</h2>"
+           "<p><b>Purpose:</b> read-only preview of PDFs and common text files.</p>"
+           "<h3>Basics</h3>"
+           "<ul>"
+           "<li>Use the <b>Files</b> tab on the left to browse and select files.</li>"
+           "<li>When a PDF has bookmarks, the <b>TOC</b> tab becomes available.</li>"
+           "<li>Use toolbar controls to navigate pages, print, and search.</li>"
+           "</ul>"
+           "<h3>Printing</h3>"
+           "<ul>"
+           "<li><b>File → Print PDF…</b> opens print options first.</li>"
+           "<li><b>Rasterized by skrat</b> prints in-app and supports page ranges.</li>"
+           "<li><b>Native PDF</b> opens the file in the system viewer for vector-quality printing and native controls.</li>"
+           "</ul>"
+           "<h3>Keyboard shortcuts</h3>"
+           "<ul>"
+           "<li><b>Open folder:</b> %1</li>"
+           "<li><b>Print PDF:</b> %2</li>"
+           "<li><b>Find in PDF:</b> %3</li>"
+           "<li><b>Find next / previous:</b> %4 / %5</li>"
+           "<li><b>Copy:</b> %6</li>"
+           "<li><b>Go to page / line:</b> Ctrl+G</li>"
+           "<li><b>First / Last page:</b> Ctrl+Home / Ctrl+End</li>"
+           "<li><b>Prev / Next page:</b> Alt+PgUp / Alt+PgDown</li>"
+           "<li><b>Zoom in / out:</b> %7 / %8</li>"
+           "</ul>"
+           "<p>More details: <a href='https://github.com/code-monki/skrat#readme'>README</a></p>")
+            .arg(QKeySequence(QKeySequence::Open).toString(QKeySequence::NativeText),
+                 QKeySequence(QKeySequence::Print).toString(QKeySequence::NativeText),
+                 QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText),
+                 QKeySequence(QKeySequence::FindNext).toString(QKeySequence::NativeText),
+                 QKeySequence(QKeySequence::FindPrevious).toString(QKeySequence::NativeText),
+                 QKeySequence(QKeySequence::Copy).toString(QKeySequence::NativeText),
+                 QKeySequence(QKeySequence::ZoomIn).toString(QKeySequence::NativeText),
+                 QKeySequence(QKeySequence::ZoomOut).toString(QKeySequence::NativeText)));
+    layout->addWidget(browser);
+    auto *buttons = new QDialogButtonBox(QDialogButtonBox::Close, Qt::Horizontal, &dlg);
+    connect(buttons, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+    connect(buttons, &QDialogButtonBox::accepted, &dlg, &QDialog::accept);
+    layout->addWidget(buttons);
+    dlg.exec();
 }
 
 void MainWindow::onPdfPageEditReturnPressed()
