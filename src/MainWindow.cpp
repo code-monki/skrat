@@ -442,7 +442,9 @@ void MainWindow::setupUi()
     m_pdfSearchModel->setDocument(m_pdfDocument);
     m_pdfView = new QPdfView;
     m_pdfView->setDocument(m_pdfDocument);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
     m_pdfView->setSearchModel(m_pdfSearchModel);
+#endif
     // Default is SinglePage (one page, no vertical scroll through the document).
     m_pdfView->setPageMode(QPdfView::PageMode::MultiPage);
 
@@ -528,14 +530,21 @@ void MainWindow::setupUi()
             this,
             &MainWindow::updatePdfPageUi);
     connect(m_pdfDocument, &QPdfDocument::pageCountChanged, this, &MainWindow::updatePdfPageUi);
+    connect(m_pdfSearchModel, &QAbstractItemModel::modelReset, this, &MainWindow::onPdfSearchResultsChanged);
     connect(m_pdfSearchModel,
-            &QPdfSearchModel::countChanged,
+            &QAbstractItemModel::rowsInserted,
             this,
             &MainWindow::onPdfSearchResultsChanged);
+    connect(m_pdfSearchModel,
+            &QAbstractItemModel::rowsRemoved,
+            this,
+            &MainWindow::onPdfSearchResultsChanged);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
     connect(m_pdfView,
             &QPdfView::currentSearchResultIndexChanged,
             this,
             &MainWindow::onPdfSearchResultsChanged);
+#endif
     connect(m_pdfFindEdit, &QLineEdit::textChanged, this, &MainWindow::onPdfFindTextChanged);
     connect(m_pdfFindEdit, &QLineEdit::returnPressed, this, &MainWindow::pdfFindNext);
 
@@ -707,9 +716,7 @@ void MainWindow::onPdfFindTextChanged(const QString &text)
         return;
     }
     m_pdfSearchModel->setSearchString(text);
-    if (m_pdfView) {
-        m_pdfView->setCurrentSearchResultIndex(-1);
-    }
+    setCurrentPdfSearchResultIndexCompat(-1);
     updatePdfFindActions();
     updatePdfSearchStatus();
 }
@@ -728,6 +735,26 @@ int MainWindow::pdfSearchResultCount() const
     return m_pdfSearchModel->rowCount(QModelIndex());
 }
 
+int MainWindow::currentPdfSearchResultIndex() const
+{
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+    if (m_pdfView) {
+        return m_pdfView->currentSearchResultIndex();
+    }
+#endif
+    return m_pdfSearchCurrentIndex;
+}
+
+void MainWindow::setCurrentPdfSearchResultIndexCompat(int index)
+{
+    m_pdfSearchCurrentIndex = index;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
+    if (m_pdfView) {
+        m_pdfView->setCurrentSearchResultIndex(index);
+    }
+#endif
+}
+
 void MainWindow::selectPdfSearchResult(int index)
 {
     if (!m_pdfView || !m_pdfSearchModel) {
@@ -737,7 +764,7 @@ void MainWindow::selectPdfSearchResult(int index)
     if (index < 0 || index >= total) {
         return;
     }
-    m_pdfView->setCurrentSearchResultIndex(index);
+    setCurrentPdfSearchResultIndexCompat(index);
     const QPdfLink link = m_pdfSearchModel->resultAtIndex(index);
     if (link.isValid()) {
         m_pdfView->pageNavigator()->jump(link.page(), link.location(), link.zoom());
@@ -753,7 +780,7 @@ void MainWindow::pdfFindNext()
     if (total <= 0) {
         return;
     }
-    const int current = m_pdfView->currentSearchResultIndex();
+    const int current = currentPdfSearchResultIndex();
     const int next = (current + 1 + total) % total;
     selectPdfSearchResult(next);
 }
@@ -767,7 +794,7 @@ void MainWindow::pdfFindPrev()
     if (total <= 0) {
         return;
     }
-    const int current = m_pdfView->currentSearchResultIndex();
+    const int current = currentPdfSearchResultIndex();
     const int prev = (current - 1 + total) % total;
     selectPdfSearchResult(prev);
 }
@@ -1066,7 +1093,7 @@ void MainWindow::updatePdfSearchStatus()
         m_pdfFindCountLabel->setText(tr("No matches"));
         return;
     }
-    const int current = m_pdfView->currentSearchResultIndex();
+    const int current = currentPdfSearchResultIndex();
     const int oneBased = (current >= 0 && current < total) ? current + 1 : 0;
     m_pdfFindCountLabel->setText(tr("Match %1 of %2").arg(oneBased).arg(total));
 }

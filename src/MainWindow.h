@@ -68,6 +68,8 @@ private:
     void updatePdfSearchStatus();
     int pdfSearchResultCount() const;
     void selectPdfSearchResult(int index);
+    int currentPdfSearchResultIndex() const;
+    void setCurrentPdfSearchResultIndexCompat(int index);
 
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
@@ -100,6 +102,7 @@ private:
 
     QString m_previewFilePath;
     QString m_pendingReloadPath;
+    int m_pdfSearchCurrentIndex = -1;
     QFileSystemWatcher *m_fileWatcher = nullptr;
     QTimer *m_reloadDebounceTimer = nullptr;
 
