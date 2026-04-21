@@ -4,7 +4,7 @@
 |---|---|---|
 | FR-001 File Navigation | `MainWindow::setRootFolder`, tree selection flow | Manual: open folder + selection tests |
 | FR-002 Preview Modes | `previewPath()` PDF/text/placeholder branches | Manual + regression smoke |
-| FR-003 PDF Navigation | PDF toolbar actions, page input slot, go-to logic | Manual page-nav checklist |
+| FR-003 PDF Navigation | PDF toolbar actions, page input slot, go-to logic; first/last page actions use dual shortcuts (`Ctrl+Home`/`Ctrl+End` plus `Meta+Up`/`Meta+Down` for macOS-friendly Cmd+arrow binding) | Manual page-nav checklist; on macOS verify Cmd+Up/Cmd+Down and Ctrl+Home/Ctrl+End where hardware supports them |
 | FR-004 PDF Search | find slots, search model integration, result status | Manual search scenarios |
 | FR-005 TOC Navigation | `QPdfBookmarkModel`, TOC tab activation/jump | Manual bookmark navigation tests |
 | FR-006 Print | `printCurrentPdf()` options + raster/native paths | Manual print matrix (mode/range/printer) |

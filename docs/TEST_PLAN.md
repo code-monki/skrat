@@ -36,7 +36,7 @@
 ## 5. Core Test Scenarios
 
 1. **Preview routing**: select PDF/text/unsupported and verify expected page/widget.
-2. **PDF navigation**: first/prev/next/last + page input valid/invalid behavior.
+2. **PDF navigation**: first/prev/next/last + page input valid/invalid behavior. **First/last page**: confirm **Ctrl+Home** / **Ctrl+End** (where applicable) and **Cmd+Up** / **Cmd+Down** (**Meta+Up** / **Meta+Down**) on macOS; tooltips should show native shortcut text for both bindings.
 3. **Search**: query -> auto-jump first result -> next/previous traversal.
 4. **TOC**: tab enablement by context + bookmark activation jumps.
 5. **Print (raster)**: 300/600 DPI + page range output.

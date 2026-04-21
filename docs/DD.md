@@ -38,6 +38,12 @@
 - TOC tab enabled only when PDF active.
 - Bookmark row activation jumps to (page, location, zoom).
 
+### 2.5 PDF first/last page shortcuts (cross-platform)
+- **First page** and **Last page** actions (`m_pdfActFirst`, `m_pdfActLast`) each register **two** key sequences via `QAction::setShortcuts`:
+  - **Ctrl+Home** / **Ctrl+End** — conventional on Windows and Linux; on macOS these keys are often absent or awkward on laptop keyboards.
+  - **Meta+Up** / **Meta+Down** — interpreted as **Cmd+Up** / **Cmd+Down** on macOS (`QKeySequence::NativeText` in tooltips reflects the platform).
+- Both bindings invoke the same slots (`pdfGoFirstPage`, `pdfGoLastPage`); behavior is identical. Tooltips list both shortcuts so testers can confirm parity without reading source.
+
 ## 3. Error and Edge Handling
 
 - Missing file -> placeholder.
