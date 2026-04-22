@@ -18,11 +18,13 @@ class QFileSystemWatcher;
 class QLabel;
 class QLineEdit;
 class QIntValidator;
+class QPoint;
 class QPdfBookmarkModel;
 class QPdfDocument;
 class QPdfSearchModel;
 class QPdfView;
 class QPlainTextEdit;
+class QScrollArea;
 class QSplitter;
 class QStackedWidget;
 class QTabWidget;
@@ -52,6 +54,8 @@ public:
 private slots:
     /** React to tree selection changes and preview the selected path. */
     void onTreeCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
+    /** Show file-tree context menu for native-open actions. */
+    void onTreeContextMenuRequested(const QPoint &pos);
     /** Show folder picker and update the tree root. */
     void openFolderDialog();
     /** Increase PDF zoom while in PDF preview mode. */
@@ -110,6 +114,10 @@ private:
     void showPlaceholder(const QString &html);
     /** Heuristic text-file classifier based on extension. */
     static bool isProbablyTextFile(const QFileInfo &fi);
+    /** Heuristic image-file classifier based on extension. */
+    static bool isProbablyImageFile(const QFileInfo &fi);
+    /** Open a path in the OS default handler (viewer/editor/file manager). */
+    bool openPathInDefaultApp(const QString &absolutePath);
     /** Remove all active file-system watch registrations. */
     void pauseWatching();
     /** Set currently watched preview file (or clear when empty). */
@@ -142,6 +150,8 @@ private:
     QPdfView *m_pdfView = nullptr;
     QPdfDocument *m_pdfDocument = nullptr;
     QPlainTextEdit *m_textView = nullptr;
+    QScrollArea *m_imageScroll = nullptr;
+    QLabel *m_imageView = nullptr;
     QLabel *m_placeholder = nullptr;
 
     QToolBar *m_pdfToolBar = nullptr;

@@ -3,13 +3,15 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-Define functional and non-functional requirements for `skrat`, a read-only desktop viewer for PDFs and text files.
+Define functional and non-functional requirements for `skrat`, a read-only desktop viewer for PDFs, common text files, and common images.
 
 ### 1.2 Scope
 `skrat` provides:
 - File browsing via a tree view
 - PDF preview, navigation, search, TOC browsing, and print workflows
 - Text preview for common textual formats
+- Image preview for common raster formats
+- File-tree context action to open selected files in the OS default app
 - Basic help/about documentation in-app
 
 ### 1.3 Definitions
@@ -26,7 +28,12 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 ### FR-002 Preview Modes
 - The system shall preview PDF files in a PDF viewer.
 - The system shall preview supported text files in read-only text view.
+- The system shall preview supported image files (`gif`, `png`, `jpg`/`jpeg`, `tif`/`tiff`, `webp`) in read-only image view.
 - The system shall show an explanatory placeholder for unsupported/unavailable files.
+
+### FR-010 Native App Handoff
+- The system shall provide a file-tree context menu action to open the selected file/folder in the system default app.
+- The system shall keep preview behavior unchanged when opening in `skrat`.
 
 ### FR-003 PDF Navigation
 - The system shall support first/prev/next/last page actions.
@@ -80,6 +87,7 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 ### AC-001 File/Preview
 - Given a selected directory, when user selects a supported PDF/text file, then corresponding preview appears.
 - Given unsupported file, then placeholder explains unsupported type.
+- Given supported image file, then image preview appears in the preview pane.
 
 ### AC-002 PDF Navigation
 - Given an active PDF with N pages, when navigation controls are used, then current page changes correctly and page indicators update.
@@ -104,3 +112,6 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 
 ### AC-007 Documentation
 - `docs/` includes SRS, HLA, DD, RTM, and Test Plan documents.
+
+### AC-008 Native app handoff
+- Given a selected file in tree view, when user chooses **Open in Default App**, then the OS-associated app opens that file.

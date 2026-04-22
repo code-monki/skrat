@@ -30,6 +30,7 @@
 #include <QGuiApplication>
 #include <QInputDialog>
 #include <QIntValidator>
+#include <QImageReader>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QKeySequence>
@@ -51,6 +52,7 @@
 #include <QPlainTextEdit>
 #include <QPrintDialog>
 #include <QPrinter>
+#include <QScrollArea>
 #include <QScreen>
 #include <QSplitter>
 #include <QStackedWidget>
@@ -76,6 +78,7 @@ namespace {
 constexpr int kPlaceholderPage = 0;
 constexpr int kPdfPage = 1;
 constexpr int kTextPage = 2;
+constexpr int kImagePage = 3;
 constexpr int kRasterDpiDefault = 300;
 
 enum class PrintOutputMode : int {
@@ -143,6 +146,16 @@ bool looksLikeSourceSuffix(const QString &suffixLower)
         QStringLiteral("jsx"), QStringLiteral("qml"), QStringLiteral("cmake"),
     };
     return kCode.contains(suffixLower);
+}
+
+bool hasImageSuffix(const QString &suffixLower)
+{
+    static const QStringList kImageSuffixes = {
+        QStringLiteral("png"),  QStringLiteral("jpg"),  QStringLiteral("jpeg"),
+        QStringLiteral("gif"),  QStringLiteral("tif"),  QStringLiteral("tiff"),
+        QStringLiteral("webp"),
+    };
+    return kImageSuffixes.contains(suffixLower);
 }
 
 QIcon iconThemedOrStandard(const QString &themeName, QStyle::StandardPixmap fallback)
@@ -335,6 +348,19 @@ bool MainWindow::isProbablyTextFile(const QFileInfo &fi)
     return hasTextualSuffix(suf);
 }
 
+bool MainWindow::isProbablyImageFile(const QFileInfo &fi)
+{
+    if (!fi.isFile()) {
+        return false;
+    }
+    const QString suf = fi.suffix().toLower();
+    if (!suf.isEmpty() && hasImageSuffix(suf)) {
+        return true;
+    }
+    QImageReader reader(fi.absoluteFilePath());
+    return reader.canRead();
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
@@ -348,6 +374,10 @@ MainWindow::MainWindow(QWidget *parent)
             &QItemSelectionModel::currentChanged,
             this,
             &MainWindow::onTreeCurrentChanged);
+    connect(m_tree,
+            &QWidget::customContextMenuRequested,
+            this,
+            &MainWindow::onTreeContextMenuRequested);
 
     resize(1280, 800);
     if (QScreen *scr = screen()) {
@@ -549,6 +579,7 @@ void MainWindow::setupUi()
     m_tree->sortByColumn(0, Qt::AscendingOrder);
     m_tree->setColumnWidth(0, 320);
     m_tree->setMinimumWidth(240);
+    m_tree->setContextMenuPolicy(Qt::CustomContextMenu);
 
     m_pdfDocument = new QPdfDocument(this);
     m_pdfBookmarkModel = new QPdfBookmarkModel(this);
@@ -567,6 +598,18 @@ void MainWindow::setupUi()
     m_textView->setReadOnly(true);
     m_textView->setLineWrapMode(QPlainTextEdit::WidgetWidth);
     m_textView->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
+
+    m_imageView = new QLabel;
+    m_imageView->setAlignment(Qt::AlignCenter);
+    m_imageView->setBackgroundRole(QPalette::Base);
+    m_imageView->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    m_imageView->setScaledContents(false);
+
+    m_imageScroll = new QScrollArea;
+    m_imageScroll->setBackgroundRole(QPalette::Dark);
+    m_imageScroll->setWidget(m_imageView);
+    m_imageScroll->setWidgetResizable(true);
+    m_imageScroll->setAlignment(Qt::AlignCenter);
 
     m_placeholder = new QLabel;
     m_placeholder->setWordWrap(true);
@@ -597,6 +640,7 @@ void MainWindow::setupUi()
     m_stack->addWidget(m_placeholder); // kPlaceholderPage
     m_stack->addWidget(m_pdfView);     // kPdfPage
     m_stack->addWidget(m_textView);    // kTextPage
+    m_stack->addWidget(m_imageScroll); // kImagePage
     m_stack->setCurrentIndex(kPlaceholderPage);
 
     m_leftTabs = new QTabWidget;
@@ -702,7 +746,7 @@ void MainWindow::setupUi()
 
     statusBar()->setSizeGripEnabled(true);
 
-    showPlaceholder(tr("<p><b>skrat</b> — pick a file in the tree to preview PDFs and text.</p>"
+    showPlaceholder(tr("<p><b>skrat</b> — pick a file in the tree to preview PDFs, text, and images.</p>"
                         "<p>Use <b>File → Open Folder…</b> to point the tree at a project directory.</p>"));
 }
 
@@ -753,6 +797,35 @@ void MainWindow::onTreeCurrentChanged(const QModelIndex &current, const QModelIn
 
     const QString path = m_fsModel->filePath(current);
     previewPath(path);
+}
+
+void MainWindow::onTreeContextMenuRequested(const QPoint &pos)
+{
+    const QModelIndex indexAtPos = m_tree->indexAt(pos);
+    const QModelIndex idx = indexAtPos.isValid() ? indexAtPos : m_tree->currentIndex();
+    if (!idx.isValid()) {
+        return;
+    }
+    const QString path = m_fsModel->filePath(idx);
+    if (path.isEmpty()) {
+        return;
+    }
+
+    QMenu menu(this);
+    QAction *const actPreview = menu.addAction(tr("Open in skrat"));
+    QAction *const actDefault = menu.addAction(tr("Open in Default App"));
+    const QAction *const chosen = menu.exec(m_tree->viewport()->mapToGlobal(pos));
+    if (!chosen) {
+        return;
+    }
+    if (chosen == actPreview) {
+        m_tree->setCurrentIndex(idx);
+        previewPath(path);
+        return;
+    }
+    if (chosen == actDefault) {
+        openPathInDefaultApp(path);
+    }
 }
 
 void MainWindow::openFolderDialog()
@@ -1179,10 +1252,11 @@ void MainWindow::showHelpDialog()
     browser->setOpenExternalLinks(true);
     browser->setHtml(
         tr("<h2>skrat Help</h2>"
-           "<p><b>Purpose:</b> read-only preview of PDFs and common text files.</p>"
+           "<p><b>Purpose:</b> read-only preview of PDFs, common text files, and common image formats.</p>"
            "<h3>Basics</h3>"
            "<ul>"
            "<li>Use the <b>Files</b> tab on the left to browse and select files.</li>"
+           "<li>Right-click a file or folder in the tree and choose <b>Open in Default App</b> to hand off to your OS-native app associations (for office docs, spreadsheets, slides, etc.).</li>"
            "<li>When a PDF has bookmarks, the <b>TOC</b> tab becomes available.</li>"
            "<li>Use toolbar controls to navigate pages, print, and search.</li>"
            "</ul>"
@@ -1676,9 +1750,50 @@ void MainWindow::previewPath(const QString &absolutePath)
         return;
     }
 
+    if (isProbablyImageFile(fi)) {
+        QImageReader reader(fi.absoluteFilePath());
+        reader.setAutoTransform(true);
+        const QImage image = reader.read();
+        if (image.isNull()) {
+            showPlaceholder(
+                tr("<p><b>Could not load image</b></p><p>%1</p><p>Error: %2</p>")
+                    .arg(fi.absoluteFilePath().toHtmlEscaped(), reader.errorString().toHtmlEscaped()));
+            return;
+        }
+        m_imageView->setPixmap(QPixmap::fromImage(image));
+        m_imageView->adjustSize();
+        m_stack->setCurrentIndex(kImagePage);
+        setWatchedPreviewFile(fi.absoluteFilePath());
+        updatePdfPageUi();
+        return;
+    }
+
     showPlaceholder(
         tr("<p><b>Unsupported file type</b> for preview.</p>"
            "<p>%1</p>"
-           "<p>Supported: <b>PDF</b> and common <b>text</b> extensions (txt, md, json, code, …).</p>")
+           "<p>Supported: <b>PDF</b>, common <b>text</b> extensions (txt, md, json, code, …), and common <b>image</b> formats (gif, png, jpg/jpeg, tiff, webp).</p>"
+           "<p>Tip: right-click in the file tree and use <b>Open in Default App</b> for any type your OS can handle.</p>")
             .arg(fi.absoluteFilePath().toHtmlEscaped()));
+}
+
+bool MainWindow::openPathInDefaultApp(const QString &absolutePath)
+{
+    if (absolutePath.isEmpty()) {
+        return false;
+    }
+    const QFileInfo fi(absolutePath);
+    if (!fi.exists()) {
+        QMessageBox::warning(this, tr("Open in Default App"), tr("Path does not exist:\n%1").arg(absolutePath));
+        return false;
+    }
+    const bool ok = QDesktopServices::openUrl(QUrl::fromLocalFile(fi.absoluteFilePath()));
+    if (!ok) {
+        QMessageBox::warning(this,
+                             tr("Open in Default App"),
+                             tr("Could not open with the system default app:\n%1")
+                                 .arg(fi.absoluteFilePath()));
+        return false;
+    }
+    statusBar()->showMessage(tr("Opened in system default app."), 2500);
+    return true;
 }

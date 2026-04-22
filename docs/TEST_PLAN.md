@@ -2,7 +2,7 @@
 
 ## 1. Objectives
 
-- Validate core read-only viewing workflows for PDF/text.
+- Validate core read-only viewing workflows for PDF/text/image.
 - Validate usability and correctness of search, TOC, print, and help/about.
 - Prevent regressions across CI platform matrix.
 
@@ -10,6 +10,7 @@
 
 ### In Scope
 - File browsing + preview routing
+- Tree context menu native-app handoff
 - PDF navigation/search/TOC
 - Print workflows (raster + native handoff)
 - Clipboard sanitization
@@ -35,7 +36,7 @@
 
 ## 5. Core Test Scenarios
 
-1. **Preview routing**: select PDF/text/unsupported and verify expected page/widget.
+1. **Preview routing**: select PDF/text/image/unsupported and verify expected page/widget.
 2. **PDF navigation**: first/prev/next/last + page input valid/invalid behavior. **First/last page**: confirm **Ctrl+Home** / **Ctrl+End** (where applicable) and **Cmd+Up** / **Cmd+Down** (**Meta+Up** / **Meta+Down**) on macOS; tooltips should show native shortcut text for both bindings.
 3. **Search**: query -> auto-jump first result -> next/previous traversal.
 4. **TOC**: tab enablement by context + bookmark activation jumps.
@@ -44,6 +45,7 @@
 7. **Clipboard**: copied content pastes without background style artifacts.
 8. **Help/About**: dialog visibility/content/link checks.
 9. **File reload**: modify currently previewed file and verify debounced reload.
+10. **Native app handoff**: right-click selected file and use **Open in Default App**; verify OS-associated application opens (`.docx`, `.xlsx`, `.pptx`, `.odt`, `.ods`, and unsupported preview formats).
 
 ## 6. Exit Criteria
 
