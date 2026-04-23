@@ -11,6 +11,7 @@
 ### In Scope
 - File browsing + preview routing
 - Tree context menu native-app handoff
+- Tools menu CLI launcher installation
 - PDF navigation/search/TOC
 - Print workflows (raster + native handoff)
 - Clipboard sanitization
@@ -46,6 +47,7 @@
 8. **Help/About**: dialog visibility/content/link checks.
 9. **File reload**: modify currently previewed file and verify debounced reload.
 10. **Native app handoff**: right-click selected file and use **Open in Default App**; verify OS-associated application opens (`.docx`, `.xlsx`, `.pptx`, `.odt`, `.ods`, and unsupported preview formats).
+11. **CLI launcher installer**: run **Tools → Install Command-Line Tool…**, verify launcher file created at platform path, execute `skrat <dir-or-file>` from terminal, and verify app opens expected root/selection.
 
 ## 6. Exit Criteria
 

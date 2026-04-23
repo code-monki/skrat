@@ -13,6 +13,7 @@
 ### 2.1 UI Shell
 - `MainWindow` orchestrates all top-level UI interactions and action routing.
 - Menu actions and toolbar actions share slot handlers.
+- `Tools` menu hosts command-line launcher installation flow.
 
 ### 2.2 File Browsing
 - `QFileSystemModel` + `QTreeView`
@@ -21,13 +22,13 @@
 
 ### 2.3 Preview Engine
 - `QStackedWidget` with:
-  - PDF view (`QPdfView` + `QPdfDocument`)
+  - PDF view (`PdfGraphicsView` + `QPdfDocument` + `QGraphicsScene` page items)
   - Text view (`QPlainTextEdit`)
   - Image view (`QScrollArea` + `QLabel` pixmap)
   - Placeholder (`QLabel` HTML)
 
 ### 2.4 PDF Services
-- Page navigation (`QPdfPageNavigator`)
+- Page navigation via custom scene/scroll logic in `PdfGraphicsView`
 - Search model (`QPdfSearchModel`)
 - Bookmark model (`QPdfBookmarkModel`) for TOC
 - Print mode selection (raster vs native handoff)

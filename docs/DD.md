@@ -8,9 +8,9 @@
 - Maintains state for search index, current preview path, watch/debounce.
 - Handles tree context menu handoff to OS-native apps.
 
-### `QPdfDocument` / `QPdfView`
-- Core PDF load and rendering backend.
-- Navigation and viewport behavior.
+### `QPdfDocument` / `PdfGraphicsView`
+- Core PDF load backend (`QPdfDocument`) with custom rendering in `PdfGraphicsView`.
+- Deterministic scroll/jump behavior using scene/page geometry instead of `QPdfView` defaults.
 
 ### `QPdfSearchModel`
 - Match extraction for active query.
@@ -18,6 +18,11 @@
 
 ### `QPdfBookmarkModel`
 - Supplies outline tree data to TOC tab view.
+
+### `PdfGraphicsView`
+- Renders PDF pages to `QGraphicsPixmapItem` instances.
+- Draws search overlays from `QPdfSearchModel` result rectangles.
+- Maintains current-page/current-search-result state and jump behavior.
 
 ## 2. State Flows
 
@@ -29,7 +34,7 @@
 ### 2.2 Search Flow
 - Query change updates search model.
 - Model updates trigger first-match auto-selection and status refresh.
-- Next/previous actions select indexed match and jump.
+- Next/previous actions select indexed match and jump via `PdfGraphicsView::jumpTo()`.
 
 ### 2.3 Print Flow
 - Print options dialog chooses mode:
@@ -51,6 +56,11 @@
   - `Open in skrat` (existing internal preview routing)
   - `Open in Default App` (calls `QDesktopServices::openUrl` on the selected local path)
 - Handoff failures produce warning dialogs; success posts a short status message.
+
+### 2.7 CLI launcher installation flow
+- `Tools → Install Command-Line Tool…` computes platform-specific launcher target path.
+- Installer writes a wrapper script/shim that forwards CLI args to the app executable.
+- UI reports success and whether install directory is present on current `PATH`.
 
 ## 3. Error and Edge Handling
 

@@ -12,6 +12,7 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - Text preview for common textual formats
 - Image preview for common raster formats
 - File-tree context action to open selected files in the OS default app
+- In-app installer for a command-line launcher utility (`skrat`)
 - Basic help/about documentation in-app
 
 ### 1.3 Definitions
@@ -34,6 +35,10 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 ### FR-010 Native App Handoff
 - The system shall provide a file-tree context menu action to open the selected file/folder in the system default app.
 - The system shall keep preview behavior unchanged when opening in `skrat`.
+
+### FR-011 CLI Launcher Installer
+- The system shall provide an in-app action to install a user-level `skrat` command-line launcher wrapper.
+- The installer shall write to a user-writable location and report whether that location is on the current `PATH`.
 
 ### FR-003 PDF Navigation
 - The system shall support first/prev/next/last page actions.
@@ -115,3 +120,7 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 
 ### AC-008 Native app handoff
 - Given a selected file in tree view, when user chooses **Open in Default App**, then the OS-associated app opens that file.
+
+### AC-009 CLI launcher installation
+- Given user invokes **Tools → Install Command-Line Tool…**, launcher file is created in the platform-specific user location with executable behavior.
+- Given installer path is not on `PATH`, the user is shown guidance to add it.

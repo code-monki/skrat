@@ -12,5 +12,6 @@
 | FR-008 Help/About | help/about slots + menu actions | Manual dialog content checks |
 | FR-009 Live Reload | watcher + debounce callbacks | Manual file-change reload scenarios |
 | FR-010 Native App Handoff | tree context menu slot + `openPathInDefaultApp()` (`QDesktopServices::openUrl`) | Manual default-app open tests for supported and unsupported preview types |
+| FR-011 CLI Launcher Installer | Tools menu action + `installCommandLineTool()` + launcher path/content helpers | Manual installer flow (file creation, executable bit/shim behavior, PATH guidance messaging) |
 | NFR-001 Platform Support | CI workflow matrix + packaging scripts | CI run status and release artifacts |
 | NFR-004 Maintainability | Header/function doc blocks + `docs/` set | Review checklist |
