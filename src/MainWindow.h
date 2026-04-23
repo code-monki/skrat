@@ -22,7 +22,6 @@ class QPoint;
 class QPdfBookmarkModel;
 class QPdfDocument;
 class QPdfSearchModel;
-class QPdfView;
 class QPlainTextEdit;
 class QScrollArea;
 class QSplitter;
@@ -31,6 +30,7 @@ class QTabWidget;
 class QTimer;
 class QToolBar;
 class QTreeView;
+class PdfGraphicsView;
 
 namespace skrat {
 class PdfDocumentRibbon;
@@ -147,7 +147,7 @@ private:
     QTabWidget *m_leftTabs = nullptr;
     QSplitter *m_splitter = nullptr;
     QStackedWidget *m_stack = nullptr;
-    QPdfView *m_pdfView = nullptr;
+    PdfGraphicsView *m_pdfView = nullptr;
     QPdfDocument *m_pdfDocument = nullptr;
     QPlainTextEdit *m_textView = nullptr;
     QScrollArea *m_imageScroll = nullptr;

@@ -10,6 +10,7 @@
  */
 
 #include "MainWindow.h"
+#include "PdfGraphicsView.h"
 
 #include <QAction>
 #include <QApplication>
@@ -36,6 +37,7 @@
 #include <QKeySequence>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QPalette>
 #include <QResizeEvent>
 #include <QMenu>
 #include <QMenuBar>
@@ -44,9 +46,7 @@
 #include <QModelIndex>
 #include <QPdfDocument>
 #include <QPdfBookmarkModel>
-#include <QPdfPageNavigator>
 #include <QPdfSearchModel>
-#include <QPdfView>
 #include <QPainter>
 #include <QPen>
 #include <QPlainTextEdit>
@@ -397,7 +397,7 @@ MainWindow::~MainWindow()
         QObject::disconnect(m_pdfDocument, nullptr, this, nullptr);
     }
     if (m_pdfView) {
-        QObject::disconnect(m_pdfView->pageNavigator(), nullptr, this, nullptr);
+        QObject::disconnect(m_pdfView, nullptr, this, nullptr);
         m_pdfView->setDocument(nullptr);
     }
 }
@@ -586,13 +586,10 @@ void MainWindow::setupUi()
     m_pdfBookmarkModel->setDocument(m_pdfDocument);
     m_pdfSearchModel = new QPdfSearchModel(this);
     m_pdfSearchModel->setDocument(m_pdfDocument);
-    m_pdfView = new QPdfView;
+    m_pdfView = new PdfGraphicsView;
     m_pdfView->setDocument(m_pdfDocument);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
     m_pdfView->setSearchModel(m_pdfSearchModel);
-#endif
-    // Default is SinglePage (one page, no vertical scroll through the document).
-    m_pdfView->setPageMode(QPdfView::PageMode::MultiPage);
+    m_pdfView->setPageMode(PdfGraphicsView::PageMode::MultiPage);
 
     m_textView = new QPlainTextEdit;
     m_textView->setReadOnly(true);
@@ -715,10 +712,7 @@ void MainWindow::setupUi()
 
     setCentralWidget(m_splitter);
 
-    connect(m_pdfView->pageNavigator(),
-            &QPdfPageNavigator::currentPageChanged,
-            this,
-            &MainWindow::updatePdfPageUi);
+    connect(m_pdfView, &PdfGraphicsView::currentPageChanged, this, &MainWindow::updatePdfPageUi);
     connect(m_pdfDocument, &QPdfDocument::pageCountChanged, this, &MainWindow::updatePdfPageUi);
     connect(m_pdfSearchModel, &QAbstractItemModel::modelReset, this, &MainWindow::onPdfSearchResultsChanged);
     connect(m_pdfSearchModel,
@@ -729,12 +723,10 @@ void MainWindow::setupUi()
             &QAbstractItemModel::rowsRemoved,
             this,
             &MainWindow::onPdfSearchResultsChanged);
-#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
     connect(m_pdfView,
-            &QPdfView::currentSearchResultIndexChanged,
+            &PdfGraphicsView::currentSearchResultIndexChanged,
             this,
             &MainWindow::onPdfSearchResultsChanged);
-#endif
     connect(m_pdfFindEdit, &QLineEdit::textChanged, this, &MainWindow::onPdfFindTextChanged);
     connect(m_pdfFindEdit, &QLineEdit::returnPressed, this, &MainWindow::pdfFindNext);
     connect(m_pdfPageEdit, &QLineEdit::returnPressed, this, &MainWindow::onPdfPageEditReturnPressed);
@@ -847,7 +839,7 @@ void MainWindow::zoomInPdf()
     if (m_stack->currentWidget() != m_pdfView) {
         return;
     }
-    m_pdfView->setZoomMode(QPdfView::ZoomMode::Custom);
+    m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::Custom);
     m_pdfView->setZoomFactor(m_pdfView->zoomFactor() * 1.15);
 }
 
@@ -856,7 +848,7 @@ void MainWindow::zoomOutPdf()
     if (m_stack->currentWidget() != m_pdfView) {
         return;
     }
-    m_pdfView->setZoomMode(QPdfView::ZoomMode::Custom);
+    m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::Custom);
     m_pdfView->setZoomFactor(qMax(0.1, m_pdfView->zoomFactor() / 1.15));
 }
 
@@ -865,7 +857,7 @@ void MainWindow::pdfFitWidth()
     if (m_stack->currentWidget() != m_pdfView) {
         return;
     }
-    m_pdfView->setZoomMode(QPdfView::ZoomMode::FitToWidth);
+    m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::FitToWidth);
 }
 
 void MainWindow::pdfGoFirstPage()
@@ -877,7 +869,7 @@ void MainWindow::pdfGoFirstPage()
     if (pages <= 0) {
         return;
     }
-    m_pdfView->pageNavigator()->jump(0, QPointF(0, 0), 0);
+    m_pdfView->jumpTo(0, QPointF(0, 0), 0);
 }
 
 void MainWindow::pdfGoPrevPage()
@@ -885,10 +877,9 @@ void MainWindow::pdfGoPrevPage()
     if (m_stack->currentWidget() != m_pdfView || !m_pdfDocument) {
         return;
     }
-    QPdfPageNavigator *const nav = m_pdfView->pageNavigator();
-    const int cur = nav->currentPage();
+    const int cur = m_pdfView->currentPage();
     if (cur > 0) {
-        nav->jump(cur - 1, QPointF(0, 0), 0);
+        m_pdfView->jumpTo(cur - 1, QPointF(0, 0), 0);
     }
 }
 
@@ -901,10 +892,9 @@ void MainWindow::pdfGoNextPage()
     if (pages <= 0) {
         return;
     }
-    QPdfPageNavigator *const nav = m_pdfView->pageNavigator();
-    const int cur = nav->currentPage();
+    const int cur = m_pdfView->currentPage();
     if (cur < pages - 1) {
-        nav->jump(cur + 1, QPointF(0, 0), 0);
+        m_pdfView->jumpTo(cur + 1, QPointF(0, 0), 0);
     }
 }
 
@@ -917,7 +907,7 @@ void MainWindow::pdfGoLastPage()
     if (pages <= 0) {
         return;
     }
-    m_pdfView->pageNavigator()->jump(pages - 1, QPointF(0, 0), 0);
+    m_pdfView->jumpTo(pages - 1, QPointF(0, 0), 0);
 }
 
 void MainWindow::openPdfFind()
@@ -972,24 +962,15 @@ int MainWindow::pdfSearchResultCount() const
 
 int MainWindow::currentPdfSearchResultIndex() const
 {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
-    if (m_pdfView) {
-        return m_pdfView->currentSearchResultIndex();
-    }
-#endif
-    return m_pdfSearchCurrentIndex;
+    return m_pdfView ? m_pdfView->currentSearchResultIndex() : m_pdfSearchCurrentIndex;
 }
 
 void MainWindow::setCurrentPdfSearchResultIndexCompat(int index)
 {
     m_pdfSearchCurrentIndex = index;
-#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
-    // Keep Qt's bright cyan "current result" frame disabled; we use the softer
-    // rectangular background boxes that QPdfView draws for all matches.
     if (m_pdfView) {
-        m_pdfView->setCurrentSearchResultIndex(-1);
+        m_pdfView->setCurrentSearchResultIndex(index);
     }
-#endif
 }
 
 void MainWindow::selectPdfSearchResult(int index)
@@ -1003,9 +984,15 @@ void MainWindow::selectPdfSearchResult(int index)
     }
     setCurrentPdfSearchResultIndexCompat(index);
     const QPdfLink link = m_pdfSearchModel->resultAtIndex(index);
-    if (link.isValid()) {
-        m_pdfView->pageNavigator()->jump(link.page(), link.location(), link.zoom());
+    if (!link.isValid() || !m_pdfDocument || !m_pdfView) {
+        return;
     }
+    QPointF target = link.location();
+    const QList<QRectF> rects = link.rectangles();
+    if (!rects.isEmpty()) {
+        target = rects.first().topLeft();
+    }
+    m_pdfView->jumpTo(link.page(), target, link.zoom());
 }
 
 void MainWindow::pdfFindNext()
@@ -1315,12 +1302,12 @@ void MainWindow::onPdfPageEditReturnPressed()
                              tr("Go to Page"),
                              tr("Page number out of range. Enter a value between 1 and %1.").arg(pages));
         m_updatingPdfPageEdit = true;
-        m_pdfPageEdit->setText(QString::number(m_pdfView->pageNavigator()->currentPage() + 1));
+        m_pdfPageEdit->setText(QString::number(m_pdfView->currentPage() + 1));
         m_updatingPdfPageEdit = false;
         m_pdfPageEdit->selectAll();
         return;
     }
-    m_pdfView->pageNavigator()->jump(pageOneBased - 1, QPointF(0, 0), 0);
+    m_pdfView->jumpTo(pageOneBased - 1, QPointF(0, 0), 0);
 }
 
 void MainWindow::onTocActivated(const QModelIndex &index)
@@ -1338,7 +1325,7 @@ void MainWindow::onTocActivated(const QModelIndex &index)
     const QVariant zoomVar = m_pdfBookmarkModel->data(index, static_cast<int>(QPdfBookmarkModel::Role::Zoom));
     const QPointF location = locVar.isValid() ? locVar.toPointF() : QPointF(0, 0);
     const qreal zoom = zoomVar.isValid() ? zoomVar.toReal() : 0.0;
-    m_pdfView->pageNavigator()->jump(page, location, zoom);
+    m_pdfView->jumpTo(page, location, zoom);
 }
 
 void MainWindow::onPdfBookmarksChanged()
@@ -1380,8 +1367,7 @@ void MainWindow::goToPageOrLine()
         if (pages <= 0) {
             return;
         }
-        QPdfPageNavigator *const nav = m_pdfView->pageNavigator();
-        const int cur = nav->currentPage();
+        const int cur = m_pdfView->currentPage();
         bool ok = false;
         const int pageOneBased = QInputDialog::getInt(
             this,
@@ -1395,7 +1381,7 @@ void MainWindow::goToPageOrLine()
         if (!ok) {
             return;
         }
-        nav->jump(pageOneBased - 1, QPointF(0, 0), 0);
+        m_pdfView->jumpTo(pageOneBased - 1, QPointF(0, 0), 0);
         return;
     }
 
@@ -1475,8 +1461,7 @@ void MainWindow::updatePdfPageUi()
         return;
     }
 
-    QPdfPageNavigator *const nav = m_pdfView->pageNavigator();
-    const int cur = nav->currentPage();
+    const int cur = m_pdfView->currentPage();
     if (m_pdfPageLabel) {
         m_pdfPageLabel->setText(tr("Page %1 of %2").arg(cur + 1).arg(pages));
     }
@@ -1713,7 +1698,7 @@ void MainWindow::previewPath(const QString &absolutePath)
             return;
         }
 
-        m_pdfView->setZoomMode(QPdfView::ZoomMode::FitToWidth);
+        m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::FitToWidth);
         m_stack->setCurrentIndex(kPdfPage);
         setWatchedPreviewFile(fi.absoluteFilePath());
         updatePdfPageUi();
