@@ -26,9 +26,34 @@ PdfGraphicsView::PdfGraphicsView(QWidget *parent)
 void PdfGraphicsView::setDocument(QPdfDocument *document)
 {
     if (m_document == document) {
+        // Same document instance can still change after reloads.
+        rebuildPages();
+        rebuildSearchHighlights();
+        updateCurrentPageFromViewport();
         return;
     }
+    if (m_document) {
+        QObject::disconnect(m_document, nullptr, this, nullptr);
+    }
     m_document = document;
+    if (m_document) {
+        connect(m_document,
+                &QPdfDocument::statusChanged,
+                this,
+                [this](QPdfDocument::Status) {
+                    rebuildPages();
+                    rebuildSearchHighlights();
+                    updateCurrentPageFromViewport();
+                });
+        connect(m_document,
+                &QPdfDocument::pageCountChanged,
+                this,
+                [this](int) {
+                    rebuildPages();
+                    rebuildSearchHighlights();
+                    updateCurrentPageFromViewport();
+                });
+    }
     rebuildPages();
     rebuildSearchHighlights();
     updateCurrentPageFromViewport();
