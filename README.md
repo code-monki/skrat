@@ -70,6 +70,7 @@ make clean      # remove the build directory
 Each artifact zip often contains **two files** where applicable:
 
 - **`*-portable.tar.gz` / `*-portable.zip`**: Qt runtime bundled (**linuxdeploy** + Qt plugin on **Ubuntu** and **Fedora** CI, **macdeployqt** on macOS, **windeployqt** on Windows). Use these on machines **without** a Qt SDK.
+- **`*.dmg` (macOS)**: drag-install image containing `skrat.app` plus an `Applications` shortcut.
 - **`skrat` / `skrat.exe`**: raw build output (still needs Qt libraries on the system, like a local compile).
 
 | Artifact | Portable bundle | Raw binary |
@@ -78,7 +79,7 @@ Each artifact zip often contains **two files** where applicable:
 | `skrat-ubuntu-aarch64` | same pattern | `skrat` |
 | `skrat-fedora-x86_64` | `skrat-fedora-x86_64-portable.tar.gz` — extract, run `AppDir/AppRun` | `skrat` |
 | `skrat-fedora-aarch64` | same pattern | `skrat` |
-| `skrat-macos-universal` | `skrat-macos-universal-portable.tar.gz` — extract `skrat.app` | — |
+| `skrat-macos-universal` | `skrat-macos-universal-portable.tar.gz` and `skrat-macos-universal.dmg` | — |
 | `skrat-windows-x86_64` | `skrat-windows-x86_64-portable.zip` — extract, run `skrat.exe` | `skrat.exe` |
 
 **Linux portable:** run **`./AppDir/AppRun`** from the extracted tree. **macOS:** CI does **not** notarize; Gatekeeper may prompt the first open. **Windows:** **SmartScreen** may warn for unsigned builds. For raw Unix binaries after unzip, **`chmod +x skrat`** may be needed.

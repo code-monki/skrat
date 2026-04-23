@@ -204,12 +204,23 @@ jobs:
           xcrun stapler staple "${APP}"
           /usr/bin/codesign --verify --deep --verbose=2 "${APP}"
       - name: Pack macOS app
-        run: tar czf skrat-macos-universal-portable.tar.gz -C build skrat.app
+        run: |
+          tar czf skrat-macos-universal-portable.tar.gz -C build skrat.app
+          STAGE_DIR="$(mktemp -d)"
+          cp -R build/skrat.app "${STAGE_DIR}/skrat.app"
+          ln -s /Applications "${STAGE_DIR}/Applications"
+          hdiutil create -volname "skrat" \
+            -srcfolder "${STAGE_DIR}" \
+            -ov -format UDZO \
+            skrat-macos-universal.dmg
+          rm -rf "${STAGE_DIR}"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: skrat-macos-universal
-          path: skrat-macos-universal-portable.tar.gz
+          path: |
+            skrat-macos-universal-portable.tar.gz
+            skrat-macos-universal.dmg
           if-no-files-found: error
 
   windows:
@@ -269,9 +280,13 @@ jobs:
           for d in release-assets/skrat-*; do
             [ -d "$d" ] || continue
             name=$(basename "$d")
-            portable=$(find "$d" -type f \( -name '*-portable.tar.gz' -o -name '*-portable.zip' \) -print -quit)
-            if [ -n "${portable}" ]; then
-              cp "${portable}" "upload/$(basename "${portable}")"
+            copied_any=0
+            for asset in "$d"/*-portable.tar.gz "$d"/*-portable.zip "$d"/*.dmg; do
+              [ -f "${asset}" ] || continue
+              cp "${asset}" "upload/$(basename "${asset}")"
+              copied_any=1
+            done
+            if [ "${copied_any}" -eq 1 ]; then
               continue
             fi
             exe=$(find "$d" -type f -name 'skrat.exe' -print -quit)
