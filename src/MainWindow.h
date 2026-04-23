@@ -90,6 +90,8 @@ private slots:
     void showAboutDialog();
     /** Show help/shortcuts dialog. */
     void showHelpDialog();
+    /** Install a command-line launcher wrapper for skrat. */
+    void installCommandLineTool();
     /** Jump to page number entered in the toolbar page input. */
     void onPdfPageEditReturnPressed();
     /** Handle click/activation from PDF table-of-contents tree. */
@@ -118,6 +120,10 @@ private:
     static bool isProbablyImageFile(const QFileInfo &fi);
     /** Open a path in the OS default handler (viewer/editor/file manager). */
     bool openPathInDefaultApp(const QString &absolutePath);
+    /** Return install path for platform CLI launcher wrapper. */
+    QString cliLauncherPath() const;
+    /** Return launcher script content for current platform. */
+    QString cliLauncherContent() const;
     /** Remove all active file-system watch registrations. */
     void pauseWatching();
     /** Set currently watched preview file (or clear when empty). */

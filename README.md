@@ -14,6 +14,7 @@ This is **not** an editor.
 - **Menus**
   - **File → Open Folder…** sets the tree root.
   - **File tree context menu:** right-click a file/folder and use **Open in Default App** to open it with your operating system association (useful for Office/OpenDocument formats and any unsupported preview type).
+  - **Tools → Install Command-Line Tool…** installs a small `skrat` launcher wrapper in a user-writable location so terminal commands can open directories/files in the app.
   - **File → Print PDF…** prints the currently selected/open PDF (**Ctrl+P**), with a pre-print options dialog: **Native PDF (vector, opened in system viewer for native print controls)** or **Rasterized by skrat** at **300/600 DPI**. Raster mode honors print dialog page ranges.
   - **Edit → Copy** copies selection from text/PDF; HTML payloads are sanitized to remove background color styling before paste (**Ctrl+C**).
   - **Edit → Find in PDF… / Find Next / Find Previous** searches in the active PDF (**Ctrl+F**, **F3**, **Shift+F3**). A **Find** toolbar (icon buttons + search field) shows the query and match count; hover for shortcuts and hints. On new queries, the preview auto-jumps to the first match and **Find Next/Previous** cycles through all matches while updating `Match X of Y`.
@@ -229,6 +230,8 @@ You may pass **one** optional path:
 
 - **Directory:** opens that folder as the tree root.
 - **File:** sets the tree root to the file’s parent directory and selects the file (if it is visible under that root).
+
+If you do not want to invoke the full app binary path each time, install a launcher via **Tools → Install Command-Line Tool…** and then run `skrat <path>` from your shell.
 
 Examples:
 

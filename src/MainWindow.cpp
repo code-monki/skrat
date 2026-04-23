@@ -38,6 +38,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QPalette>
+#include <QProcessEnvironment>
 #include <QResizeEvent>
 #include <QMenu>
 #include <QMenuBar>
@@ -67,6 +68,7 @@
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTextStream>
 #include <QTimer>
 #include <QToolBar>
 #include <QTreeView>
@@ -556,6 +558,11 @@ void MainWindow::setupUi()
     addAction(m_pdfActPrev);
     addAction(m_pdfActNext);
     addAction(m_pdfActLast);
+
+    auto *toolsMenu = menuBar()->addMenu(tr("&Tools"));
+    auto *actInstallCli = new QAction(tr("Install Command-Line Tool…"), this);
+    connect(actInstallCli, &QAction::triggered, this, &MainWindow::installCommandLineTool);
+    toolsMenu->addAction(actInstallCli);
 
     auto *helpMenu = menuBar()->addMenu(tr("&Help"));
     auto *actHelp = new QAction(tr("&Help / Shortcuts…"), this);
@@ -1244,6 +1251,7 @@ void MainWindow::showHelpDialog()
            "<ul>"
            "<li>Use the <b>Files</b> tab on the left to browse and select files.</li>"
            "<li>Right-click a file or folder in the tree and choose <b>Open in Default App</b> to hand off to your OS-native app associations (for office docs, spreadsheets, slides, etc.).</li>"
+           "<li>Use <b>Tools → Install Command-Line Tool…</b> to install a <code>skrat</code> launcher for terminal usage.</li>"
            "<li>When a PDF has bookmarks, the <b>TOC</b> tab becomes available.</li>"
            "<li>Use toolbar controls to navigate pages, print, and search.</li>"
            "</ul>"
@@ -1781,4 +1789,82 @@ bool MainWindow::openPathInDefaultApp(const QString &absolutePath)
     }
     statusBar()->showMessage(tr("Opened in system default app."), 2500);
     return true;
+}
+
+QString MainWindow::cliLauncherPath() const
+{
+#if defined(Q_OS_WIN)
+    const QString dir = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation)
+                        + QStringLiteral("/bin");
+    return QDir::cleanPath(dir + QStringLiteral("/skrat.cmd"));
+#else
+    const QString dir = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)
+                        + QStringLiteral("/.local/bin");
+    return QDir::cleanPath(dir + QStringLiteral("/skrat"));
+#endif
+}
+
+QString MainWindow::cliLauncherContent() const
+{
+    const QString exePath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+#if defined(Q_OS_WIN)
+    return QStringLiteral("@echo off\r\n\"%1\" %%*\r\n").arg(exePath);
+#else
+    return QStringLiteral("#!/usr/bin/env sh\nexec \"%1\" \"$@\"\n").arg(exePath);
+#endif
+}
+
+void MainWindow::installCommandLineTool()
+{
+    const QString launcherPath = cliLauncherPath();
+    QFileInfo fi(launcherPath);
+    QDir parentDir(fi.absolutePath());
+    if (!parentDir.exists() && !parentDir.mkpath(QStringLiteral("."))) {
+        QMessageBox::warning(this,
+                             tr("Install Command-Line Tool"),
+                             tr("Could not create launcher directory:\n%1").arg(fi.absolutePath()));
+        return;
+    }
+
+    QFile outFile(launcherPath);
+    if (!outFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+        QMessageBox::warning(this,
+                             tr("Install Command-Line Tool"),
+                             tr("Could not write launcher file:\n%1").arg(launcherPath));
+        return;
+    }
+    QTextStream ts(&outFile);
+    ts << cliLauncherContent();
+    outFile.close();
+
+#if !defined(Q_OS_WIN)
+    QFile::Permissions perms = outFile.permissions();
+    perms |= QFileDevice::ExeOwner | QFileDevice::ExeGroup | QFileDevice::ExeOther;
+    if (!outFile.setPermissions(perms)) {
+        QMessageBox::warning(this,
+                             tr("Install Command-Line Tool"),
+                             tr("Launcher installed, but executable permissions could not be set:\n%1")
+                                 .arg(launcherPath));
+        return;
+    }
+#endif
+
+    const QString pathEnv = QProcessEnvironment::systemEnvironment().value(QStringLiteral("PATH"));
+    const QStringList parts = pathEnv.split(QDir::listSeparator(), Qt::SkipEmptyParts);
+    bool onPath = false;
+    const QString normalizedDir = QDir::cleanPath(fi.absolutePath());
+    for (const QString &part : parts) {
+        if (QDir::cleanPath(part) == normalizedDir) {
+            onPath = true;
+            break;
+        }
+    }
+
+    const QString msg = onPath
+                            ? tr("Installed command-line launcher at:\n%1\n\nYou can now run:\nskrat <path>")
+                                  .arg(launcherPath)
+                            : tr("Installed command-line launcher at:\n%1\n\nCurrent PATH does not include:\n%2\n\n"
+                                 "Add that directory to PATH, then run:\nskrat <path>")
+                                  .arg(launcherPath, fi.absolutePath());
+    QMessageBox::information(this, tr("Install Command-Line Tool"), msg);
 }
