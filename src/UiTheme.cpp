@@ -67,6 +67,81 @@ QPalette warmSepiaPalette()
     return pal;
 }
 
+QString buildChromeStylesheet(const QPalette &pal)
+{
+    const QString window = pal.color(QPalette::Window).name();
+    const QString base = pal.color(QPalette::Base).name();
+    const QString button = pal.color(QPalette::Button).name();
+    const QString text = pal.color(QPalette::Text).name();
+    const QString buttonText = pal.color(QPalette::ButtonText).name();
+    const QString border = pal.color(QPalette::Mid).name();
+    const QString altBase = pal.color(QPalette::AlternateBase).name();
+    const QString selectedBorder = pal.color(QPalette::Highlight).name();
+    const QString selectedText = pal.color(QPalette::HighlightedText).name();
+
+    return QStringLiteral(
+               "QTabWidget::pane {"
+               "  border: 1px solid %1;"
+               "  top: -1px;"
+               "  background: %2;"
+               "}"
+               "QTabWidget::left-corner, QTabWidget::right-corner {"
+               "  background: %3;"
+               "  border-bottom: 1px solid %1;"
+               "}"
+               "QTabBar::tab {"
+               "  background: %3;"
+               "  color: %4;"
+               "  border: 1px solid %1;"
+               "  border-bottom: none;"
+               "  border-top-left-radius: 4px;"
+               "  border-top-right-radius: 4px;"
+               "  padding: 4px 10px;"
+               "  margin-right: 2px;"
+               "}"
+               "QTabBar::tab:selected {"
+               "  background: %2;"
+               "  border-color: %5;"
+               "}"
+               "QTabBar::tab:!selected {"
+               "  margin-top: 2px;"
+               "}"
+               "QToolBar {"
+               "  background: %1;"
+               "  border: 1px solid %6;"
+               "}"
+               "QToolButton {"
+               "  background: %3;"
+               "  color: %7;"
+               "  border: 1px solid %6;"
+               "  border-radius: 3px;"
+               "  padding: 2px 6px;"
+               "}"
+               "QToolButton:hover {"
+               "  background: %8;"
+               "}"
+               "QToolButton:pressed {"
+               "  background: %2;"
+               "}"
+               "QToolButton:disabled {"
+               "  color: %6;"
+               "}"
+               "QLineEdit {"
+               "  background: %2;"
+               "  color: %4;"
+               "  border: 1px solid %6;"
+               "  border-radius: 3px;"
+               "  padding: 1px 6px;"
+               "  selection-background-color: %5;"
+               "  selection-color: %9;"
+               "}"
+               "QLineEdit:disabled {"
+               "  background: %8;"
+               "  color: %6;"
+               "}")
+        .arg(window, base, button, text, selectedBorder, border, buttonText, altBase, selectedText);
+}
+
 } // namespace
 
 UiThemePrefs loadUiThemePrefs()
@@ -95,7 +170,6 @@ void applyUiTheme(QApplication &app, const UiThemePrefs &prefs)
     switch (prefs.mode) {
     case ThemeMode::System:
         app.setPalette(systemPalette);
-        app.setStyleSheet(QString());
         break;
     case ThemeMode::Light:
         app.setPalette(lightPalette());
@@ -107,6 +181,8 @@ void applyUiTheme(QApplication &app, const UiThemePrefs &prefs)
         app.setPalette(warmSepiaPalette());
         break;
     }
+
+    app.setStyleSheet(buildChromeStylesheet(app.palette()));
 
     QFont uiFont = systemFont;
     if (!prefs.fontFamily.isEmpty()) {

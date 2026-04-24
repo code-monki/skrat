@@ -205,15 +205,16 @@ jobs:
           /usr/bin/codesign --verify --deep --verbose=2 "${APP}"
       - name: Pack macOS app
         run: |
-          tar czf skrat-macos-universal-portable.tar.gz -C build skrat.app
+          set -euo pipefail
           STAGE_DIR="$(mktemp -d)"
-          cp -R build/skrat.app "${STAGE_DIR}/skrat.app"
+          trap 'rm -rf "${STAGE_DIR}"' EXIT
+          ditto build/skrat.app "${STAGE_DIR}/skrat.app"
+          COPYFILE_DISABLE=1 tar --disable-copyfile -czf skrat-macos-universal-portable.tar.gz -C "${STAGE_DIR}" skrat.app
           ln -s /Applications "${STAGE_DIR}/Applications"
           hdiutil create -volname "skrat" \
             -srcfolder "${STAGE_DIR}" \
             -ov -format UDZO \
             skrat-macos-universal.dmg
-          rm -rf "${STAGE_DIR}"
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

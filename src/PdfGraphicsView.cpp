@@ -76,11 +76,19 @@ void PdfGraphicsView::setPageMode(PageMode mode)
 void PdfGraphicsView::setZoomMode(ZoomMode mode)
 {
     if (m_zoomMode == mode) {
+        if (mode == ZoomMode::FitToWidth || mode == ZoomMode::FitInView) {
+            rebuildPages();
+            rebuildSearchHighlights();
+            updateCurrentPageFromViewport();
+        }
         return;
     }
     m_zoomMode = mode;
+    const bool fitMode = (m_zoomMode == ZoomMode::FitToWidth || m_zoomMode == ZoomMode::FitInView);
+    setHorizontalScrollBarPolicy(fitMode ? Qt::ScrollBarAlwaysOff : Qt::ScrollBarAsNeeded);
     rebuildPages();
     rebuildSearchHighlights();
+    updateCurrentPageFromViewport();
 }
 
 void PdfGraphicsView::setZoomFactor(qreal factor)
@@ -138,10 +146,21 @@ void PdfGraphicsView::setCurrentSearchResultIndex(int index)
 void PdfGraphicsView::resizeEvent(QResizeEvent *event)
 {
     QGraphicsView::resizeEvent(event);
-    if (m_zoomMode == ZoomMode::FitToWidth) {
+    if (m_zoomMode == ZoomMode::FitToWidth || m_zoomMode == ZoomMode::FitInView) {
         rebuildPages();
         rebuildSearchHighlights();
     }
+}
+
+void PdfGraphicsView::scrollContentsBy(int dx, int dy)
+{
+    const bool fitMode = (m_zoomMode == ZoomMode::FitToWidth || m_zoomMode == ZoomMode::FitInView);
+    if (fitMode) {
+        QGraphicsView::scrollContentsBy(0, dy);
+        horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
+        return;
+    }
+    QGraphicsView::scrollContentsBy(dx, dy);
 }
 
 void PdfGraphicsView::clearScene()
@@ -159,10 +178,12 @@ void PdfGraphicsView::rebuildPages()
     }
 
     // Keep visible gutters around pages so fit-width mode doesn't look clipped.
-    const qreal leftPad = 56.0;
     const qreal topPad = 24.0;
-    const qreal fitWidthGutterPx = 56.0;
     const qreal pageMatPx = 14.0;
+    const qreal fitWidthGutterPx = 0.0;
+    const qreal fitOuterPad = pageMatPx + fitWidthGutterPx;
+    const qreal leftPad = (m_zoomMode == ZoomMode::Custom) ? 56.0 : pageMatPx;
+    const bool fitMode = (m_zoomMode == ZoomMode::FitToWidth || m_zoomMode == ZoomMode::FitInView);
     qreal y = topPad;
     qreal maxWidth = 0.0;
 
@@ -175,9 +196,18 @@ void PdfGraphicsView::rebuildPages()
             continue;
         }
         qreal scale = m_zoomFactor;
-        if (m_zoomMode == ZoomMode::FitToWidth) {
-            const qreal usableWidth = qMax<qreal>(80.0, viewport()->width() - 2.0 * (leftPad + fitWidthGutterPx));
-            scale = qMax<qreal>(0.05, usableWidth / pagePt.width());
+        if (m_zoomMode == ZoomMode::FitToWidth || m_zoomMode == ZoomMode::FitInView) {
+            const qreal usableWidth = qMax<qreal>(
+                80.0,
+                viewport()->width() - (2.0 * fitOuterPad));
+            const qreal widthScale = qMax<qreal>(0.05, usableWidth / pagePt.width());
+            if (m_zoomMode == ZoomMode::FitToWidth) {
+                scale = widthScale;
+            } else {
+                const qreal usableHeight = qMax<qreal>(80.0, viewport()->height() - 2.0 * (topPad + pageMatPx));
+                const qreal heightScale = qMax<qreal>(0.05, usableHeight / pagePt.height());
+                scale = qMin(widthScale, heightScale);
+            }
         }
         const QSize pagePx(qMax(1, qRound(pagePt.width() * scale)),
                            qMax(1, qRound(pagePt.height() * scale)));
@@ -216,7 +246,13 @@ void PdfGraphicsView::rebuildPages()
         maxWidth = qMax(maxWidth, static_cast<qreal>(pagePx.width()));
     }
 
-    m_scene->setSceneRect(0.0, 0.0, maxWidth + leftPad * 2.0, y + topPad);
+    const qreal contentWidth = maxWidth + leftPad * 2.0;
+    const qreal sceneWidth = fitMode ? qMax(contentWidth, static_cast<qreal>(viewport()->width()))
+                                     : contentWidth;
+    m_scene->setSceneRect(0.0, 0.0, sceneWidth, y + topPad);
+    if (fitMode) {
+        horizontalScrollBar()->setValue(horizontalScrollBar()->minimum());
+    }
 }
 
 void PdfGraphicsView::rebuildSearchHighlights()

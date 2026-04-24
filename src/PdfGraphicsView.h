@@ -20,6 +20,7 @@ public:
     enum class ZoomMode {
         Custom,
         FitToWidth,
+        FitInView,
     };
 
     enum class PageMode {
@@ -58,6 +59,7 @@ signals:
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
+    void scrollContentsBy(int dx, int dy) override;
 
 private:
     struct PageItem {
@@ -77,7 +79,7 @@ private:
     QPdfDocument *m_document = nullptr;
     QPdfSearchModel *m_searchModel = nullptr;
     PageMode m_pageMode = PageMode::MultiPage;
-    ZoomMode m_zoomMode = ZoomMode::FitToWidth;
+    ZoomMode m_zoomMode = ZoomMode::FitInView;
     qreal m_zoomFactor = 1.0;
     int m_pageSpacingPx = 12;
     int m_currentPage = 0;

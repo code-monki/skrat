@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QDesktopServices>
 #include <QDateTime>
+#include <QEvent>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -433,6 +434,15 @@ MainWindow::~MainWindow()
     }
 }
 
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (watched == (m_imageScroll ? m_imageScroll->viewport() : nullptr) && event
+        && event->type() == QEvent::Resize) {
+        updateImagePreviewScale();
+    }
+    return QMainWindow::eventFilter(watched, event);
+}
+
 void MainWindow::setupUi()
 {
     setWindowTitle(tr("skrat — preview"));
@@ -504,7 +514,7 @@ void MainWindow::setupUi()
     addAction(m_actPdfFindPrev);
 
     auto *viewMenu = menuBar()->addMenu(tr("&View"));
-    auto *actFitWidth = new QAction(tr("PDF Fit &Width"), this);
+    auto *actFitWidth = new QAction(tr("PDF Fit Page to &Width"), this);
     connect(actFitWidth, &QAction::triggered, this, &MainWindow::pdfFitWidth);
     viewMenu->addAction(actFitWidth);
 
@@ -517,6 +527,12 @@ void MainWindow::setupUi()
     actZoomOut->setShortcut(QKeySequence::ZoomOut);
     connect(actZoomOut, &QAction::triggered, this, &MainWindow::zoomOutPdf);
     viewMenu->addAction(actZoomOut);
+
+    auto *actZoomReset = new QAction(tr("Zoom &Reset (Auto-size to viewport)"), this);
+    actZoomReset->setShortcuts(
+        {QKeySequence(QStringLiteral("Ctrl+0")), QKeySequence(QStringLiteral("Meta+0"))});
+    connect(actZoomReset, &QAction::triggered, this, &MainWindow::zoomResetToViewport);
+    addAction(actZoomReset);
 
     viewMenu->addSeparator();
     m_actGoToPageOrLine = new QAction(tr("&Go to page / line…"), this);
@@ -647,6 +663,7 @@ void MainWindow::setupUi()
     m_imageScroll->setWidget(m_imageView);
     m_imageScroll->setWidgetResizable(true);
     m_imageScroll->setAlignment(Qt::AlignCenter);
+    m_imageScroll->viewport()->installEventFilter(this);
 
     m_placeholder = new QLabel;
     m_placeholder->setWordWrap(true);
@@ -897,20 +914,28 @@ void MainWindow::openFolderDialog()
 
 void MainWindow::zoomInPdf()
 {
-    if (m_stack->currentWidget() != m_pdfView) {
+    if (m_stack->currentWidget() == m_pdfView) {
+        m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::Custom);
+        m_pdfView->setZoomFactor(m_pdfView->zoomFactor() * 1.15);
         return;
     }
-    m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::Custom);
-    m_pdfView->setZoomFactor(m_pdfView->zoomFactor() * 1.15);
+    if (m_stack->currentWidget() == m_imageScroll && !m_imageOriginalPixmap.isNull()) {
+        m_imageZoomFactor = qMin(8.0, m_imageZoomFactor * 1.15);
+        updateImagePreviewScale();
+    }
 }
 
 void MainWindow::zoomOutPdf()
 {
-    if (m_stack->currentWidget() != m_pdfView) {
+    if (m_stack->currentWidget() == m_pdfView) {
+        m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::Custom);
+        m_pdfView->setZoomFactor(qMax(0.1, m_pdfView->zoomFactor() / 1.15));
         return;
     }
-    m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::Custom);
-    m_pdfView->setZoomFactor(qMax(0.1, m_pdfView->zoomFactor() / 1.15));
+    if (m_stack->currentWidget() == m_imageScroll && !m_imageOriginalPixmap.isNull()) {
+        m_imageZoomFactor = qMax(0.1, m_imageZoomFactor / 1.15);
+        updateImagePreviewScale();
+    }
 }
 
 void MainWindow::pdfFitWidth()
@@ -919,6 +944,27 @@ void MainWindow::pdfFitWidth()
         return;
     }
     m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::FitToWidth);
+}
+
+void MainWindow::zoomResetToViewport()
+{
+    if (!m_stack) {
+        return;
+    }
+    if (m_stack->currentWidget() == m_pdfView) {
+        m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::FitToWidth);
+        QTimer::singleShot(0, this, [this]() {
+            if (m_stack && m_stack->currentWidget() == m_pdfView) {
+                m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::FitToWidth);
+            }
+        });
+        return;
+    }
+    if (m_stack->currentWidget() == m_imageScroll && !m_imageOriginalPixmap.isNull()) {
+        m_imageZoomFactor = 1.0;
+        updateImagePreviewScale();
+        QTimer::singleShot(0, this, &MainWindow::updateImagePreviewScale);
+    }
 }
 
 void MainWindow::pdfGoFirstPage()
@@ -1324,9 +1370,10 @@ void MainWindow::showHelpDialog()
            "<li><b>Find next / previous:</b> %4 / %5</li>"
            "<li><b>Copy:</b> %6</li>"
            "<li><b>Go to page / line:</b> Ctrl+G</li>"
+           "<li><b>Zoom reset (auto-size viewport):</b> %7</li>"
            "<li><b>First / Last page:</b> Ctrl+Home or Cmd+Up / Ctrl+End or Cmd+Down</li>"
            "<li><b>Prev / Next page:</b> Alt+PgUp / Alt+PgDown</li>"
-           "<li><b>Zoom in / out:</b> %7 / %8</li>"
+           "<li><b>Zoom in / out:</b> %8 / %9</li>"
            "</ul>"
            "<p>More details: <a href='https://github.com/code-monki/skrat#readme'>README</a></p>")
             .arg(QKeySequence(QKeySequence::Open).toString(QKeySequence::NativeText),
@@ -1335,6 +1382,7 @@ void MainWindow::showHelpDialog()
                  QKeySequence(QKeySequence::FindNext).toString(QKeySequence::NativeText),
                  QKeySequence(QKeySequence::FindPrevious).toString(QKeySequence::NativeText),
                  QKeySequence(QKeySequence::Copy).toString(QKeySequence::NativeText),
+                 QKeySequence(QStringLiteral("Ctrl+0")).toString(QKeySequence::NativeText),
                  QKeySequence(QKeySequence::ZoomIn).toString(QKeySequence::NativeText),
                  QKeySequence(QKeySequence::ZoomOut).toString(QKeySequence::NativeText)));
     layout->addWidget(browser);
@@ -1724,6 +1772,32 @@ void MainWindow::updatePdfSearchStatus()
     m_pdfFindCountLabel->setText(tr("Match %1 of %2").arg(oneBased).arg(total));
 }
 
+void MainWindow::updateImagePreviewScale()
+{
+    if (!m_imageView || !m_imageScroll || m_imageOriginalPixmap.isNull()) {
+        return;
+    }
+    if (!m_stack || m_stack->currentIndex() != kImagePage) {
+        return;
+    }
+
+    const QSize viewportSize = m_imageScroll->viewport()->size();
+    if (viewportSize.width() <= 0 || viewportSize.height() <= 0) {
+        return;
+    }
+
+    const QSize fitted = m_imageOriginalPixmap.size().scaled(viewportSize, Qt::KeepAspectRatio);
+    if (fitted.width() <= 0 || fitted.height() <= 0) {
+        return;
+    }
+    const QSize zoomed(qMax(1, qRound(fitted.width() * m_imageZoomFactor)),
+                       qMax(1, qRound(fitted.height() * m_imageZoomFactor)));
+    const QPixmap scaled = m_imageOriginalPixmap.scaled(
+        zoomed, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_imageView->setPixmap(scaled);
+    m_imageView->resize(scaled.size());
+}
+
 void MainWindow::showPlaceholder(const QString &html)
 {
     setWatchedPreviewFile(QString());
@@ -1802,6 +1876,8 @@ void MainWindow::previewPath(const QString &absolutePath)
     m_reloadDebounceTimer->stop();
     m_pendingReloadPath.clear();
     pauseWatching();
+    m_imageOriginalPixmap = QPixmap();
+    m_imageZoomFactor = 1.0;
 
     const QFileInfo fi(absolutePath);
 
@@ -1859,6 +1935,12 @@ void MainWindow::previewPath(const QString &absolutePath)
         m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::FitToWidth);
         m_pdfThumbPageCount = -1;
         m_stack->setCurrentIndex(kPdfPage);
+        QTimer::singleShot(0, this, [this]() {
+            if (m_stack && m_stack->currentWidget() == m_pdfView) {
+                m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::FitToWidth);
+                updatePdfPageUi();
+            }
+        });
         setWatchedPreviewFile(fi.absoluteFilePath());
         updatePdfPageUi();
         return;
@@ -1904,9 +1986,14 @@ void MainWindow::previewPath(const QString &absolutePath)
                     .arg(fi.absoluteFilePath().toHtmlEscaped(), reader.errorString().toHtmlEscaped()));
             return;
         }
-        m_imageView->setPixmap(QPixmap::fromImage(image));
+        m_imageOriginalPixmap = QPixmap::fromImage(image);
+        m_imageZoomFactor = 1.0;
+        m_imageView->setPixmap(m_imageOriginalPixmap);
         m_imageView->adjustSize();
         m_stack->setCurrentIndex(kImagePage);
+        updateImagePreviewScale();
+        QTimer::singleShot(0, this, &MainWindow::updateImagePreviewScale);
+        QTimer::singleShot(40, this, &MainWindow::updateImagePreviewScale);
         setWatchedPreviewFile(fi.absoluteFilePath());
         updatePdfPageUi();
         return;

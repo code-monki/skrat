@@ -2,6 +2,7 @@
 
 #include <QFileInfo>
 #include <QMainWindow>
+#include <QPixmap>
 
 /**
  * @file MainWindow.h
@@ -13,6 +14,7 @@
  */
 
 class QAction;
+class QEvent;
 class QFileSystemModel;
 class QFileSystemWatcher;
 class QLabel;
@@ -53,6 +55,10 @@ public:
     /** Select and preview a specific file path under the current root. */
     void selectPath(const QString &absoluteFilePath);
 
+protected:
+    /** Track image viewport resizes to maintain fit-to-viewport behavior. */
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private slots:
     /** React to tree selection changes and preview the selected path. */
     void onTreeCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
@@ -66,6 +72,8 @@ private slots:
     void zoomOutPdf();
     /** Switch PDF zoom behavior to fit width. */
     void pdfFitWidth();
+    /** Reset zoom to auto-size content to current viewport. */
+    void zoomResetToViewport();
     /** Navigate to first page in current PDF. */
     void pdfGoFirstPage();
     /** Navigate to previous page in current PDF. */
@@ -167,6 +175,8 @@ private:
     void rebuildPdfThumbnails();
     /** Sync selected thumbnail with the active PDF page. */
     void syncPdfThumbnailSelection();
+    /** Scale current image preview to the available viewport. */
+    void updateImagePreviewScale();
 
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
@@ -179,6 +189,7 @@ private:
     QPlainTextEdit *m_textView = nullptr;
     QScrollArea *m_imageScroll = nullptr;
     QLabel *m_imageView = nullptr;
+    QPixmap m_imageOriginalPixmap;
     QLabel *m_placeholder = nullptr;
 
     QToolBar *m_pdfToolBar = nullptr;
@@ -209,6 +220,7 @@ private:
     int m_pdfThumbPageCount = -1;
 
     QString m_previewFilePath;
+    qreal m_imageZoomFactor = 1.0;
     QString m_pendingReloadPath;
     int m_pdfSearchCurrentIndex = -1;
     bool m_updatingPdfPageEdit = false;
