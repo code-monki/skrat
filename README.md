@@ -17,7 +17,7 @@ This is **not** an editor.
 - **Right pane:** preview stack
   - **PDF** via Qt’s **`QtPdf` / `QPdfDocument`** rendered through a custom **`PdfGraphicsView`** component for deterministic navigation/search positioning.
   - **Text** for common extensions (UTF-8; see `MainWindow.cpp` for the allowlist).
-  - **Images** for common formats (`.gif`, `.png`, `.jpg`/`.jpeg`, `.tif`/`.tiff`, `.webp`).
+  - **Images** for common formats (`.gif`, `.png`, `.jpg`/`.jpeg`, `.tif`/`.tiff`, `.webp`) plus basic `.svg` rendering support.
 - **Menus**
   - **File → Open Folder…** sets the tree root.
   - **File tree context menu:** right-click a file/folder and use **Open in Default App** to open it with your operating system association (useful for Office/OpenDocument formats and any unsupported preview type).
@@ -35,7 +35,7 @@ This is **not** an editor.
 ## Requirements
 
 - **CMake** 3.16 or newer  
-- **Qt 6** with these modules available to CMake: **Core**, **Gui**, **Widgets**, **PrintSupport**, **Pdf**, **PdfWidgets**  
+- **Qt 6** with these modules available to CMake: **Core**, **Gui**, **Widgets**, **PrintSupport**, **Pdf**, **PdfWidgets**, **Svg**  
   - Qt **6.4+** is required by `CMakeLists.txt` (PDF APIs used here); some distributions package PDF/print modules separately—if CMake cannot find `Qt6::PdfWidgets` or `Qt6::PrintSupport`, install your OS Qt6 PDF/print development packages or point `CMAKE_PREFIX_PATH` at a full Qt kit from the Qt Online Installer.
 - A **C++17** toolchain
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(skrat VERSION 0.2.14 LANGUAGES CXX)
+project(skrat VERSION 0.2.15 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -36,7 +36,7 @@ if((NOT CMAKE_PREFIX_PATH) AND ((NOT DEFINED Qt6_DIR) OR (Qt6_DIR STREQUAL "")))
   endforeach()
 endif()
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Pdf PdfWidgets)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Pdf PdfWidgets Svg)
 
 add_executable(skrat
   src/main.cpp
@@ -57,6 +57,7 @@ target_link_libraries(skrat PRIVATE
   Qt6::PrintSupport
   Qt6::Pdf
   Qt6::PdfWidgets
+  Qt6::Svg
 )
 
 target_compile_definitions(skrat PRIVATE "SKRAT_APP_VERSION=\"${PROJECT_VERSION}\"")

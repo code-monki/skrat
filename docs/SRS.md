@@ -10,7 +10,7 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - File browsing via a tree view
 - PDF preview, navigation, search, TOC browsing, and print workflows
 - Text preview for common textual formats
-- Image preview for common raster formats
+- Image preview for common raster formats and basic SVG rendering
 - File-tree context action to open selected files in the OS default app
 - In-app installer for a command-line launcher utility (`skrat`)
 - Basic help/about documentation in-app
@@ -36,7 +36,7 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 ### FR-002 Preview Modes
 - The system shall preview PDF files in a PDF viewer.
 - The system shall preview supported text files in read-only text view.
-- The system shall preview supported image files (`gif`, `png`, `jpg`/`jpeg`, `tif`/`tiff`, `webp`) in read-only image view.
+- The system shall preview supported image files (`gif`, `png`, `jpg`/`jpeg`, `tif`/`tiff`, `webp`, basic `svg`) in read-only image view.
 - The system shall show an explanatory placeholder for unsupported/unavailable files.
 
 ### FR-010 Native App Handoff

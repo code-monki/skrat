@@ -44,7 +44,7 @@
 ### 2.1 Preview Loading
 - Input path -> existence/type check -> PDF/text/image/placeholder branch.
 - PDF path updates: document load, toolbar/tab state, watcher registration.
-- Image path updates: image decode, image widget update, watcher registration.
+- Image path updates: image decode (raster formats via `QImageReader`, basic SVG via `QSvgRenderer` rasterization), image widget update, watcher registration.
 
 ### 2.2 Search Flow
 - Query change updates search model.

@@ -55,6 +55,7 @@
 14. **Open With fallback**: on environment where association discovery is partial, verify chooser still offers **Other…** and successful launch path.
 15. **PDF thumbnails tab**: with active PDF, verify Thumbnails tab enables, displays one entry per page, and clicking a thumbnail jumps to expected page while current-page indicator updates.
 16. **Theme/font preferences**: switch between System/Light/Dark/Warm Sepia and UI font settings, verify immediate chrome update, persistence across restart, and unchanged document rendering semantics.
+17. **Basic SVG preview**: open simple SVG files and verify in-app rendering in image preview path; for malformed/unsupported SVGs verify clear fallback/error messaging and native-app handoff guidance.
 
 ## 6. Exit Criteria
 

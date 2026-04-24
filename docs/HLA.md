@@ -25,7 +25,7 @@
 - `QStackedWidget` with:
   - PDF view (`PdfGraphicsView` + `QPdfDocument` + `QGraphicsScene` page items)
   - Text view (`QPlainTextEdit`)
-  - Image view (`QScrollArea` + `QLabel` pixmap)
+  - Image view (`QScrollArea` + `QLabel` pixmap, including basic SVG rasterized preview)
   - Placeholder (`QLabel` HTML)
 
 ### 2.4 PDF Services

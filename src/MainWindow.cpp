@@ -66,6 +66,7 @@
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QPushButton>
+#include <QSvgRenderer>
 #include <QScrollArea>
 #include <QScreen>
 #include <QSplitter>
@@ -164,7 +165,6 @@ bool hasTextualSuffix(const QString &suffixLower)
         QStringLiteral("pri"),
         QStringLiteral("qml"),
         QStringLiteral("rst"),
-        QStringLiteral("svg"),
     };
     return kSuffixes.contains(suffixLower);
 }
@@ -185,6 +185,7 @@ bool hasImageSuffix(const QString &suffixLower)
     static const QStringList kImageSuffixes = {
         QStringLiteral("png"),  QStringLiteral("jpg"),  QStringLiteral("jpeg"),
         QStringLiteral("gif"),  QStringLiteral("tif"),  QStringLiteral("tiff"),
+        QStringLiteral("svg"),
         QStringLiteral("webp"),
     };
     return kImageSuffixes.contains(suffixLower);
@@ -1977,13 +1978,40 @@ void MainWindow::previewPath(const QString &absolutePath)
     }
 
     if (isProbablyImageFile(fi)) {
-        QImageReader reader(fi.absoluteFilePath());
-        reader.setAutoTransform(true);
-        const QImage image = reader.read();
+        QImage image;
+        QString loadErr;
+        if (suffix == QStringLiteral("svg")) {
+            QSvgRenderer svg(fi.absoluteFilePath());
+            if (!svg.isValid()) {
+                loadErr = tr("Invalid or unsupported SVG.");
+            } else {
+                QSize defaultSize = svg.defaultSize();
+                if (!defaultSize.isValid()) {
+                    defaultSize = QSize(1600, 1200);
+                }
+                const QSize targetSize(qBound(64, defaultSize.width(), 4096),
+                                       qBound(64, defaultSize.height(), 4096));
+                image = QImage(targetSize, QImage::Format_ARGB32_Premultiplied);
+                image.fill(Qt::transparent);
+                QPainter painter(&image);
+                svg.render(&painter);
+            }
+        } else {
+            QImageReader reader(fi.absoluteFilePath());
+            reader.setAutoTransform(true);
+            image = reader.read();
+            if (image.isNull()) {
+                loadErr = reader.errorString();
+            }
+        }
         if (image.isNull()) {
+            if (loadErr.trimmed().isEmpty()) {
+                loadErr = tr("Unknown image loading error.");
+            }
             showPlaceholder(
-                tr("<p><b>Could not load image</b></p><p>%1</p><p>Error: %2</p>")
-                    .arg(fi.absoluteFilePath().toHtmlEscaped(), reader.errorString().toHtmlEscaped()));
+                tr("<p><b>Could not load image</b></p><p>%1</p><p>Error: %2</p>"
+                   "<p>Tip: use <b>Open in Default App</b> for complex SVGs your OS viewer may handle better.</p>")
+                    .arg(fi.absoluteFilePath().toHtmlEscaped(), loadErr.toHtmlEscaped()));
             return;
         }
         m_imageOriginalPixmap = QPixmap::fromImage(image);
@@ -2002,7 +2030,7 @@ void MainWindow::previewPath(const QString &absolutePath)
     showPlaceholder(
         tr("<p><b>Unsupported file type</b> for preview.</p>"
            "<p>%1</p>"
-           "<p>Supported: <b>PDF</b>, common <b>text</b> extensions (txt, md, json, code, …), and common <b>image</b> formats (gif, png, jpg/jpeg, tiff, webp).</p>"
+           "<p>Supported: <b>PDF</b>, common <b>text</b> extensions (txt, md, json, code, …), and common <b>image</b> formats (gif, png, jpg/jpeg, tiff, webp, basic svg).</p>"
            "<p>Tip: right-click in the file tree and use <b>Open in Default App</b> for any type your OS can handle.</p>")
             .arg(fi.absoluteFilePath().toHtmlEscaped()));
 }
