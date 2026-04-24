@@ -43,6 +43,7 @@ jobs:
             libgl1-mesa-dev \
             qt6-base-dev \
             qt6-pdf-dev \
+            qt6-svg-dev \
             curl \
             file \
             patchelf
@@ -93,6 +94,7 @@ jobs:
             ninja-build \
             qt6-qtbase-devel \
             qt6-qtpdf-devel \
+            qt6-qtsvg-devel \
             curl \
             file \
             patchelf
