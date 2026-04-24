@@ -4,6 +4,13 @@
 
 This is **not** an editor.
 
+## Product Scope Guardrails
+
+- `skrat` is intentionally focused on **read-only document triage**: open, inspect, navigate, search, print, copy, and hand off.
+- Features that require **document authoring or mutation semantics** are explicitly out of scope for `skrat`.
+- Out-of-scope examples include (non-exhaustive): fillable form workflows, annotation/markup toolchains, digital-signature authoring, and redaction editing pipelines.
+- For those workflows, use the file-tree context actions **Open in Default App** or **Open With…** to continue in a dedicated native application.
+
 ## Features
 
 - **Left tabbed view:** `Files` tab is the `QTreeView` file tree (`QFileSystemModel`); `TOC` tab shows PDF **Table of contents** (outline/bookmarks when available; placeholder when unavailable); `Thumbnails` tab shows PDF page thumbnails for quick page jumps. `TOC` and `Thumbnails` tabs are enabled only while previewing a PDF.

@@ -15,7 +15,14 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - In-app installer for a command-line launcher utility (`skrat`)
 - Basic help/about documentation in-app
 
-### 1.3 Definitions
+### 1.3 Product Scope Guardrails
+- `skrat` is a **read-only triage viewer**, not a document editor.
+- In scope: fast preview, navigation, search, TOC/thumbnails, print, copy sanitation, and native-app handoff.
+- Out of scope: authoring-grade document workflows that modify or enrich document semantics.
+- Out-of-scope examples include (non-exhaustive): fillable form editing/submission workflows, annotation/markup authoring, digital-signature authoring flows, and redaction editing workflows.
+- When those capabilities are needed, the expected path is handoff through **Open in Default App** or **Open With…**.
+
+### 1.4 Definitions
 - **TOC**: Table of contents (PDF bookmarks/outline)
 - **Raster print**: In-app rendering of PDF pages to images before print
 - **Vector print handoff**: Opening PDF in system viewer for native print controls
