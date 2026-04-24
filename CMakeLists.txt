@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(skrat VERSION 1.0.0 LANGUAGES CXX)
+# User-visible / Qt version string (About, etc.). Bundle plist uses numeric short version per Apple guidance.
 set(SKRAT_APP_VERSION_STRING "1.0.0-rc1")
+# CFBundleVersion: must increase per submission; numeric tail distinguishes pre-releases from final 1.0.0.
+set(SKRAT_MACOS_CF_BUNDLE_VERSION "1.0.0.1")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -73,8 +76,8 @@ if(APPLE)
     MACOSX_BUNDLE_GUI_IDENTIFIER com.codemonki.skrat
     MACOSX_BUNDLE_BUNDLE_NAME "skrat"
     MACOSX_BUNDLE_COPYRIGHT "GPL-3.0-or-later"
-    MACOSX_BUNDLE_SHORT_VERSION_STRING "${SKRAT_APP_VERSION_STRING}"
-    MACOSX_BUNDLE_BUNDLE_VERSION "${SKRAT_APP_VERSION_STRING}"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+    MACOSX_BUNDLE_BUNDLE_VERSION "${SKRAT_MACOS_CF_BUNDLE_VERSION}"
     MACOSX_BUNDLE_ICON_FILE skrat
   )
   # CMake often leaves CFBundleIconFile empty / omits Resources; macdeployqt can strip them too.
