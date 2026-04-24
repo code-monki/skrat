@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(skrat VERSION 0.2.15 LANGUAGES CXX)
+project(skrat VERSION 1.0.0 LANGUAGES CXX)
+set(SKRAT_APP_VERSION_STRING "1.0.0-rc1")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -60,7 +61,7 @@ target_link_libraries(skrat PRIVATE
   Qt6::Svg
 )
 
-target_compile_definitions(skrat PRIVATE "SKRAT_APP_VERSION=\"${PROJECT_VERSION}\"")
+target_compile_definitions(skrat PRIVATE "SKRAT_APP_VERSION=\"${SKRAT_APP_VERSION_STRING}\"")
 
 if(APPLE)
   set(_skrat_icns "${CMAKE_CURRENT_SOURCE_DIR}/packaging/macos/skrat.icns")

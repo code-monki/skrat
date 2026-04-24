@@ -39,7 +39,6 @@
 #include <QInputDialog>
 #include <QIntValidator>
 #include <QImageReader>
-#include <QKeyEvent>
 #include <QLabel>
 #include <QKeySequence>
 #include <QLineEdit>
@@ -1280,11 +1279,11 @@ void MainWindow::copyCurrentSelection()
         if (!m_pdfView->hasFocus()) {
             m_pdfView->setFocus(Qt::ShortcutFocusReason);
         }
-        QKeyEvent press(QEvent::KeyPress, Qt::Key_C, Qt::ControlModifier, QStringLiteral("c"));
-        QKeyEvent release(QEvent::KeyRelease, Qt::Key_C, Qt::ControlModifier, QStringLiteral("c"));
-        QApplication::sendEvent(m_pdfView, &press);
-        QApplication::sendEvent(m_pdfView, &release);
-        attemptedCopy = true;
+        attemptedCopy = m_pdfView->copySelectionToClipboard();
+        if (!attemptedCopy) {
+            statusBar()->showMessage(tr("Select text in the PDF first."), 2500);
+            return;
+        }
     } else if (target) {
         if (auto *plain = qobject_cast<QPlainTextEdit *>(target)) {
             plain->copy();
