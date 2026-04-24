@@ -22,6 +22,7 @@ This is **not** an editor.
   - **File → Open Folder…** sets the tree root.
   - **File tree context menu:** right-click a file/folder and use **Open in Default App** to open it with your operating system association (useful for Office/OpenDocument formats and any unsupported preview type).
   - **File tree context menu:** **Open With…** chooser with per-filetype app ranking (last used / most used first) and an **Other…** option to pick an app manually.
+  - **Tools → Theme Settings…** applies chrome-only UI themes (**System / Light / Dark / Warm Sepia**) and UI font preferences (family + size). Document content rendering remains unchanged.
   - **Tools → Install Command-Line Tool…** installs a small `skrat` launcher wrapper in a user-writable location so terminal commands can open directories/files in the app.
   - **File → Print PDF…** prints the currently selected/open PDF (**Ctrl+P**), with a pre-print options dialog: **Native PDF (vector, opened in system viewer for native print controls)** or **Rasterized by skrat** at **300/600 DPI**. Raster mode honors print dialog page ranges.
   - **Edit → Copy** copies selection from text/PDF; HTML payloads are sanitized to remove background color styling before paste (**Ctrl+C**).

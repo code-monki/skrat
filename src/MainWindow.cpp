@@ -11,12 +11,14 @@
 
 #include "MainWindow.h"
 #include "PdfGraphicsView.h"
+#include "UiTheme.h"
 
 #include <algorithm>
 
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
+#include <QCheckBox>
 #include <QFrame>
 #include <QDebug>
 #include <QDialog>
@@ -30,6 +32,7 @@
 #include <QFileSystemModel>
 #include <QFileSystemWatcher>
 #include <QFont>
+#include <QFontComboBox>
 #include <QFormLayout>
 #include <QGuiApplication>
 #include <QInputDialog>
@@ -61,6 +64,7 @@
 #include <QPlainTextEdit>
 #include <QPrintDialog>
 #include <QPrinter>
+#include <QPushButton>
 #include <QScrollArea>
 #include <QScreen>
 #include <QSplitter>
@@ -69,6 +73,7 @@
 #include <QSizePolicy>
 #include <QStatusBar>
 #include <QStyle>
+#include <QSpinBox>
 #include <QTabWidget>
 #include <QTextBrowser>
 #include <QVBoxLayout>
@@ -584,6 +589,10 @@ void MainWindow::setupUi()
     addAction(m_pdfActLast);
 
     auto *toolsMenu = menuBar()->addMenu(tr("&Tools"));
+    auto *actThemeSettings = new QAction(tr("Theme Settings…"), this);
+    connect(actThemeSettings, &QAction::triggered, this, &MainWindow::showThemeSettingsDialog);
+    toolsMenu->addAction(actThemeSettings);
+    toolsMenu->addSeparator();
     auto *actInstallCli = new QAction(tr("Install Command-Line Tool…"), this);
     connect(actInstallCli, &QAction::triggered, this, &MainWindow::installCommandLineTool);
     toolsMenu->addAction(actInstallCli);
@@ -2145,6 +2154,83 @@ QString MainWindow::cliLauncherContent() const
 #else
     return QStringLiteral("#!/usr/bin/env sh\nexec \"%1\" \"$@\"\n").arg(exePath);
 #endif
+}
+
+void MainWindow::showThemeSettingsDialog()
+{
+    QDialog dlg(this);
+    dlg.setWindowTitle(tr("Theme Settings"));
+    dlg.setModal(true);
+    dlg.resize(520, 240);
+
+    auto *layout = new QVBoxLayout(&dlg);
+    auto *form = new QFormLayout;
+
+    auto *themeCombo = new QComboBox(&dlg);
+    themeCombo->addItem(tr("System (match OS)"), static_cast<int>(skrat::ThemeMode::System));
+    themeCombo->addItem(tr("Light"), static_cast<int>(skrat::ThemeMode::Light));
+    themeCombo->addItem(tr("Dark"), static_cast<int>(skrat::ThemeMode::Dark));
+    themeCombo->addItem(tr("Warm Sepia"), static_cast<int>(skrat::ThemeMode::WarmSepia));
+
+    auto *fontCombo = new QFontComboBox(&dlg);
+    fontCombo->setEditable(false);
+    fontCombo->setCurrentFont(QApplication::font());
+
+    auto *fontSizeSpin = new QSpinBox(&dlg);
+    fontSizeSpin->setRange(8, 28);
+    fontSizeSpin->setValue(QApplication::font().pointSize() > 0 ? QApplication::font().pointSize() : 11);
+    fontSizeSpin->setSuffix(tr(" pt"));
+
+    auto *resetFont = new QCheckBox(tr("Use system UI font"), &dlg);
+
+    const skrat::UiThemePrefs currentPrefs = skrat::loadUiThemePrefs();
+    const int modeIdx = themeCombo->findData(static_cast<int>(currentPrefs.mode));
+    if (modeIdx >= 0) {
+        themeCombo->setCurrentIndex(modeIdx);
+    }
+    if (!currentPrefs.fontFamily.isEmpty()) {
+        fontCombo->setCurrentFont(QFont(currentPrefs.fontFamily));
+    }
+    if (currentPrefs.fontPointSize > 0) {
+        fontSizeSpin->setValue(currentPrefs.fontPointSize);
+    }
+    resetFont->setChecked(currentPrefs.fontFamily.isEmpty() && currentPrefs.fontPointSize <= 0);
+    fontCombo->setEnabled(!resetFont->isChecked());
+    fontSizeSpin->setEnabled(!resetFont->isChecked());
+
+    connect(resetFont, &QCheckBox::toggled, &dlg, [fontCombo, fontSizeSpin](bool checked) {
+        fontCombo->setEnabled(!checked);
+        fontSizeSpin->setEnabled(!checked);
+    });
+
+    form->addRow(tr("Theme"), themeCombo);
+    form->addRow(tr("UI font"), fontCombo);
+    form->addRow(tr("UI font size"), fontSizeSpin);
+    form->addRow(QString(), resetFont);
+    layout->addLayout(form);
+
+    auto *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &dlg);
+    auto *applyNow = buttons->addButton(tr("Apply"), QDialogButtonBox::ApplyRole);
+    auto applyPrefs = [this, themeCombo, fontCombo, fontSizeSpin, resetFont]() {
+        skrat::UiThemePrefs prefs;
+        prefs.mode = static_cast<skrat::ThemeMode>(themeCombo->currentData().toInt());
+        if (!resetFont->isChecked()) {
+            prefs.fontFamily = fontCombo->currentFont().family();
+            prefs.fontPointSize = fontSizeSpin->value();
+        }
+        skrat::saveUiThemePrefs(prefs);
+        skrat::applyUiTheme(*qApp, prefs);
+        statusBar()->showMessage(tr("Theme preferences applied."), 2500);
+    };
+    connect(applyNow, &QPushButton::clicked, &dlg, applyPrefs);
+    connect(buttons, &QDialogButtonBox::accepted, &dlg, [&dlg, applyPrefs]() {
+        applyPrefs();
+        dlg.accept();
+    });
+    connect(buttons, &QDialogButtonBox::rejected, &dlg, &QDialog::reject);
+    layout->addWidget(buttons);
+
+    dlg.exec();
 }
 
 void MainWindow::installCommandLineTool()

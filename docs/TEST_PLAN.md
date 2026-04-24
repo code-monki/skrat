@@ -3,7 +3,7 @@
 ## 1. Objectives
 
 - Validate core read-only viewing workflows for PDF/text/image.
-- Validate usability and correctness of search, TOC, thumbnails, print, and help/about.
+- Validate usability and correctness of search, TOC, thumbnails, theme/font preferences, print, and help/about.
 - Prevent regressions across CI platform matrix.
 
 ## 2. Test Scope
@@ -16,6 +16,7 @@
 - PDF navigation/search/TOC/thumbnails
 - Print workflows (raster + native handoff)
 - Clipboard sanitization
+- Theme/font settings dialog behavior
 - Help/About dialogs
 - File watcher reload behavior
 
@@ -53,6 +54,7 @@
 13. **Open With Other…**: choose **Other…**, select app executable/bundle, verify launch and persisted ranking update on subsequent chooser open.
 14. **Open With fallback**: on environment where association discovery is partial, verify chooser still offers **Other…** and successful launch path.
 15. **PDF thumbnails tab**: with active PDF, verify Thumbnails tab enables, displays one entry per page, and clicking a thumbnail jumps to expected page while current-page indicator updates.
+16. **Theme/font preferences**: switch between System/Light/Dark/Warm Sepia and UI font settings, verify immediate chrome update, persistence across restart, and unchanged document rendering semantics.
 
 ## 6. Exit Criteria
 

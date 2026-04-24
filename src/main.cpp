@@ -5,6 +5,7 @@
 #endif
 
 #include "MainWindow.h"
+#include "UiTheme.h"
 
 /**
  * @file main.cpp
@@ -29,6 +30,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName(QStringLiteral("skrat"));
     QCoreApplication::setApplicationVersion(QStringLiteral(SKRAT_APP_VERSION));
     QCoreApplication::setOrganizationName(QStringLiteral("CodeMonki"));
+
+    skrat::applyUiTheme(app, skrat::loadUiThemePrefs());
 
 #if defined(Q_OS_MACOS)
     {

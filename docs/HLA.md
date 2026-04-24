@@ -13,7 +13,7 @@
 ### 2.1 UI Shell
 - `MainWindow` orchestrates all top-level UI interactions and action routing.
 - Menu actions and toolbar actions share slot handlers.
-- `Tools` menu hosts command-line launcher installation flow.
+- `Tools` menu hosts theme settings and command-line launcher installation flows.
 
 ### 2.2 File Browsing
 - `QFileSystemModel` + `QTreeView`
@@ -44,6 +44,10 @@
 - **Association Provider:** platform-specific handler discovery for a file extension/MIME type.
 - **Preference Store:** local persistence of per-filetype app usage (last-used + launch count).
 - **Launcher Adapter:** platform-specific execution path for opening selected file with selected app.
+
+### 2.7 UI Theme Services
+- **Theme Preference Store:** local persistence of selected theme mode + UI font preferences.
+- **Theme Applicator:** applies palette/font to Qt Widgets chrome while preserving document rendering content.
 
 ## 3. Runtime Interaction Summary
 

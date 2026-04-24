@@ -94,6 +94,8 @@ private slots:
     void showHelpDialog();
     /** Install a command-line launcher wrapper for skrat. */
     void installCommandLineTool();
+    /** Open theme settings (theme mode + UI font preferences). */
+    void showThemeSettingsDialog();
     /** Jump to page number entered in the toolbar page input. */
     void onPdfPageEditReturnPressed();
     /** Handle click/activation from PDF table-of-contents tree. */

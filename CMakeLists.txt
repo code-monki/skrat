@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(skrat VERSION 0.2.12 LANGUAGES CXX)
+project(skrat VERSION 0.2.13 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -44,6 +44,8 @@ add_executable(skrat
   src/MainWindow.h
   src/PdfGraphicsView.cpp
   src/PdfGraphicsView.h
+  src/UiTheme.cpp
+  src/UiTheme.h
 )
 
 target_include_directories(skrat PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")

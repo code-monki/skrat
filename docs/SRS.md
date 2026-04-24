@@ -82,6 +82,12 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - Activating a thumbnail shall navigate the viewer to the selected page.
 - The system shall disable Thumbnails tab when no PDF is active.
 
+### FR-016 UI Theme and Font Preferences
+- The system shall provide a chrome-only UI theme preference with modes: System, Light, Dark, and Warm Sepia.
+- The system shall provide chrome-only UI font preferences (family and point size).
+- Theme/font preferences shall persist locally and apply at startup.
+- Theme/font preferences shall not alter PDF/text/image document rendering content.
+
 ### FR-006 Print
 - The system shall provide print options for:
   - Rasterized in-app printing at selectable DPI (300/600)
@@ -138,6 +144,11 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - Given active PDF, Thumbnails tab is enabled and renders one thumbnail item per page.
 - Given thumbnail activation, viewer jumps to that page and page UI state updates accordingly.
 - Given non-PDF active preview, Thumbnails tab is disabled.
+
+### AC-014 UI theme/font preferences
+- Given user selects a theme/font in Theme Settings and applies it, chrome colors/fonts update immediately.
+- Given app restart, the previously selected theme/font preferences are restored.
+- Given theme/font changes, document content rendering semantics remain unchanged.
 
 ### AC-005 Print
 - Given raster print mode, print dialog supports page range and only selected pages print.

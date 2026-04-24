@@ -17,5 +17,6 @@
 | FR-013 Open With Preference Persistence | local preference storage + candidate sorting by last-used/frequency | Manual repeat-launch ordering tests across app restarts |
 | FR-014 Cross-Platform Fallback Behavior | best-effort association provider + always-available `Other…` path | Manual fallback tests on platforms with limited association enumeration |
 | FR-015 PDF Thumbnails Navigation | left tab `QListWidget` thumbnail rendering + activation jump + page sync | Manual thumbnail rendering/activation tests across short and multi-page PDFs |
+| FR-016 UI Theme and Font Preferences | `UiTheme` preference load/save/apply + Theme Settings dialog (`Tools`) | Manual theme/font persistence and chrome-only scope tests |
 | NFR-001 Platform Support | CI workflow matrix + packaging scripts | CI run status and release artifacts |
 | NFR-004 Maintainability | Header/function doc blocks + `docs/` set | Review checklist |

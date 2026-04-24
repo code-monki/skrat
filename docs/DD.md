@@ -34,6 +34,11 @@
 - **Usage preference store:** persisted local ranking metadata per extension.
 - **App launcher helper:** executes selected app with selected file path safely.
 
+### `UiTheme` support components
+- **Theme preference model:** stores mode (`System`, `Light`, `Dark`, `Warm Sepia`) and optional UI font family/size.
+- **Theme applicator:** applies palette/font to application chrome via `QApplication`.
+- **Theme settings dialog flow:** edits and persists preferences in `QSettings`.
+
 ## 2. State Flows
 
 ### 2.1 Preview Loading
@@ -87,6 +92,12 @@
   3) platform-discovered fallback order.
 - Chooser always appends **Other…**.
 - If **Other…** is selected, app-pick dialog returns executable/bundle path; app attempts launch and persists usage on success.
+
+### 2.10 UI theme/font preference flow
+- At startup, app loads `UiTheme` preferences from `QSettings` and applies them before main window creation.
+- User opens **Tools → Theme Settings…**, edits theme/font, and chooses Apply/OK.
+- App saves preferences and reapplies chrome palette/font immediately.
+- Theme application is scoped to app chrome; active document rendering remains unchanged.
 
 ## 3. Error and Edge Handling
 
