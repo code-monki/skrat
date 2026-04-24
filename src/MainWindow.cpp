@@ -12,6 +12,8 @@
 #include "MainWindow.h"
 #include "PdfGraphicsView.h"
 
+#include <algorithm>
+
 #include <QAction>
 #include <QApplication>
 #include <QClipboard>
@@ -21,6 +23,7 @@
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QDesktopServices>
+#include <QDateTime>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -37,9 +40,12 @@
 #include <QKeySequence>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QCursor>
 #include <QPalette>
+#include <QProcess>
 #include <QProcessEnvironment>
 #include <QResizeEvent>
+#include <QSettings>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
@@ -87,6 +93,21 @@ enum class PrintOutputMode : int {
     VectorNative = 0,
     RasterQt = 1,
 };
+
+struct OpenWithCandidate {
+    QString key;
+    QString label;
+    QString appPath;
+    qint64 lastUsedEpoch = 0;
+    int launchCount = 0;
+    bool isDefault = false;
+};
+
+QString encodeSettingsKey(const QString &key)
+{
+    return QString::fromLatin1(
+        key.toUtf8().toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals));
+}
 
 /** Return true when suffix belongs to allowlisted textual extensions. */
 bool hasTextualSuffix(const QString &suffixLower)
@@ -813,6 +834,7 @@ void MainWindow::onTreeContextMenuRequested(const QPoint &pos)
     QMenu menu(this);
     QAction *const actPreview = menu.addAction(tr("Open in skrat"));
     QAction *const actDefault = menu.addAction(tr("Open in Default App"));
+    QAction *const actOpenWith = menu.addAction(tr("Open With…"));
     const QAction *const chosen = menu.exec(m_tree->viewport()->mapToGlobal(pos));
     if (!chosen) {
         return;
@@ -824,6 +846,10 @@ void MainWindow::onTreeContextMenuRequested(const QPoint &pos)
     }
     if (chosen == actDefault) {
         openPathInDefaultApp(path);
+        return;
+    }
+    if (chosen == actOpenWith) {
+        openWithForPath(path);
     }
 }
 
@@ -1250,7 +1276,7 @@ void MainWindow::showHelpDialog()
            "<h3>Basics</h3>"
            "<ul>"
            "<li>Use the <b>Files</b> tab on the left to browse and select files.</li>"
-           "<li>Right-click a file or folder in the tree and choose <b>Open in Default App</b> to hand off to your OS-native app associations (for office docs, spreadsheets, slides, etc.).</li>"
+           "<li>Right-click a file or folder in the tree and choose <b>Open in Default App</b> or <b>Open With…</b> to hand off to OS-native apps.</li>"
            "<li>Use <b>Tools → Install Command-Line Tool…</b> to install a <code>skrat</code> launcher for terminal usage.</li>"
            "<li>When a PDF has bookmarks, the <b>TOC</b> tab becomes available.</li>"
            "<li>Use toolbar controls to navigate pages, print, and search.</li>"
@@ -1789,6 +1815,197 @@ bool MainWindow::openPathInDefaultApp(const QString &absolutePath)
     }
     statusBar()->showMessage(tr("Opened in system default app."), 2500);
     return true;
+}
+
+bool MainWindow::openPathWithApp(const QString &absolutePath, const QString &appPath)
+{
+    if (appPath.trimmed().isEmpty()) {
+        return openPathInDefaultApp(absolutePath);
+    }
+    const QFileInfo fileInfo(absolutePath);
+    if (!fileInfo.exists()) {
+        QMessageBox::warning(this,
+                             tr("Open With"),
+                             tr("Path does not exist:\n%1").arg(fileInfo.absoluteFilePath()));
+        return false;
+    }
+
+    bool ok = false;
+#if defined(Q_OS_MACOS)
+    if (appPath.endsWith(QStringLiteral(".app"), Qt::CaseInsensitive)) {
+        ok = QProcess::startDetached(QStringLiteral("open"),
+                                     {QStringLiteral("-a"), appPath, fileInfo.absoluteFilePath()});
+    } else {
+        ok = QProcess::startDetached(appPath, {fileInfo.absoluteFilePath()});
+    }
+#else
+    ok = QProcess::startDetached(appPath, {fileInfo.absoluteFilePath()});
+#endif
+
+    if (!ok) {
+        QMessageBox::warning(this,
+                             tr("Open With"),
+                             tr("Could not open with selected app:\n%1").arg(appPath));
+        return false;
+    }
+    statusBar()->showMessage(tr("Opened with selected app."), 2500);
+    return true;
+}
+
+QString MainWindow::fileTypeKeyForPath(const QString &absolutePath) const
+{
+    const QString suffix = QFileInfo(absolutePath).suffix().trimmed().toLower();
+    if (suffix.isEmpty()) {
+        return QStringLiteral("__noext__");
+    }
+    return suffix;
+}
+
+void MainWindow::recordOpenWithUsage(const QString &fileTypeKey,
+                                     const QString &appKey,
+                                     const QString &label,
+                                     const QString &appPath)
+{
+    if (fileTypeKey.trimmed().isEmpty() || appKey.trimmed().isEmpty()) {
+        return;
+    }
+    QSettings s;
+    const QString base = QStringLiteral("openWith/%1/apps/%2")
+                             .arg(fileTypeKey, encodeSettingsKey(appKey));
+    const int count = s.value(base + QStringLiteral("/count"), 0).toInt();
+    s.setValue(base + QStringLiteral("/count"), count + 1);
+    s.setValue(base + QStringLiteral("/lastUsedEpoch"), QDateTime::currentSecsSinceEpoch());
+    s.setValue(base + QStringLiteral("/label"), label);
+    s.setValue(base + QStringLiteral("/path"), appPath);
+}
+
+void MainWindow::openWithForPath(const QString &absolutePath)
+{
+    const QFileInfo fi(absolutePath);
+    if (!fi.exists() || !fi.isFile()) {
+        return;
+    }
+
+    const QString typeKey = fileTypeKeyForPath(absolutePath);
+    QList<OpenWithCandidate> candidates;
+    {
+        OpenWithCandidate def;
+        def.key = QStringLiteral("__default__");
+        def.label = tr("System default app");
+        def.isDefault = true;
+        candidates.push_back(def);
+    }
+
+    QSettings s;
+    const QString appsBase = QStringLiteral("openWith/%1/apps").arg(typeKey);
+    s.beginGroup(appsBase);
+    const QStringList encodedGroups = s.childGroups();
+    for (const QString &encoded : encodedGroups) {
+        s.beginGroup(encoded);
+        OpenWithCandidate c;
+        c.key = QString::fromUtf8(
+            QByteArray::fromBase64(encoded.toUtf8(), QByteArray::Base64UrlEncoding));
+        c.label = s.value(QStringLiteral("label")).toString();
+        c.appPath = s.value(QStringLiteral("path")).toString();
+        c.launchCount = s.value(QStringLiteral("count"), 0).toInt();
+        c.lastUsedEpoch = s.value(QStringLiteral("lastUsedEpoch"), 0).toLongLong();
+        c.isDefault = (c.key == QStringLiteral("__default__"));
+        s.endGroup();
+
+        if (!c.isDefault && c.appPath.trimmed().isEmpty()) {
+            continue;
+        }
+        if (!c.isDefault && !QFileInfo::exists(c.appPath)) {
+            continue;
+        }
+        if (c.label.trimmed().isEmpty()) {
+            c.label = c.isDefault ? tr("System default app") : QFileInfo(c.appPath).completeBaseName();
+        }
+
+        bool merged = false;
+        for (OpenWithCandidate &existing : candidates) {
+            if (existing.key == c.key) {
+                existing = c;
+                merged = true;
+                break;
+            }
+        }
+        if (!merged) {
+            candidates.push_back(c);
+        }
+    }
+    s.endGroup();
+
+    std::sort(candidates.begin(), candidates.end(), [](const OpenWithCandidate &a, const OpenWithCandidate &b) {
+        if (a.lastUsedEpoch != b.lastUsedEpoch) {
+            return a.lastUsedEpoch > b.lastUsedEpoch;
+        }
+        if (a.launchCount != b.launchCount) {
+            return a.launchCount > b.launchCount;
+        }
+        return QString::localeAwareCompare(a.label, b.label) < 0;
+    });
+
+    QMenu chooser(this);
+    chooser.setTitle(tr("Open With"));
+    QHash<QAction *, OpenWithCandidate> actionMap;
+    for (const OpenWithCandidate &c : candidates) {
+        QString text = c.label;
+        if (!c.isDefault && !c.appPath.isEmpty()) {
+            text += tr(" (%1)").arg(QFileInfo(c.appPath).fileName());
+        }
+        QAction *const a = chooser.addAction(text);
+        actionMap.insert(a, c);
+    }
+    chooser.addSeparator();
+    QAction *const other = chooser.addAction(tr("Other…"));
+
+    const QAction *const picked = chooser.exec(QCursor::pos());
+    if (!picked) {
+        return;
+    }
+    if (picked == other) {
+        QString appPath;
+#if defined(Q_OS_MACOS)
+        appPath = QFileDialog::getOpenFileName(this,
+                                               tr("Choose Application"),
+                                               QStringLiteral("/Applications"),
+                                               tr("Applications (*.app);;All files (*)"));
+#elif defined(Q_OS_WIN)
+        appPath = QFileDialog::getOpenFileName(this,
+                                               tr("Choose Application"),
+                                               QStandardPaths::writableLocation(QStandardPaths::ApplicationsLocation),
+                                               tr("Applications (*.exe);;All files (*)"));
+#else
+        appPath = QFileDialog::getOpenFileName(this,
+                                               tr("Choose Application"),
+                                               QStringLiteral("/usr/bin"),
+                                               tr("All files (*)"));
+#endif
+        if (appPath.isEmpty()) {
+            return;
+        }
+        const QFileInfo appInfo(appPath);
+        const QString appKey = QStringLiteral("app:%1").arg(QDir::cleanPath(appInfo.absoluteFilePath()));
+        const QString label =
+#if defined(Q_OS_MACOS)
+            appInfo.fileName().endsWith(QStringLiteral(".app"), Qt::CaseInsensitive)
+                ? appInfo.fileName().left(appInfo.fileName().size() - 4)
+                :
+#endif
+                appInfo.completeBaseName();
+        if (openPathWithApp(fi.absoluteFilePath(), appInfo.absoluteFilePath())) {
+            recordOpenWithUsage(typeKey, appKey, label, appInfo.absoluteFilePath());
+        }
+        return;
+    }
+
+    const OpenWithCandidate choice = actionMap.value(const_cast<QAction *>(picked));
+    const bool opened = choice.isDefault ? openPathInDefaultApp(fi.absoluteFilePath())
+                                         : openPathWithApp(fi.absoluteFilePath(), choice.appPath);
+    if (opened) {
+        recordOpenWithUsage(typeKey, choice.key, choice.label, choice.appPath);
+    }
 }
 
 QString MainWindow::cliLauncherPath() const

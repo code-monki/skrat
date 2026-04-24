@@ -7,6 +7,7 @@
 - Routes user actions to preview-specific logic.
 - Maintains state for search index, current preview path, watch/debounce.
 - Handles tree context menu handoff to OS-native apps.
+- Hosts Open With chooser entrypoint and delegates app selection/launch logic.
 
 ### `QPdfDocument` / `PdfGraphicsView`
 - Core PDF load backend (`QPdfDocument`) with custom rendering in `PdfGraphicsView`.
@@ -23,6 +24,11 @@
 - Renders PDF pages to `QGraphicsPixmapItem` instances.
 - Draws search overlays from `QPdfSearchModel` result rectangles.
 - Maintains current-page/current-search-result state and jump behavior.
+
+### `OpenWith` support components (planned)
+- **Association discovery helper:** platform-specific discovery of candidate apps for file type.
+- **Usage preference store:** persisted local ranking metadata per extension.
+- **App launcher helper:** executes selected app with selected file path safely.
 
 ## 2. State Flows
 
@@ -62,15 +68,28 @@
 - Installer writes a wrapper script/shim that forwards CLI args to the app executable.
 - UI reports success and whether install directory is present on current `PATH`.
 
+### 2.8 Open With chooser + persistence flow
+- User triggers **Open With…** on selected file.
+- App discovers candidate handlers for extension/MIME (best effort per platform).
+- App loads local usage metadata and reorders candidate list:
+  1) most recently used,
+  2) higher frequency,
+  3) platform-discovered fallback order.
+- Chooser always appends **Other…**.
+- If **Other…** is selected, app-pick dialog returns executable/bundle path; app attempts launch and persists usage on success.
+
 ## 3. Error and Edge Handling
 
 - Missing file -> placeholder.
 - Invalid page input -> warning + reset.
 - No search results -> informative status.
 - Native print unavailable -> warning dialog.
+- Open With launch failure -> warning dialog with app path and file path context.
+- Association enumeration unavailable -> show **Other…** fallback without hard failure.
 
 ## 4. Design Constraints
 
 - Read-only application model (no source document mutation).
 - Qt Widgets architecture retained (no QML migration).
 - Maintain Qt 6.4+ compatibility.
+- Open With ranking persistence remains local-only (no cloud sync/telemetry dependency).

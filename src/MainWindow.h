@@ -120,6 +120,17 @@ private:
     static bool isProbablyImageFile(const QFileInfo &fi);
     /** Open a path in the OS default handler (viewer/editor/file manager). */
     bool openPathInDefaultApp(const QString &absolutePath);
+    /** Open a path with a specific application executable/bundle. */
+    bool openPathWithApp(const QString &absolutePath, const QString &appPath);
+    /** Handle Open With chooser flow for selected path. */
+    void openWithForPath(const QString &absolutePath);
+    /** Build stable per-filetype key used for Open With ranking storage. */
+    QString fileTypeKeyForPath(const QString &absolutePath) const;
+    /** Record Open With usage stats for ranking. */
+    void recordOpenWithUsage(const QString &fileTypeKey,
+                             const QString &appKey,
+                             const QString &label,
+                             const QString &appPath);
     /** Return install path for platform CLI launcher wrapper. */
     QString cliLauncherPath() const;
     /** Return launcher script content for current platform. */

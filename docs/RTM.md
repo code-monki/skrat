@@ -13,5 +13,8 @@
 | FR-009 Live Reload | watcher + debounce callbacks | Manual file-change reload scenarios |
 | FR-010 Native App Handoff | tree context menu slot + `openPathInDefaultApp()` (`QDesktopServices::openUrl`) | Manual default-app open tests for supported and unsupported preview types |
 | FR-011 CLI Launcher Installer | Tools menu action + `installCommandLineTool()` + launcher path/content helpers | Manual installer flow (file creation, executable bit/shim behavior, PATH guidance messaging) |
+| FR-012 Open With App Chooser | tree context Open With action + chooser UI + app candidate list assembly | Manual chooser display tests per file type and platform |
+| FR-013 Open With Preference Persistence | local preference storage + candidate sorting by last-used/frequency | Manual repeat-launch ordering tests across app restarts |
+| FR-014 Cross-Platform Fallback Behavior | best-effort association provider + always-available `Other…` path | Manual fallback tests on platforms with limited association enumeration |
 | NFR-001 Platform Support | CI workflow matrix + packaging scripts | CI run status and release artifacts |
 | NFR-004 Maintainability | Header/function doc blocks + `docs/` set | Review checklist |

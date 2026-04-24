@@ -40,6 +40,20 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - The system shall provide an in-app action to install a user-level `skrat` command-line launcher wrapper.
 - The installer shall write to a user-writable location and report whether that location is on the current `PATH`.
 
+### FR-012 Open With App Chooser
+- The system shall provide an **Open With…** context action for files.
+- The chooser shall list known handlers for the selected file type, ordered by local usage preference.
+- The chooser shall include an **Other…** option that lets the user select an application executable/bundle path manually.
+
+### FR-013 Open With Preference Persistence
+- The system shall persist per-filetype app usage metadata locally (at minimum: last used timestamp and launch count).
+- The chooser shall sort candidates primarily by last-used/frequency preference, then by platform-discovered order.
+- Launching a file through a selected app shall update persisted usage metadata.
+
+### FR-014 Cross-Platform Fallback Behavior
+- On platforms where full handler enumeration is unavailable, the system shall still present best-effort candidates plus **Other…**.
+- If no candidate list is available, **Other…** shall remain available so users can choose an app path explicitly.
+
 ### FR-003 PDF Navigation
 - The system shall support first/prev/next/last page actions.
 - The system shall provide a page input field for direct jump with validation.
@@ -124,3 +138,14 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 ### AC-009 CLI launcher installation
 - Given user invokes **Tools → Install Command-Line Tool…**, launcher file is created in the platform-specific user location with executable behavior.
 - Given installer path is not on `PATH`, the user is shown guidance to add it.
+
+### AC-010 Open With chooser
+- Given a selected file, when user chooses **Open With…**, a chooser dialog/menu is shown with known handlers and **Other…**.
+- Given user selects a listed app, the file opens in that app and usage metadata updates.
+
+### AC-011 Other fallback
+- Given user chooses **Other…**, a file dialog allows selecting an app executable/bundle path.
+- Given selected app launches successfully, usage metadata updates and future chooser ordering reflects that choice.
+
+### AC-012 Best-effort platform enumeration
+- Given platform association enumeration is partial/unavailable, user can still open the file via **Other…** without blocking errors.
