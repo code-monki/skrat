@@ -1441,23 +1441,39 @@ void MainWindow::rebuildPdfThumbnails()
 
     constexpr int kThumbMaxWidth = 140;
     constexpr int kThumbMaxHeight = 190;
+    constexpr int kThumbPad = 6;
+    const QSize iconCanvas(kThumbMaxWidth + (kThumbPad * 2), kThumbMaxHeight + (kThumbPad * 2));
     for (int page = 0; page < pages; ++page) {
         const QSizeF pt = m_pdfDocument->pagePointSize(page);
         const QSize rawSize = QSize(qMax(1, qRound(pt.width() * 96.0 / 72.0)),
                                     qMax(1, qRound(pt.height() * 96.0 / 72.0)));
-        const QSize targetSize = rawSize.scaled(QSize(kThumbMaxWidth, kThumbMaxHeight), Qt::KeepAspectRatio);
-        QPixmap pix;
-        const QImage rendered = m_pdfDocument->render(page, targetSize);
+        const QSize pageBoxSize = rawSize.scaled(QSize(kThumbMaxWidth, kThumbMaxHeight), Qt::KeepAspectRatio);
+        QPixmap pix(iconCanvas);
+        pix.fill(Qt::transparent);
+
+        QPainter painter(&pix);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+        const QRect pageRect((iconCanvas.width() - pageBoxSize.width()) / 2,
+                             (iconCanvas.height() - pageBoxSize.height()) / 2,
+                             pageBoxSize.width(),
+                             pageBoxSize.height());
+
+        // Always draw a white page mat so blank/near-blank pages remain visible in dark themes.
+        painter.fillRect(pageRect, Qt::white);
+        painter.setPen(QPen(QColor(180, 180, 180), 1));
+        painter.drawRect(pageRect.adjusted(0, 0, -1, -1));
+
+        const QImage rendered = m_pdfDocument->render(page, pageBoxSize);
         if (!rendered.isNull()) {
-            pix = QPixmap::fromImage(rendered);
-        } else {
-            pix = QPixmap(targetSize);
-            pix.fill(Qt::white);
+            painter.drawImage(pageRect, rendered);
         }
+        painter.end();
 
         auto *item = new QListWidgetItem(QIcon(pix), tr("Page %1").arg(page + 1));
         item->setData(Qt::UserRole, page);
         item->setToolTip(tr("Go to page %1").arg(page + 1));
+        item->setSizeHint(QSize(iconCanvas.width() + 8, iconCanvas.height() + 24));
         m_pdfThumbList->addItem(item);
     }
 }
