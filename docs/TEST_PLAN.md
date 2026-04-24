@@ -3,7 +3,7 @@
 ## 1. Objectives
 
 - Validate core read-only viewing workflows for PDF/text/image.
-- Validate usability and correctness of search, TOC, print, and help/about.
+- Validate usability and correctness of search, TOC, thumbnails, print, and help/about.
 - Prevent regressions across CI platform matrix.
 
 ## 2. Test Scope
@@ -13,7 +13,7 @@
 - Tree context menu native-app handoff
 - Tools menu CLI launcher installation
 - Open With chooser and app-ranking persistence
-- PDF navigation/search/TOC
+- PDF navigation/search/TOC/thumbnails
 - Print workflows (raster + native handoff)
 - Clipboard sanitization
 - Help/About dialogs
@@ -52,6 +52,7 @@
 12. **Open With chooser list**: open chooser for file type with multiple handlers and verify candidates render in expected order (most recently/frequently used first).
 13. **Open With Other…**: choose **Other…**, select app executable/bundle, verify launch and persisted ranking update on subsequent chooser open.
 14. **Open With fallback**: on environment where association discovery is partial, verify chooser still offers **Other…** and successful launch path.
+15. **PDF thumbnails tab**: with active PDF, verify Thumbnails tab enables, displays one entry per page, and clicking a thumbnail jumps to expected page while current-page indicator updates.
 
 ## 6. Exit Criteria
 

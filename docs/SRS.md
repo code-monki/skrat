@@ -69,6 +69,12 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - The system shall disable TOC tab when no PDF is active.
 - The system shall jump to selected bookmark location/page when activated.
 
+### FR-015 PDF Thumbnails Navigation
+- The system shall show a Thumbnails tab while a PDF is active.
+- The Thumbnails tab shall display per-page thumbnail entries for the active PDF.
+- Activating a thumbnail shall navigate the viewer to the selected page.
+- The system shall disable Thumbnails tab when no PDF is active.
+
 ### FR-006 Print
 - The system shall provide print options for:
   - Rasterized in-app printing at selectable DPI (300/600)
@@ -120,6 +126,11 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - Given active PDF with bookmarks, TOC tab is enabled and displays entries.
 - Given non-PDF active preview, TOC tab is disabled.
 - Given bookmark activation, viewer jumps to expected destination.
+
+### AC-013 PDF thumbnails
+- Given active PDF, Thumbnails tab is enabled and renders one thumbnail item per page.
+- Given thumbnail activation, viewer jumps to that page and page UI state updates accordingly.
+- Given non-PDF active preview, Thumbnails tab is disabled.
 
 ### AC-005 Print
 - Given raster print mode, print dialog supports page range and only selected pages print.

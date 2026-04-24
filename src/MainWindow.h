@@ -9,7 +9,7 @@
  *
  * The main window coordinates file browsing, preview rendering for PDF/text,
  * PDF navigation/search/print actions, live file reload behavior, and
- * left-pane tab content (files + PDF table of contents).
+ * left-pane tab content (files + PDF table of contents + PDF thumbnails).
  */
 
 class QAction;
@@ -18,6 +18,8 @@ class QFileSystemWatcher;
 class QLabel;
 class QLineEdit;
 class QIntValidator;
+class QListWidget;
+class QListWidgetItem;
 class QPoint;
 class QPdfBookmarkModel;
 class QPdfDocument;
@@ -98,6 +100,8 @@ private slots:
     void onTocActivated(const QModelIndex &index);
     /** React to bookmark model changes and refresh TOC pane state. */
     void onPdfBookmarksChanged();
+    /** Navigate to clicked PDF thumbnail page. */
+    void onPdfThumbnailActivated(QListWidgetItem *item);
     /** Context-aware "go to page/line" action handler. */
     void goToPageOrLine();
     /** Recompute PDF navigation state, labels, and action enablement. */
@@ -157,6 +161,10 @@ private:
     void setCurrentPdfSearchResultIndexCompat(int index);
     /** Toggle and populate TOC tab content based on active preview. */
     void updateTocPaneUi();
+    /** Rebuild PDF thumbnail entries for current document. */
+    void rebuildPdfThumbnails();
+    /** Sync selected thumbnail with the active PDF page. */
+    void syncPdfThumbnailSelection();
 
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
@@ -195,6 +203,8 @@ private:
     QTreeView *m_tocView = nullptr;
     QStackedWidget *m_tocStack = nullptr;
     QLabel *m_tocPlaceholder = nullptr;
+    QListWidget *m_pdfThumbList = nullptr;
+    int m_pdfThumbPageCount = -1;
 
     QString m_previewFilePath;
     QString m_pendingReloadPath;

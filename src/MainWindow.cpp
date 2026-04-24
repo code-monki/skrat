@@ -39,6 +39,8 @@
 #include <QLabel>
 #include <QKeySequence>
 #include <QLineEdit>
+#include <QListView>
+#include <QListWidget>
 #include <QComboBox>
 #include <QCursor>
 #include <QPalette>
@@ -80,6 +82,7 @@
 #include <QTreeView>
 #include <QWidget>
 #include <QUrl>
+#include <QSignalBlocker>
 
 namespace {
 
@@ -661,6 +664,18 @@ void MainWindow::setupUi()
     m_tocStack->addWidget(m_tocView);
     m_tocStack->setCurrentWidget(m_tocPlaceholder);
 
+    m_pdfThumbList = new QListWidget;
+    m_pdfThumbList->setViewMode(QListView::IconMode);
+    m_pdfThumbList->setMovement(QListView::Static);
+    m_pdfThumbList->setResizeMode(QListView::Adjust);
+    m_pdfThumbList->setWrapping(true);
+    m_pdfThumbList->setSpacing(8);
+    m_pdfThumbList->setUniformItemSizes(false);
+    m_pdfThumbList->setIconSize(QSize(140, 190));
+    m_pdfThumbList->setWordWrap(true);
+    m_pdfThumbList->setSelectionMode(QAbstractItemView::SingleSelection);
+    m_pdfThumbList->setToolTip(tr("Click a thumbnail to jump to that PDF page."));
+
     m_stack = new QStackedWidget;
     m_stack->addWidget(m_placeholder); // kPlaceholderPage
     m_stack->addWidget(m_pdfView);     // kPdfPage
@@ -671,7 +686,9 @@ void MainWindow::setupUi()
     m_leftTabs = new QTabWidget;
     m_leftTabs->addTab(m_tree, tr("Files"));
     m_leftTabs->addTab(m_tocStack, tr("TOC"));
+    m_leftTabs->addTab(m_pdfThumbList, tr("Thumbnails"));
     m_leftTabs->setTabEnabled(1, false);
+    m_leftTabs->setTabEnabled(2, false);
     m_leftTabs->setCurrentWidget(m_tree);
 
     m_previewPane = new QWidget;
@@ -763,6 +780,8 @@ void MainWindow::setupUi()
     connect(m_pdfBookmarkModel, &QAbstractItemModel::modelReset, this, &MainWindow::onPdfBookmarksChanged);
     connect(m_pdfBookmarkModel, &QAbstractItemModel::rowsInserted, this, &MainWindow::onPdfBookmarksChanged);
     connect(m_pdfBookmarkModel, &QAbstractItemModel::rowsRemoved, this, &MainWindow::onPdfBookmarksChanged);
+    connect(m_pdfThumbList, &QListWidget::itemActivated, this, &MainWindow::onPdfThumbnailActivated);
+    connect(m_pdfThumbList, &QListWidget::itemClicked, this, &MainWindow::onPdfThumbnailActivated);
 
     statusBar()->setSizeGripEnabled(true);
 
@@ -1276,6 +1295,7 @@ void MainWindow::showHelpDialog()
            "<h3>Basics</h3>"
            "<ul>"
            "<li>Use the <b>Files</b> tab on the left to browse and select files.</li>"
+           "<li>In PDF mode, a <b>Thumbnails</b> tab appears for quick page-jump navigation.</li>"
            "<li>Right-click a file or folder in the tree and choose <b>Open in Default App</b> or <b>Open With…</b> to hand off to OS-native apps.</li>"
            "<li>Use <b>Tools → Install Command-Line Tool…</b> to install a <code>skrat</code> launcher for terminal usage.</li>"
            "<li>When a PDF has bookmarks, the <b>TOC</b> tab becomes available.</li>"
@@ -1372,26 +1392,105 @@ void MainWindow::onPdfBookmarksChanged()
 
 void MainWindow::updateTocPaneUi()
 {
-    if (!m_leftTabs || !m_tocStack || !m_tocPlaceholder || !m_tocView || !m_pdfBookmarkModel) {
+    if (!m_leftTabs || !m_tocStack || !m_tocPlaceholder || !m_tocView || !m_pdfBookmarkModel
+        || !m_pdfThumbList) {
         return;
     }
     const bool pdfActive = (m_stack && m_stack->currentWidget() == m_pdfView);
     const int bookmarks = m_pdfBookmarkModel->rowCount(QModelIndex());
+    const int pages = m_pdfDocument ? m_pdfDocument->pageCount() : 0;
     if (!pdfActive) {
         m_tocPlaceholder->setText(
             tr("<b>Table of contents</b><br/>Open a PDF with bookmarks to view outline entries."));
         m_tocStack->setCurrentWidget(m_tocPlaceholder);
         m_leftTabs->setTabEnabled(1, false);
+        m_leftTabs->setTabEnabled(2, false);
+        if (m_leftTabs->currentWidget() == m_tocStack || m_leftTabs->currentWidget() == m_pdfThumbList) {
+            m_leftTabs->setCurrentWidget(m_tree);
+        }
+        m_pdfThumbList->clear();
+        m_pdfThumbPageCount = -1;
         return;
     }
     m_leftTabs->setTabEnabled(1, true);
+    m_leftTabs->setTabEnabled(2, pages > 0);
     if (bookmarks <= 0) {
         m_tocPlaceholder->setText(
             tr("<b>Table of contents</b><br/>No outline entries were found in this PDF."));
         m_tocStack->setCurrentWidget(m_tocPlaceholder);
+    } else {
+        m_tocStack->setCurrentWidget(m_tocView);
+    }
+    if (pages != m_pdfThumbPageCount) {
+        rebuildPdfThumbnails();
+    }
+    syncPdfThumbnailSelection();
+}
+
+void MainWindow::rebuildPdfThumbnails()
+{
+    if (!m_pdfThumbList || !m_pdfDocument) {
         return;
     }
-    m_tocStack->setCurrentWidget(m_tocView);
+    m_pdfThumbList->clear();
+    const int pages = m_pdfDocument->pageCount();
+    m_pdfThumbPageCount = pages;
+    if (pages <= 0) {
+        return;
+    }
+
+    constexpr int kThumbMaxWidth = 140;
+    constexpr int kThumbMaxHeight = 190;
+    for (int page = 0; page < pages; ++page) {
+        const QSizeF pt = m_pdfDocument->pagePointSize(page);
+        const QSize rawSize = QSize(qMax(1, qRound(pt.width() * 96.0 / 72.0)),
+                                    qMax(1, qRound(pt.height() * 96.0 / 72.0)));
+        const QSize targetSize = rawSize.scaled(QSize(kThumbMaxWidth, kThumbMaxHeight), Qt::KeepAspectRatio);
+        QPixmap pix;
+        const QImage rendered = m_pdfDocument->render(page, targetSize);
+        if (!rendered.isNull()) {
+            pix = QPixmap::fromImage(rendered);
+        } else {
+            pix = QPixmap(targetSize);
+            pix.fill(Qt::white);
+        }
+
+        auto *item = new QListWidgetItem(QIcon(pix), tr("Page %1").arg(page + 1));
+        item->setData(Qt::UserRole, page);
+        item->setToolTip(tr("Go to page %1").arg(page + 1));
+        m_pdfThumbList->addItem(item);
+    }
+}
+
+void MainWindow::syncPdfThumbnailSelection()
+{
+    if (!m_pdfThumbList || !m_pdfView || !m_pdfDocument) {
+        return;
+    }
+    if (!m_stack || m_stack->currentWidget() != m_pdfView || m_pdfDocument->pageCount() <= 0) {
+        return;
+    }
+    const int page = m_pdfView->currentPage();
+    if (page < 0 || page >= m_pdfThumbList->count()) {
+        return;
+    }
+    QSignalBlocker blocker(m_pdfThumbList);
+    m_pdfThumbList->setCurrentRow(page);
+    if (QListWidgetItem *item = m_pdfThumbList->item(page)) {
+        m_pdfThumbList->scrollToItem(item, QAbstractItemView::PositionAtCenter);
+    }
+}
+
+void MainWindow::onPdfThumbnailActivated(QListWidgetItem *item)
+{
+    if (!item || !m_pdfView || !m_pdfDocument || !m_stack || m_stack->currentWidget() != m_pdfView) {
+        return;
+    }
+    const int page = item->data(Qt::UserRole).toInt();
+    if (page < 0 || page >= m_pdfDocument->pageCount()) {
+        return;
+    }
+    m_pdfView->jumpTo(page, QPointF(0, 0), 0);
 }
 
 void MainWindow::goToPageOrLine()
@@ -1733,6 +1832,7 @@ void MainWindow::previewPath(const QString &absolutePath)
         }
 
         m_pdfView->setZoomMode(PdfGraphicsView::ZoomMode::FitToWidth);
+        m_pdfThumbPageCount = -1;
         m_stack->setCurrentIndex(kPdfPage);
         setWatchedPreviewFile(fi.absoluteFilePath());
         updatePdfPageUi();

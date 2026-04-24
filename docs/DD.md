@@ -20,12 +20,16 @@
 ### `QPdfBookmarkModel`
 - Supplies outline tree data to TOC tab view.
 
+### `QListWidget` (PDF thumbnails)
+- Hosts rendered per-page thumbnail tiles in the left `Thumbnails` tab.
+- Stores target page index in item metadata and triggers page jumps on activation.
+
 ### `PdfGraphicsView`
 - Renders PDF pages to `QGraphicsPixmapItem` instances.
 - Draws search overlays from `QPdfSearchModel` result rectangles.
 - Maintains current-page/current-search-result state and jump behavior.
 
-### `OpenWith` support components (planned)
+### `OpenWith` support components
 - **Association discovery helper:** platform-specific discovery of candidate apps for file type.
 - **Usage preference store:** persisted local ranking metadata per extension.
 - **App launcher helper:** executes selected app with selected file path safely.
@@ -51,24 +55,30 @@
 - TOC tab enabled only when PDF active.
 - Bookmark row activation jumps to (page, location, zoom).
 
-### 2.5 PDF first/last page shortcuts (cross-platform)
+### 2.5 PDF Thumbnails Flow
+- Thumbnails tab enabled only when PDF active.
+- On PDF load (or page-count change), app renders per-page thumbnail images and rebuilds list items.
+- Thumbnail activation jumps to selected page via `PdfGraphicsView::jumpTo()`.
+- Active page updates keep thumbnail selection synchronized with viewer page state.
+
+### 2.6 PDF first/last page shortcuts (cross-platform)
 - **First page** and **Last page** actions (`m_pdfActFirst`, `m_pdfActLast`) each register **two** key sequences via `QAction::setShortcuts`:
   - **Ctrl+Home** / **Ctrl+End** — conventional on Windows and Linux; on macOS these keys are often absent or awkward on laptop keyboards.
   - **Meta+Up** / **Meta+Down** — interpreted as **Cmd+Up** / **Cmd+Down** on macOS (`QKeySequence::NativeText` in tooltips reflects the platform).
 - Both bindings invoke the same slots (`pdfGoFirstPage`, `pdfGoLastPage`); behavior is identical. Tooltips list both shortcuts so testers can confirm parity without reading source.
 
-### 2.6 Tree context menu handoff
+### 2.7 Tree context menu handoff
 - Right-click in the `Files` tree opens a context menu with:
   - `Open in skrat` (existing internal preview routing)
   - `Open in Default App` (calls `QDesktopServices::openUrl` on the selected local path)
 - Handoff failures produce warning dialogs; success posts a short status message.
 
-### 2.7 CLI launcher installation flow
+### 2.8 CLI launcher installation flow
 - `Tools → Install Command-Line Tool…` computes platform-specific launcher target path.
 - Installer writes a wrapper script/shim that forwards CLI args to the app executable.
 - UI reports success and whether install directory is present on current `PATH`.
 
-### 2.8 Open With chooser + persistence flow
+### 2.9 Open With chooser + persistence flow
 - User triggers **Open With…** on selected file.
 - App discovers candidate handlers for extension/MIME (best effort per platform).
 - App loads local usage metadata and reorders candidate list:

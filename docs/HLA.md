@@ -3,7 +3,7 @@
 ## 1. Architectural Overview
 
 `skrat` is a Qt Widgets desktop application using a single main window (`MainWindow`) that composes:
-- Left tabbed panel (`Files`, `TOC`)
+- Left tabbed panel (`Files`, `TOC`, `Thumbnails`)
 - Right preview panel (PDF/text/image/placeholder stack)
 - Menu bar, toolbars, status bar
 - File-watcher-driven live reload loop
@@ -32,6 +32,7 @@
 - Page navigation via custom scene/scroll logic in `PdfGraphicsView`
 - Search model (`QPdfSearchModel`)
 - Bookmark model (`QPdfBookmarkModel`) for TOC
+- Thumbnail list rendering and page-jump activation for PDF tab navigation
 - Print mode selection (raster vs native handoff)
 
 ### 2.5 System Integration

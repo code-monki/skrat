@@ -6,7 +6,7 @@ This is **not** an editor.
 
 ## Features
 
-- **Left tabbed view:** `Files` tab is the `QTreeView` file tree (`QFileSystemModel`); `TOC` tab shows PDF **Table of contents** (outline/bookmarks when available; placeholder when unavailable). The TOC tab is enabled only while previewing a PDF.
+- **Left tabbed view:** `Files` tab is the `QTreeView` file tree (`QFileSystemModel`); `TOC` tab shows PDF **Table of contents** (outline/bookmarks when available; placeholder when unavailable); `Thumbnails` tab shows PDF page thumbnails for quick page jumps. `TOC` and `Thumbnails` tabs are enabled only while previewing a PDF.
 - **Right pane:** preview stack
   - **PDF** via Qt’s **`QtPdf` / `QPdfDocument`** rendered through a custom **`PdfGraphicsView`** component for deterministic navigation/search positioning.
   - **Text** for common extensions (UTF-8; see `MainWindow.cpp` for the allowlist).
