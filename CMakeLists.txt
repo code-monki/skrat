@@ -1,3 +1,10 @@
+# -----------------------------------------------------------------------------
+# @file CMakeLists.txt
+# @brief Build definition for the skrat Qt6 desktop PDF/text/image previewer.
+#
+# Configures the executable target, Qt module linkage, compile definitions,
+# and macOS bundle post-build icon installation.
+# -----------------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.16)
 
 project(skrat VERSION 1.0.0 LANGUAGES CXX)

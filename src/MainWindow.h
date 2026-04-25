@@ -45,137 +45,288 @@ class MainWindow final : public QMainWindow
     Q_OBJECT
 
 public:
-    /** Construct the main window and initialize all UI/state wiring. */
+    /**
+     * @brief Constructs the main window and wires models, views, menus, and actions.
+     * @param[in] parent Optional parent widget; typically @c nullptr for a top-level window.
+     */
     explicit MainWindow(QWidget *parent = nullptr);
-    /** Tear down the window and safely disconnect late PDF signals. */
+
+    /**
+     * @brief Destroys the window and blocks disconnects PDF signals before child teardown.
+     */
     ~MainWindow() override;
 
-    /** Set the file-tree root folder using an absolute path. */
+    /**
+     * @brief Sets the file system model root to an existing directory.
+     * @param[in] absolutePath Absolute directory path; if invalid, shows a warning and returns.
+     */
     void setRootFolder(const QString &absolutePath);
-    /** Select and preview a specific file path under the current root. */
+
+    /**
+     * @brief Selects a file or folder in the tree and previews it when under the current root.
+     * @param[in] absoluteFilePath Absolute path to a file or directory visible from the root.
+     */
     void selectPath(const QString &absoluteFilePath);
 
 protected:
-    /** Track image viewport resizes to maintain fit-to-viewport behavior. */
+    /**
+     * @brief Handles resize events on the image preview viewport to rescale the pixmap.
+     * @param[in] watched Object receiving the event (image scroll viewport).
+     * @param[in] event Qt event; @c QEvent::Resize triggers image scale refresh.
+     * @return @c true if the event was handled here; otherwise base-class result.
+     */
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 private slots:
-    /** React to tree selection changes and preview the selected path. */
+    /**
+     * @brief Previews the path for the newly selected tree item.
+     * @param[in] current New selection index; invalid shows an empty-state placeholder.
+     * @param[in] previous Prior selection (unused).
+     */
     void onTreeCurrentChanged(const QModelIndex &current, const QModelIndex &previous);
-    /** Show file-tree context menu for native-open actions. */
+
+    /**
+     * @brief Shows a context menu for Open in skrat / default app / Open With.
+     * @param[in] pos Viewport-local position for menu placement.
+     */
     void onTreeContextMenuRequested(const QPoint &pos);
-    /** Show folder picker and update the tree root. */
+
+    /** @brief Prompts for a folder and calls setRootFolder() when accepted. */
     void openFolderDialog();
-    /** Increase PDF zoom while in PDF preview mode. */
+
+    /** @brief Zooms in the active PDF or image preview by a fixed factor. */
     void zoomInPdf();
-    /** Decrease PDF zoom while in PDF preview mode. */
+
+    /** @brief Zooms out the active PDF or image preview by a fixed factor. */
     void zoomOutPdf();
-    /** Switch PDF zoom behavior to fit width. */
+
+    /** @brief Sets PDF view zoom mode to fit-to-width when a PDF is active. */
     void pdfFitWidth();
-    /** Reset zoom to auto-size content to current viewport. */
+
+    /** @brief Resets PDF zoom to fit width or image zoom to fit the viewport. */
     void zoomResetToViewport();
-    /** Navigate to first page in current PDF. */
+
+    /** @brief Jumps the PDF view to the first page when a document is loaded. */
     void pdfGoFirstPage();
-    /** Navigate to previous page in current PDF. */
+
+    /** @brief Jumps the PDF view to the previous page if one exists. */
     void pdfGoPrevPage();
-    /** Navigate to next page in current PDF. */
+
+    /** @brief Jumps the PDF view to the next page if one exists. */
     void pdfGoNextPage();
-    /** Navigate to last page in current PDF. */
+
+    /** @brief Jumps the PDF view to the last page when a document is loaded. */
     void pdfGoLastPage();
-    /** Reveal/focus PDF find controls. */
+
+    /** @brief Shows the find toolbar and focuses the search field for the active PDF. */
     void openPdfFind();
-    /** Select the next search result in the active PDF. */
+
+    /** @brief Selects the next row in the PDF search model and scrolls to that match. */
     void pdfFindNext();
-    /** Select the previous search result in the active PDF. */
+
+    /** @brief Selects the previous row in the PDF search model and scrolls to that match. */
     void pdfFindPrev();
-    /** Update search model state when query text changes. */
+
+    /**
+     * @brief Updates QPdfSearchModel::setSearchString and refreshes find UI state.
+     * @param[in] text New query string (may be empty to clear matches).
+     */
     void onPdfFindTextChanged(const QString &text);
-    /** Refresh search UI when result model updates. */
+
+    /** @brief Updates match counts, labels, and action enablement after search model changes. */
     void onPdfSearchResultsChanged();
-    /** Start PDF print flow (mode selection + print pipeline). */
+
+    /** @brief Runs the print-options dialog then raster or native-vector print pipeline. */
     void printCurrentPdf();
-    /** Copy selection from active preview widget with clipboard cleanup. */
+
+    /** @brief Copies from the focused text/PDF widget and strips background HTML from clipboard. */
     void copyCurrentSelection();
-    /** Show About dialog with app and licensing summary. */
+
+    /** @brief Shows the About box with version, license, and project links. */
     void showAboutDialog();
-    /** Show help/shortcuts dialog. */
+
+    /** @brief Shows an in-window help browser with shortcuts and usage summary. */
     void showHelpDialog();
-    /** Install a command-line launcher wrapper for skrat. */
+
+    /** @brief Writes a small launcher script to the user’s CLI path and explains PATH setup. */
     void installCommandLineTool();
-    /** Open theme settings (theme mode + UI font preferences). */
+
+    /** @brief Opens the theme and UI font preferences dialog. */
     void showThemeSettingsDialog();
-    /** Jump to page number entered in the toolbar page input. */
+
+    /** @brief Parses the toolbar page field and jumps the PDF to that 1-based page. */
     void onPdfPageEditReturnPressed();
-    /** Handle click/activation from PDF table-of-contents tree. */
+
+    /**
+     * @brief Navigates the PDF view to the bookmark’s page, location, and zoom.
+     * @param[in] index Activated item in the TOC tree backed by QPdfBookmarkModel.
+     */
     void onTocActivated(const QModelIndex &index);
-    /** React to bookmark model changes and refresh TOC pane state. */
+
+    /** @brief Expands TOC rows and refreshes TOC/thumbnail tab enablement after bookmark changes. */
     void onPdfBookmarksChanged();
-    /** Navigate to clicked PDF thumbnail page. */
+
+    /**
+     * @brief Jumps the PDF to the page encoded on the clicked thumbnail item.
+     * @param[in] item Thumbnail list item whose UserRole holds the 0-based page index.
+     */
     void onPdfThumbnailActivated(QListWidgetItem *item);
-    /** Context-aware "go to page/line" action handler. */
+
+    /** @brief Prompts for a PDF page or plain-text line depending on the active preview mode. */
     void goToPageOrLine();
-    /** Recompute PDF navigation state, labels, and action enablement. */
+
+    /** @brief Refreshes page label, toolbar state, find bar visibility, and TOC/thumbnail tabs. */
     void updatePdfPageUi();
-    /** Queue reload after watched file changes on disk. */
+
+    /**
+     * @brief Starts a short debounce timer after QFileSystemWatcher reports a file change.
+     * @param[in] path Path that changed (unused; reload uses the tracked preview path).
+     */
     void onWatchedFileChanged(const QString &path);
-    /** Perform debounced preview reload for watched files. */
+
+    /** @brief Reloads the preview path after debounce, or shows unavailable if the file vanished. */
     void onReloadDebounceTimeout();
 
 private:
-    /** Build menus, toolbars, splitters, views, and signal wiring. */
+    /** @brief Builds menus, toolbars, splitters, preview stack, and signal connections. */
     void setupUi();
-    /** Preview a path as PDF/text/placeholder depending on file type/state. */
+
+    /**
+     * @brief Loads and displays PDF, text, image, or placeholder content for @a absolutePath.
+     * @param[in] absolutePath Absolute filesystem path to preview.
+     */
     void previewPath(const QString &absolutePath);
-    /** Show placeholder page with provided rich-text message. */
+
+    /**
+     * @brief Shows the stacked placeholder page with rich HTML and clears file watching.
+     * @param[in] html Rich text / HTML body for the placeholder QLabel.
+     */
     void showPlaceholder(const QString &html);
-    /** Heuristic text-file classifier based on extension. */
+
+    /**
+     * @brief Heuristically classifies a path as plain text preview by extension.
+     * @param[in] fi File metadata for the candidate path.
+     * @return @c true if the suffix is in the allowlisted text extensions.
+     */
     static bool isProbablyTextFile(const QFileInfo &fi);
-    /** Heuristic image-file classifier based on extension. */
+
+    /**
+     * @brief Heuristically classifies a path as image preview by suffix or QImageReader.
+     * @param[in] fi File metadata for the candidate path.
+     * @return @c true if the file is likely displayable as a raster or vector image.
+     */
     static bool isProbablyImageFile(const QFileInfo &fi);
-    /** Open a path in the OS default handler (viewer/editor/file manager). */
+
+    /**
+     * @brief Opens @a absolutePath with QDesktopServices (OS default application).
+     * @param[in] absolutePath Absolute path to a file or folder.
+     * @return @c true if the URL open request succeeded.
+     */
     bool openPathInDefaultApp(const QString &absolutePath);
-    /** Open a path with a specific application executable/bundle. */
+
+    /**
+     * @brief Launches @a appPath with @a absolutePath as its argument (platform-specific).
+     * @param[in] absolutePath File to open.
+     * @param[in] appPath Executable or macOS .app bundle path.
+     * @return @c true if QProcess::startDetached reported success.
+     */
     bool openPathWithApp(const QString &absolutePath, const QString &appPath);
-    /** Handle Open With chooser flow for selected path. */
+
+    /**
+     * @brief Presents ranked “Open With” choices and records usage for future ranking.
+     * @param[in] absolutePath File to open with a chosen handler.
+     */
     void openWithForPath(const QString &absolutePath);
-    /** Build stable per-filetype key used for Open With ranking storage. */
+
+    /**
+     * @brief Returns a stable QSettings subgroup key for a file type (usually lower-case suffix).
+     * @param[in] absolutePath Path whose extension (or @c __noext__) defines the key.
+     * @return Non-empty type key used under Open With settings.
+     */
     QString fileTypeKeyForPath(const QString &absolutePath) const;
-    /** Record Open With usage stats for ranking. */
+
+    /**
+     * @brief Increments launch counters and timestamps for Open With ranking.
+     * @param[in] fileTypeKey Result of fileTypeKeyForPath().
+     * @param[in] appKey Stable identifier for the chosen application.
+     * @param[in] label Human-readable label stored for menus.
+     * @param[in] appPath Executable path stored for relaunch.
+     */
     void recordOpenWithUsage(const QString &fileTypeKey,
                              const QString &appKey,
                              const QString &label,
                              const QString &appPath);
-    /** Return install path for platform CLI launcher wrapper. */
+
+    /**
+     * @brief Returns the platform-specific path where the CLI launcher script is installed.
+     * @return Native path to @c skrat or @c skrat.cmd under the user’s local bin directory.
+     */
     QString cliLauncherPath() const;
-    /** Return launcher script content for current platform. */
+
+    /**
+     * @brief Returns the shell or batch script body that forwards arguments to this binary.
+     * @return UTF-8 script contents appropriate for the host OS.
+     */
     QString cliLauncherContent() const;
-    /** Remove all active file-system watch registrations. */
+
+    /** @brief Clears all paths from QFileSystemWatcher without changing the logical preview path. */
     void pauseWatching();
-    /** Set currently watched preview file (or clear when empty). */
+
+    /**
+     * @brief Registers @a absoluteFilePath with QFileSystemWatcher for live reload.
+     * @param[in] absoluteFilePath File to watch, or empty to clear watching only.
+     */
     void setWatchedPreviewFile(const QString &absoluteFilePath);
-    /** Show "file unavailable" placeholder for deleted/renamed previews. */
+
+    /**
+     * @brief Shows a placeholder explaining the preview file disappeared (rename/delete).
+     * @param[in] lostPath Absolute path that is no longer available on disk.
+     */
     void showPreviewFileUnavailable(const QString &lostPath);
-    /** Enable/disable Go-To action according to active preview context. */
+
+    /** @brief Enables “Go to page/line” when PDF or non-empty text preview is active. */
     void updateGoToNavigationAction();
-    /** Enable/disable find-related actions based on current state. */
+
+    /** @brief Enables find/copy/print actions according to stack mode and model state. */
     void updatePdfFindActions();
-    /** Update find-match summary label (e.g. "Match X of Y"). */
+
+    /** @brief Updates the “Match X of Y” (or similar) label next to the find field. */
     void updatePdfSearchStatus();
-    /** Return number of current PDF search matches. */
+
+    /**
+     * @brief Returns the number of rows in the active QPdfSearchModel.
+     * @return Match count, or 0 if no model or empty query.
+     */
     int pdfSearchResultCount() const;
-    /** Select and navigate to a search result by index. */
+
+    /**
+     * @brief Selects search result @a index, jumps the PDF view, and syncs highlight state.
+     * @param[in] index 0-based row in QPdfSearchModel (must be in range).
+     */
     void selectPdfSearchResult(int index);
-    /** Read currently selected search-result index (Qt-version compatible). */
+
+    /**
+     * @brief Returns the current match index from the view or compatibility cache.
+     * @return 0-based index, or -1 if none / invalid.
+     */
     int currentPdfSearchResultIndex() const;
-    /** Set current search-result index using Qt-version-safe behavior. */
+
+    /**
+     * @brief Sets the active search-result index on the view and mirrored member state.
+     * @param[in] index New current index, or -1 to clear selection.
+     */
     void setCurrentPdfSearchResultIndexCompat(int index);
-    /** Toggle and populate TOC tab content based on active preview. */
+
+    /** @brief Shows or hides TOC/thumbnail tabs and rebuilds thumbnails when page count changes. */
     void updateTocPaneUi();
-    /** Rebuild PDF thumbnail entries for current document. */
+
+    /** @brief Regenerates QListWidget thumbnail icons for every PDF page. */
     void rebuildPdfThumbnails();
-    /** Sync selected thumbnail with the active PDF page. */
+
+    /** @brief Selects the thumbnail row matching PdfGraphicsView::currentPage(). */
     void syncPdfThumbnailSelection();
-    /** Scale current image preview to the available viewport. */
+
+    /** @brief Rescales the image QLabel from m_imageOriginalPixmap and m_imageZoomFactor. */
     void updateImagePreviewScale();
 
     QString m_rootPath;
@@ -228,6 +379,5 @@ private:
     QFileSystemWatcher *m_fileWatcher = nullptr;
     QTimer *m_reloadDebounceTimer = nullptr;
 
-    /** Set for the duration of destruction so slots ignore late PDF/signal callbacks. */
-    bool m_shuttingDown = false;
+    bool m_shuttingDown = false; ///< True while destroying; suppresses late PDF UI updates.
 };

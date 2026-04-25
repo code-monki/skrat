@@ -1,3 +1,8 @@
+/**
+ * @file PdfGraphicsView.cpp
+ * @brief PDF scene layout, coordinate mapping, search highlights, and text selection for PdfGraphicsView.
+ */
+
 #include "PdfGraphicsView.h"
 
 #include <QGraphicsPixmapItem>
@@ -14,6 +19,9 @@
 #include <QtGlobal>
 #include <limits>
 
+/**
+ * @copydoc PdfGraphicsView::PdfGraphicsView(QWidget*)
+ */
 PdfGraphicsView::PdfGraphicsView(QWidget *parent)
     : QGraphicsView(parent)
     , m_scene(new QGraphicsScene(this))
@@ -29,6 +37,9 @@ PdfGraphicsView::PdfGraphicsView(QWidget *parent)
     });
 }
 
+/**
+ * @copydoc PdfGraphicsView::setDocument
+ */
 void PdfGraphicsView::setDocument(QPdfDocument *document)
 {
     if (m_document == document) {
@@ -75,6 +86,9 @@ void PdfGraphicsView::setDocument(QPdfDocument *document)
     updateCurrentPageFromViewport();
 }
 
+/**
+ * @copydoc PdfGraphicsView::setSearchModel
+ */
 void PdfGraphicsView::setSearchModel(QPdfSearchModel *searchModel)
 {
     if (m_searchModel == searchModel) {
@@ -84,11 +98,17 @@ void PdfGraphicsView::setSearchModel(QPdfSearchModel *searchModel)
     rebuildSearchHighlights();
 }
 
+/**
+ * @copydoc PdfGraphicsView::setPageMode
+ */
 void PdfGraphicsView::setPageMode(PageMode mode)
 {
     m_pageMode = mode;
 }
 
+/**
+ * @copydoc PdfGraphicsView::setZoomMode
+ */
 void PdfGraphicsView::setZoomMode(ZoomMode mode)
 {
     if (m_zoomMode == mode) {
@@ -107,6 +127,9 @@ void PdfGraphicsView::setZoomMode(ZoomMode mode)
     updateCurrentPageFromViewport();
 }
 
+/**
+ * @copydoc PdfGraphicsView::setZoomFactor
+ */
 void PdfGraphicsView::setZoomFactor(qreal factor)
 {
     const qreal clamped = qMax<qreal>(0.05, factor);
@@ -120,6 +143,9 @@ void PdfGraphicsView::setZoomFactor(qreal factor)
     }
 }
 
+/**
+ * @copydoc PdfGraphicsView::jumpTo
+ */
 void PdfGraphicsView::jumpTo(int page, const QPointF &location, qreal zoom)
 {
     if (!m_document || page < 0 || page >= m_pages.size()) {
@@ -142,6 +168,9 @@ void PdfGraphicsView::jumpTo(int page, const QPointF &location, qreal zoom)
     emit currentPageChanged(m_currentPage);
 }
 
+/**
+ * @copydoc PdfGraphicsView::setCurrentSearchResultIndex
+ */
 void PdfGraphicsView::setCurrentSearchResultIndex(int index)
 {
     if (!m_searchModel) {
@@ -159,6 +188,9 @@ void PdfGraphicsView::setCurrentSearchResultIndex(int index)
     emit currentSearchResultIndexChanged(index);
 }
 
+/**
+ * @copydoc PdfGraphicsView::copySelectionToClipboard
+ */
 bool PdfGraphicsView::copySelectionToClipboard()
 {
     if (!m_hasTextSelection || !m_document || m_selectionAnchorPage < 0 || m_selectionCurrentPage < 0) {
@@ -192,11 +224,17 @@ bool PdfGraphicsView::copySelectionToClipboard()
     return true;
 }
 
+/**
+ * @copydoc PdfGraphicsView::hasTextSelection
+ */
 bool PdfGraphicsView::hasTextSelection() const
 {
     return m_hasTextSelection;
 }
 
+/**
+ * @copydoc PdfGraphicsView::resizeEvent
+ */
 void PdfGraphicsView::resizeEvent(QResizeEvent *event)
 {
     QGraphicsView::resizeEvent(event);
@@ -207,6 +245,9 @@ void PdfGraphicsView::resizeEvent(QResizeEvent *event)
     }
 }
 
+/**
+ * @copydoc PdfGraphicsView::scrollContentsBy
+ */
 void PdfGraphicsView::scrollContentsBy(int dx, int dy)
 {
     const bool fitMode = (m_zoomMode == ZoomMode::FitToWidth || m_zoomMode == ZoomMode::FitInView);
@@ -221,6 +262,9 @@ void PdfGraphicsView::scrollContentsBy(int dx, int dy)
     }
 }
 
+/**
+ * @copydoc PdfGraphicsView::wheelEvent
+ */
 void PdfGraphicsView::wheelEvent(QWheelEvent *event)
 {
     QGraphicsView::wheelEvent(event);
@@ -229,6 +273,9 @@ void PdfGraphicsView::wheelEvent(QWheelEvent *event)
     }
 }
 
+/**
+ * @copydoc PdfGraphicsView::clearScene
+ */
 void PdfGraphicsView::clearScene()
 {
     m_scene->clear();
@@ -237,6 +284,9 @@ void PdfGraphicsView::clearScene()
     m_textSelectionHighlights.clear();
 }
 
+/**
+ * @copydoc PdfGraphicsView::rebuildPages
+ */
 void PdfGraphicsView::rebuildPages()
 {
     clearScene();
@@ -323,6 +373,9 @@ void PdfGraphicsView::rebuildPages()
     rebuildTextSelectionHighlights();
 }
 
+/**
+ * @copydoc PdfGraphicsView::rebuildSearchHighlights
+ */
 void PdfGraphicsView::rebuildSearchHighlights()
 {
     for (auto *item : m_searchHighlights) {
@@ -371,6 +424,9 @@ void PdfGraphicsView::rebuildSearchHighlights()
     }
 }
 
+/**
+ * @copydoc PdfGraphicsView::rebuildTextSelectionHighlights
+ */
 void PdfGraphicsView::rebuildTextSelectionHighlights()
 {
     for (auto *item : m_textSelectionHighlights) {
@@ -440,6 +496,9 @@ void PdfGraphicsView::rebuildTextSelectionHighlights()
     }
 }
 
+/**
+ * @copydoc PdfGraphicsView::mapPdfRectToSceneRect
+ */
 QRectF PdfGraphicsView::mapPdfRectToSceneRect(int page, const QRectF &pdfRect) const
 {
     if (page < 0 || page >= m_pages.size()) {
@@ -451,6 +510,9 @@ QRectF PdfGraphicsView::mapPdfRectToSceneRect(int page, const QRectF &pdfRect) c
     return QRectF(x, y, pdfRect.width() * p.scale, pdfRect.height() * p.scale);
 }
 
+/**
+ * @copydoc PdfGraphicsView::mapPdfPointToScenePoint
+ */
 QPointF PdfGraphicsView::mapPdfPointToScenePoint(int page, const QPointF &pdfPoint) const
 {
     if (page < 0 || page >= m_pages.size()) {
@@ -461,6 +523,9 @@ QPointF PdfGraphicsView::mapPdfPointToScenePoint(int page, const QPointF &pdfPoi
                    p.sceneRect.top() + pdfPoint.y() * p.scale);
 }
 
+/**
+ * @copydoc PdfGraphicsView::mapScenePointToPdfPoint
+ */
 QPointF PdfGraphicsView::mapScenePointToPdfPoint(int page, const QPointF &scenePoint) const
 {
     if (page < 0 || page >= m_pages.size()) {
@@ -471,6 +536,9 @@ QPointF PdfGraphicsView::mapScenePointToPdfPoint(int page, const QPointF &sceneP
                    (scenePoint.y() - p.sceneRect.top()) / p.scale);
 }
 
+/**
+ * @copydoc PdfGraphicsView::scenePointToPdfPoint
+ */
 bool PdfGraphicsView::scenePointToPdfPoint(const QPointF &scenePoint, int *page, QPointF *pdfPoint) const
 {
     if (!page || !pdfPoint) {
@@ -556,6 +624,9 @@ bool PdfGraphicsView::scenePointToPdfPoint(const QPointF &scenePoint, int *page,
     return true;
 }
 
+/**
+ * @copydoc PdfGraphicsView::clampPdfPointToPage
+ */
 QPointF PdfGraphicsView::clampPdfPointToPage(int page, const QPointF &pdfPoint) const
 {
     if (page < 0 || page >= m_pages.size()) {
@@ -566,6 +637,9 @@ QPointF PdfGraphicsView::clampPdfPointToPage(int page, const QPointF &pdfPoint) 
                    qBound(0.0, pdfPoint.y(), sz.height()));
 }
 
+/**
+ * @copydoc PdfGraphicsView::selectionRangeHasText
+ */
 bool PdfGraphicsView::selectionRangeHasText()
 {
     if (!m_document || m_pages.isEmpty() || m_selectionAnchorPage < 0 || m_selectionCurrentPage < 0) {
@@ -592,6 +666,9 @@ bool PdfGraphicsView::selectionRangeHasText()
     return false;
 }
 
+/**
+ * @copydoc PdfGraphicsView::syncDocSelectionCharRange
+ */
 void PdfGraphicsView::syncDocSelectionCharRange()
 {
     m_selDocFromPage = -1;
@@ -617,6 +694,9 @@ void PdfGraphicsView::syncDocSelectionCharRange()
     }
 }
 
+/**
+ * @copydoc PdfGraphicsView::selectionAnchorComesBeforeCurrentCharOrder
+ */
 bool PdfGraphicsView::selectionAnchorComesBeforeCurrentCharOrder() const
 {
     if (m_selectionAnchorPage != m_selectionCurrentPage) {
@@ -625,6 +705,9 @@ bool PdfGraphicsView::selectionAnchorComesBeforeCurrentCharOrder() const
     return m_selectionAnchorChar <= m_selectionCurrentChar;
 }
 
+/**
+ * @copydoc PdfGraphicsView::pdfCharStartIndexAtPoint
+ */
 int PdfGraphicsView::pdfCharStartIndexAtPoint(int page, const QPointF &pdfPt) const
 {
     if (!m_document || page < 0 || page >= m_pages.size()) {
@@ -649,6 +732,9 @@ int PdfGraphicsView::pdfCharStartIndexAtPoint(int page, const QPointF &pdfPt) co
     return -1;
 }
 
+/**
+ * @copydoc PdfGraphicsView::pdfCharInclusiveEndIndexAtPoint
+ */
 int PdfGraphicsView::pdfCharInclusiveEndIndexAtPoint(int page, const QPointF &pdfPt) const
 {
     if (!m_document || page < 0 || page >= m_pages.size()) {
@@ -677,6 +763,9 @@ int PdfGraphicsView::pdfCharInclusiveEndIndexAtPoint(int page, const QPointF &pd
     return -1;
 }
 
+/**
+ * @copydoc PdfGraphicsView::pdfRangeForPageInSelection
+ */
 QPdfSelection PdfGraphicsView::pdfRangeForPageInSelection(int page,
                                                           bool isStartPage,
                                                           bool isEndPage,
@@ -753,6 +842,9 @@ QPdfSelection PdfGraphicsView::pdfRangeForPageInSelection(int page,
     return allText;
 }
 
+/**
+ * @copydoc PdfGraphicsView::selectionAnchorComesBeforeCurrent
+ */
 bool PdfGraphicsView::selectionAnchorComesBeforeCurrent() const
 {
     if (m_selectionAnchorChar >= 0 && m_selectionCurrentChar >= 0) {
@@ -767,6 +859,9 @@ bool PdfGraphicsView::selectionAnchorComesBeforeCurrent() const
     return m_selectionAnchorPdf.x() <= m_selectionCurrentPdf.x();
 }
 
+/**
+ * @copydoc PdfGraphicsView::clearTextSelection
+ */
 void PdfGraphicsView::clearTextSelection()
 {
     m_hasTextSelection = false;
@@ -782,6 +877,9 @@ void PdfGraphicsView::clearTextSelection()
     rebuildTextSelectionHighlights();
 }
 
+/**
+ * @copydoc PdfGraphicsView::updateTextSelection
+ */
 void PdfGraphicsView::updateTextSelection(int page, const QPointF &pdfPoint)
 {
     const int candidateCurrentPage = page;
@@ -827,6 +925,9 @@ void PdfGraphicsView::updateTextSelection(int page, const QPointF &pdfPoint)
     rebuildTextSelectionHighlights();
 }
 
+/**
+ * @copydoc PdfGraphicsView::updateCurrentPageFromViewport
+ */
 void PdfGraphicsView::updateCurrentPageFromViewport()
 {
     if (m_pages.isEmpty()) {
@@ -853,6 +954,9 @@ void PdfGraphicsView::updateCurrentPageFromViewport()
     }
 }
 
+/**
+ * @copydoc PdfGraphicsView::mousePressEvent
+ */
 void PdfGraphicsView::mousePressEvent(QMouseEvent *event)
 {
     if (!m_document || event->button() != Qt::LeftButton) {
@@ -884,6 +988,9 @@ void PdfGraphicsView::mousePressEvent(QMouseEvent *event)
     event->accept();
 }
 
+/**
+ * @copydoc PdfGraphicsView::mouseMoveEvent
+ */
 void PdfGraphicsView::mouseMoveEvent(QMouseEvent *event)
 {
     if (!m_selectingText || !m_document || m_selectionAnchorPage < 0) {
@@ -909,6 +1016,9 @@ void PdfGraphicsView::mouseMoveEvent(QMouseEvent *event)
     event->accept();
 }
 
+/**
+ * @copydoc PdfGraphicsView::mouseReleaseEvent
+ */
 void PdfGraphicsView::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton && m_selectingText) {

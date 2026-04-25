@@ -1,3 +1,8 @@
+/**
+ * @file UiTheme.cpp
+ * @brief Implementation of skrat UI theme palettes, stylesheet chrome, and QSettings I/O.
+ */
+
 #include "UiTheme.h"
 
 #include <QApplication>
@@ -13,6 +18,10 @@ constexpr const char *kThemeModeKey = "ui/themeMode";
 constexpr const char *kFontFamilyKey = "ui/fontFamily";
 constexpr const char *kFontPointSizeKey = "ui/fontPointSize";
 
+/**
+ * @brief Builds a fixed light QPalette for skrat’s Light theme mode.
+ * @return Palette tuned for window, base, text, buttons, links, and highlights.
+ */
 QPalette lightPalette()
 {
     QPalette pal;
@@ -31,6 +40,10 @@ QPalette lightPalette()
     return pal;
 }
 
+/**
+ * @brief Builds a fixed dark QPalette for skrat’s Dark theme mode.
+ * @return Palette tuned for dark window/base surfaces and readable contrast.
+ */
 QPalette darkPalette()
 {
     QPalette pal;
@@ -49,6 +62,10 @@ QPalette darkPalette()
     return pal;
 }
 
+/**
+ * @brief Builds a warm sepia QPalette for long-form reading.
+ * @return Palette with paper-like bases and warm accent colors.
+ */
 QPalette warmSepiaPalette()
 {
     QPalette pal;
@@ -67,6 +84,14 @@ QPalette warmSepiaPalette()
     return pal;
 }
 
+/**
+ * @brief Composes a Qt stylesheet for tabs, toolbars, tool buttons, and line edits.
+ *
+ * Colors are taken from @a pal so chrome matches the active application palette.
+ *
+ * @param[in] pal Palette whose roles (Window, Base, Button, Text, etc.) drive CSS color values.
+ * @return Stylesheet string suitable for QApplication::setStyleSheet().
+ */
 QString buildChromeStylesheet(const QPalette &pal)
 {
     const QString window = pal.color(QPalette::Window).name();
@@ -144,6 +169,7 @@ QString buildChromeStylesheet(const QPalette &pal)
 
 } // namespace
 
+/** @copydoc skrat::loadUiThemePrefs */
 UiThemePrefs loadUiThemePrefs()
 {
     QSettings s;
@@ -154,6 +180,7 @@ UiThemePrefs loadUiThemePrefs()
     return prefs;
 }
 
+/** @copydoc skrat::saveUiThemePrefs */
 void saveUiThemePrefs(const UiThemePrefs &prefs)
 {
     QSettings s;
@@ -162,6 +189,7 @@ void saveUiThemePrefs(const UiThemePrefs &prefs)
     s.setValue(QString::fromLatin1(kFontPointSizeKey), qMax(0, prefs.fontPointSize));
 }
 
+/** @copydoc skrat::applyUiTheme */
 void applyUiTheme(QApplication &app, const UiThemePrefs &prefs)
 {
     const QPalette systemPalette = app.style() ? app.style()->standardPalette() : QPalette();

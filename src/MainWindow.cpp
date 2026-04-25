@@ -7,6 +7,14 @@
  * - PDF navigation/search/print behavior.
  * - Toolbar + tabbed pane wiring and state updates.
  * - File-system watcher based reload handling.
+ *
+ * @par Member functions
+ * MainWindow slots and private methods are documented in MainWindow.h using Doxygen
+ * @brief, @param, @return, and related tags; definitions in this file omit duplicate blocks
+ * to avoid documentation drift.
+ *
+ * @par File-local helpers
+ * Functions in the anonymous namespace and `PdfDocumentRibbon` are documented below.
  */
 
 #include "MainWindow.h"
@@ -112,13 +120,22 @@ struct OpenWithCandidate {
     bool isDefault = false;
 };
 
+/**
+ * @brief Encodes an arbitrary string as a Base64-url key safe for QSettings group names.
+ * @param[in] key Logical key (e.g. application path) to encode.
+ * @return ASCII string suitable as a single path segment under QSettings groups.
+ */
 QString encodeSettingsKey(const QString &key)
 {
     return QString::fromLatin1(
         key.toUtf8().toBase64(QByteArray::Base64UrlEncoding | QByteArray::OmitTrailingEquals));
 }
 
-/** Return true when suffix belongs to allowlisted textual extensions. */
+/**
+ * @brief Returns whether a lower-case file suffix is previewed as plain text in skrat.
+ * @param[in] suffixLower File extension without dot, already lower-cased.
+ * @return @c true if the suffix is in the built-in text allowlist.
+ */
 bool hasTextualSuffix(const QString &suffixLower)
 {
     static const QStringList kSuffixes = {
@@ -168,6 +185,11 @@ bool hasTextualSuffix(const QString &suffixLower)
     return kSuffixes.contains(suffixLower);
 }
 
+/**
+ * @brief Returns whether a suffix should use a monospace font in the text preview.
+ * @param[in] suffixLower File extension without dot, already lower-cased.
+ * @return @c true for common source-code extensions (C/C++, scripts, QML, etc.).
+ */
 bool looksLikeSourceSuffix(const QString &suffixLower)
 {
     static const QStringList kCode = {
@@ -179,6 +201,11 @@ bool looksLikeSourceSuffix(const QString &suffixLower)
     return kCode.contains(suffixLower);
 }
 
+/**
+ * @brief Returns whether a suffix denotes a common raster or vector image format.
+ * @param[in] suffixLower File extension without dot, already lower-cased.
+ * @return @c true for png, jpg, svg, webp, etc.
+ */
 bool hasImageSuffix(const QString &suffixLower)
 {
     static const QStringList kImageSuffixes = {
@@ -190,6 +217,12 @@ bool hasImageSuffix(const QString &suffixLower)
     return kImageSuffixes.contains(suffixLower);
 }
 
+/**
+ * @brief Resolves an icon from the platform theme or a QStyle fallback.
+ * @param[in] themeName Freedesktop-style icon name passed to QIcon::fromTheme().
+ * @param[in] fallback Standard pixmap used when the theme icon is unavailable.
+ * @return Non-null QIcon when either source provides art; otherwise a null icon.
+ */
 QIcon iconThemedOrStandard(const QString &themeName, QStyle::StandardPixmap fallback)
 {
     const QIcon fromTheme = QIcon::fromTheme(themeName);
@@ -202,6 +235,12 @@ QIcon iconThemedOrStandard(const QString &themeName, QStyle::StandardPixmap fall
     return {};
 }
 
+/**
+ * @brief Renders a small chevron pixmap for toolbar navigation when theme icons are missing.
+ * @param[in] forward @c true for forward/next direction, @c false for backward/prev.
+ * @param[in] doubled @c true to draw a double chevron (skip/first-last style).
+ * @return QIcon wrapping a transparent 22×22 pixmap with antialiased strokes.
+ */
 QIcon chevronFallbackIcon(bool forward, bool doubled)
 {
     QPixmap pm(22, 22);
@@ -234,6 +273,14 @@ QIcon chevronFallbackIcon(bool forward, bool doubled)
     return QIcon(pm);
 }
 
+/**
+ * @brief Resolves a PDF navigation toolbar icon using theme, standard, or drawn fallback.
+ * @param[in] themeName Freedesktop-style icon name for QIcon::fromTheme().
+ * @param[in] fallback QStyle standard pixmap if the theme icon is null.
+ * @param[in] forward Chevron direction for the drawn fallback path.
+ * @param[in] doubled Whether the drawn fallback uses a double chevron.
+ * @return Usable QIcon for QAction::setIcon().
+ */
 QIcon navIcon(const QString &themeName,
               QStyle::StandardPixmap fallback,
               bool forward,
@@ -246,6 +293,11 @@ QIcon navIcon(const QString &themeName,
     return icon;
 }
 
+/**
+ * @brief Applies consistent icon metrics and non-floating toolbar chrome.
+ * @param[in] bar Toolbar to style; no-op if @c nullptr.
+ * @param[in] iconSize Edge length in pixels for QToolBar::setIconSize().
+ */
 void applyToolbarChrome(QToolBar *bar, int iconSize)
 {
     if (!bar) {
@@ -258,6 +310,11 @@ void applyToolbarChrome(QToolBar *bar, int iconSize)
     bar->setContentsMargins(4, 2, 4, 2);
 }
 
+/**
+ * @brief Strips inline background colors from HTML to avoid pasting unreadable fills.
+ * @param[in] html Clipboard HTML fragment that may contain @c style or legacy bgcolor attributes.
+ * @return Modified HTML with background-related declarations removed.
+ */
 QString stripBackgroundStyles(QString html)
 {
     // Remove inline background styling while keeping other formatting.
@@ -270,6 +327,10 @@ QString stripBackgroundStyles(QString html)
     return html;
 }
 
+/**
+ * @brief Probes the host OS for a suitable external print path (PowerShell on Windows, @c lp on Unix).
+ * @return @c true if native “open PDF in system viewer for vector print” is expected to work.
+ */
 bool supportsNativeVectorPrinting()
 {
 #if defined(Q_OS_WIN)
@@ -281,6 +342,11 @@ bool supportsNativeVectorPrinting()
 #endif
 }
 
+/**
+ * @brief Opens @a filePath with QDesktopServices so the user can print from a native viewer.
+ * @param[in] filePath Absolute path to an existing PDF file.
+ * @return @c true if QDesktopServices::openUrl succeeded; @c false if empty or unsupported platform.
+ */
 bool runNativeVectorPrint(const QString &filePath)
 {
 #if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
@@ -298,9 +364,18 @@ bool runNativeVectorPrint(const QString &filePath)
 
 namespace skrat {
 
+/**
+ * @brief Hosts the PDF tool bar with a horizontally centered page label in one row.
+ */
 class PdfDocumentRibbon final : public QFrame
 {
 public:
+    /**
+     * @brief Constructs the ribbon, reparenting the tool bar and label into this widget.
+     * @param[in] toolBar PDF navigation tool bar (may be @c nullptr; layout skips nulls).
+     * @param[in] pageLabel Label showing “Page X of Y”; receives transparent-for-mouse-events.
+     * @param[in] parent Optional parent for lifetime; usually the preview pane widget.
+     */
     explicit PdfDocumentRibbon(QToolBar *toolBar, QLabel *pageLabel, QWidget *parent = nullptr)
         : QFrame(parent)
         , m_toolBar(toolBar)
@@ -319,15 +394,24 @@ public:
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     }
 
+    /** @brief Re-runs internal layout after label text or toolbar content changes size. */
     void recenter() { doLayout(); }
 
 protected:
+    /**
+     * @brief Repositions children when the ribbon’s width or height changes.
+     * @param[in] event Qt resize event forwarded to QFrame.
+     */
     void resizeEvent(QResizeEvent *event) override
     {
         QFrame::resizeEvent(event);
         doLayout();
     }
 
+    /**
+     * @brief Returns a preferred height based on toolbar and label size hints.
+     * @return Size hint with unconstrained width and at least 34px height.
+     */
     QSize sizeHint() const override
     {
         int h = 34;
@@ -341,6 +425,9 @@ protected:
     }
 
 private:
+    /**
+     * @brief Places the tool bar flush left (vertically centered) and centers the page label.
+     */
     void doLayout()
     {
         if (!m_toolBar || !m_pageLabel) {

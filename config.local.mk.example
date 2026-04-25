@@ -1,3 +1,6 @@
+# =============================================================================
+# config.local.mk.example — optional local overrides for the root Makefile
+# =============================================================================
 # Copy to config.local.mk and adjust paths (config.local.mk is gitignored).
 #
 # Qt from the online installer is usually:

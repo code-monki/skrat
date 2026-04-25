@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# =============================================================================
+# export-pngs.sh — Export skrat.svg to freedesktop hicolor PNG sizes
+# =============================================================================
 # Rasterize packaging/icons/skrat.svg into freedesktop hicolor PNGs (requires ImageMagick or rsvg-convert).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# =============================================================================
+# build-icns.sh — Generate skrat.icns from the 512×512 source PNG (macOS only)
+# =============================================================================
 # Rebuild packaging/macos/skrat.icns from the 512px hicolor PNG (run on macOS).
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

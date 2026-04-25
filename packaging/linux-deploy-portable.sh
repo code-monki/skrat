@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# =============================================================================
+# linux-deploy-portable.sh — Linux portable tarball (linuxdeploy + Qt plugins)
+# =============================================================================
 # Bundle Qt + skrat into an AppDir and pack a portable tarball (no fuse / AppImage).
 # Usage: linux-deploy-portable.sh <x86_64|aarch64> <path-to/skrat-binary>
 
@@ -23,6 +26,7 @@ fi
 
 WORKDIR="$(mktemp -d)"
 GEN_ICON=""
+# cleanup — remove temp AppDir and any generated icon file on EXIT.
 cleanup() {
   # Never fail the script from cleanup (set -e + EXIT trap would otherwise
   # turn a harmless rm edge case into CI exit 1 after a successful bundle).

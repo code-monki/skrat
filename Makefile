@@ -1,4 +1,9 @@
+# =============================================================================
+# Makefile — skrat
+# =============================================================================
 # Orchestration layer: wraps CMake for configure + build + run.
+#
+# Targets (see `make help`): all, configure, build, clean, distclean, run.
 #
 # Variables (optional):
 #   BUILD_DIR   build directory (default: build)

@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# =============================================================================
+# install-bundle-icon.sh — Install bundle icon and CFBundleIconFile in Info.plist
+# =============================================================================
 # Copy skrat.icns into a .app bundle and set CFBundleIconFile (Finder / Dock).
 # Usage: install-bundle-icon.sh /path/to/skrat.app
 set -euo pipefail
