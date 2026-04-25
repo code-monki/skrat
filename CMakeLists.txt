@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.16)
 
 project(skrat VERSION 1.0.0 LANGUAGES CXX)
 # User-visible / Qt version string (About, etc.). Bundle plist uses numeric short version per Apple guidance.
-set(SKRAT_APP_VERSION_STRING "1.0.0-rc1")
+set(SKRAT_APP_VERSION_STRING "1.0.0-rc2")
 # CFBundleVersion: must increase per submission; numeric tail distinguishes pre-releases from final 1.0.0.
 set(SKRAT_MACOS_CF_BUNDLE_VERSION "1.0.0.1")
 
