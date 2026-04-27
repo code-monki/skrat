@@ -1,6 +1,6 @@
 # skrat
 
-`skrat` is a small **read-only desktop viewer** with a **two-pane layout**: a **file tree** on the left and a **preview** on the right. It is aimed at quickly checking **PDF layout** (for example, PDFs exported from **Playwright / Chromium**), skimming **plain text** files, and quickly opening other files in their native apps.
+`skrat` is a small **read-only desktop viewer** with a **two-pane layout**: a **file tree** on the left and a **preview** on the right. It is aimed at quickly checking **PDF layout** (for example, PDFs exported from **Playwright / Chromium**), viewing **rendered HTML/Markdown** or raw source, skimming **plain text** files, and quickly opening other files in their native apps.
 
 This is **not** an editor.
 
@@ -16,6 +16,7 @@ This is **not** an editor.
 - **Left tabbed view:** `Files` tab is the `QTreeView` file tree (`QFileSystemModel`); `TOC` tab shows PDF **Table of contents** (outline/bookmarks when available; placeholder when unavailable); `Thumbnails` tab shows PDF page thumbnails for quick page jumps. `TOC` and `Thumbnails` tabs are enabled only while previewing a PDF.
 - **Right pane:** preview stack
   - **PDF** via Qt’s **`QtPdf` / `QPdfDocument`** rendered through a custom **`PdfGraphicsView`** component for deterministic navigation/search positioning.
+  - **HTML/Markdown dual mode**: default **Preview** (rendered), optional **Text** (raw source), with mode persisted across launches.
   - **Text** for common extensions (UTF-8; see `MainWindow.cpp` for the allowlist).
   - **Images** for common formats (`.gif`, `.png`, `.jpg`/`.jpeg`, `.tif`/`.tiff`, `.webp`) plus basic `.svg` rendering support.
 - **Menus**
@@ -26,11 +27,14 @@ This is **not** an editor.
   - **Tools → Install Command-Line Tool…** installs a small `skrat` launcher wrapper in a user-writable location so terminal commands can open directories/files in the app.
   - **File → Print PDF…** prints the currently selected/open PDF (**Ctrl+P**), with a pre-print options dialog: **Native PDF (vector, opened in system viewer for native print controls)** or **Rasterized by skrat** at **300/600 DPI**. Raster mode honors print dialog page ranges.
   - **Edit → Copy** copies selection from text/PDF; HTML payloads are sanitized to remove background color styling before paste (**Ctrl+C**).
+  - **Edit → HTML/Markdown Preview / HTML/Markdown as Text** toggles rendered vs source display for `.html`/`.htm` and `.md`/`.markdown`. A small in-pane mode toolbar appears only for those file types.
   - **Edit → Find in PDF… / Find Next / Find Previous** searches in the active PDF (**Ctrl+F**, **F3**, **Shift+F3**). A **Find** toolbar (icon buttons + search field) shows the query and match count; hover for shortcuts and hints. On new queries, the preview auto-jumps to the first match and **Find Next/Previous** cycles through all matches while updating `Match X of Y`.
   - **View → PDF Fit Page to Width / Zoom In / Out** (shortcuts match platform defaults; zoom shortcuts also apply to image previews. **Zoom Reset** is available by shortcut and returns image previews to viewport-fit sizing and PDF previews to fit-width sizing).
   - **View → PDF pages** (and the **PDF** toolbars): **icon-only** controls with tooltips for page navigation (first / previous / next / last) plus a **page number input** between previous/next (press **Return** to jump; out-of-range values show a warning), along with **print** and **find**. The **page counter** is centered in the main bar over the **preview** (right) column so it lines up with the document, not the file tree. **Ctrl+G** on a PDF asks for a **page number**; on plain text it asks for a **line number** (text previews do not have PDF-style pages). First/last page also support macOS-friendly **Cmd+Up / Cmd+Down** in addition to **Ctrl+Home / Ctrl+End**. The status bar summarizes navigation when a PDF is open.
   - **Help menu:** **Help / Shortcuts…** opens an in-app usage + shortcuts screen; **About skrat…** shows version, author/maintainer, license summary (including Qt licensing notice), and project link.
   - **Disk changes:** the file shown in the preview (PDF, text, or image) is watched with **`QFileSystemWatcher`**. If it changes on disk, the preview **reloads** after a short debounce. If it **disappears** (deleted or renamed away), the preview shows that the file is **no longer available**.
+  - **Rendered preview links:** external `http/https` links open in your **system browser**; local file links are resolved and previewed in-app when possible.
+  - **Rendered HTML quick view limits:** the in-app rendered Preview mode is intentionally lightweight and does **not** fully support modern browser layout engines (notably **CSS flexbox** and **CSS grid** fidelity). For complex layouts, use the file-tree context menu **Open in Default App** (or **Open With…**) to open in a full external browser.
 
 ## Requirements
 

@@ -4,7 +4,7 @@
 
 `skrat` is a Qt Widgets desktop application using a single main window (`MainWindow`) that composes:
 - Left tabbed panel (`Files`, `TOC`, `Thumbnails`)
-- Right preview panel (PDF/text/image/placeholder stack)
+- Right preview panel (PDF/rendered-rich-text/text/image/placeholder stack)
 - Menu bar, toolbars, status bar
 - File-watcher-driven live reload loop
 
@@ -24,9 +24,11 @@
 ### 2.3 Preview Engine
 - `QStackedWidget` with:
   - PDF view (`PdfGraphicsView` + `QPdfDocument` + `QGraphicsScene` page items)
+  - Rich preview view (`QTextBrowser`) for rendered HTML/Markdown
   - Text view (`QPlainTextEdit`)
   - Image view (`QScrollArea` + `QLabel` pixmap, including basic SVG rasterized preview)
   - Placeholder (`QLabel` HTML)
+- HTML/Markdown mode controls (`Preview`/`Text`) shown only for rich-text file types and persisted in local settings.
 
 ### 2.4 PDF Services
 - Page navigation via custom scene/scroll logic in `PdfGraphicsView`
@@ -38,6 +40,7 @@
 ### 2.5 System Integration
 - `QFileSystemWatcher` for content reload
 - Native URI opening for vector print handoff and tree-level "Open in Default App"
+- Native URI opening for external links clicked in rendered HTML/Markdown preview
 - Platform CI packaging/deploy scripts
 
 ### 2.6 Open With Services

@@ -2,7 +2,7 @@
 
 ## 1. Objectives
 
-- Validate core read-only viewing workflows for PDF/text/image.
+- Validate core read-only viewing workflows for PDF/HTML/Markdown/text/image.
 - Validate usability and correctness of search, TOC, thumbnails, theme/font preferences, print, and help/about.
 - Prevent regressions across CI platform matrix.
 
@@ -56,6 +56,9 @@
 15. **PDF thumbnails tab**: with active PDF, verify Thumbnails tab enables, displays one entry per page, and clicking a thumbnail jumps to expected page while current-page indicator updates.
 16. **Theme/font preferences**: switch between System/Light/Dark/Warm Sepia and UI font settings, verify immediate chrome update, persistence across restart, and unchanged document rendering semantics.
 17. **Basic SVG preview**: open simple SVG files and verify in-app rendering in image preview path; for malformed/unsupported SVGs verify clear fallback/error messaging and native-app handoff guidance.
+18. **HTML/Markdown mode toggle**: open `.html`/`.htm` and `.md`/`.markdown`, verify default rendered Preview, toggle to Text source, and confirm mode persists after restart.
+19. **Rendered preview link handling**: in rendered HTML/Markdown mode, click `http`/`https` links and verify system browser opens; click local file links and verify in-app navigation when target exists.
+20. **Quick-view limitation disclosure**: verify docs/help text explicitly state rendered in-app HTML quick view may not faithfully support flexbox/grid layouts and recommend opening in external browser from file-tree context menu for full fidelity.
 
 ## 6. Exit Criteria
 

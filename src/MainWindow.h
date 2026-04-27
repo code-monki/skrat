@@ -8,12 +8,13 @@
  * @file MainWindow.h
  * @brief Main application window for the skrat desktop viewer.
  *
- * The main window coordinates file browsing, preview rendering for PDF/text,
+ * The main window coordinates file browsing, preview rendering for PDF/HTML/Markdown/text,
  * PDF navigation/search/print actions, live file reload behavior, and
  * left-pane tab content (files + PDF table of contents + PDF thumbnails).
  */
 
 class QAction;
+class QActionGroup;
 class QEvent;
 class QFileSystemModel;
 class QFileSystemWatcher;
@@ -34,6 +35,8 @@ class QTabWidget;
 class QTimer;
 class QToolBar;
 class QTreeView;
+class QTextBrowser;
+class QUrl;
 class PdfGraphicsView;
 
 namespace skrat {
@@ -187,12 +190,21 @@ private slots:
     /** @brief Reloads the preview path after debounce, or shows unavailable if the file vanished. */
     void onReloadDebounceTimeout();
 
+    /** @brief Switches between source text and rendered preview for HTML/Markdown files. */
+    void setRichPreviewMode(bool previewMode);
+
+    /**
+     * @brief Handles clicked links inside the rendered rich-text preview.
+     * @param[in] url Link target from QTextBrowser::anchorClicked.
+     */
+    void onRichPreviewLinkClicked(const QUrl &url);
+
 private:
     /** @brief Builds menus, toolbars, splitters, preview stack, and signal connections. */
     void setupUi();
 
     /**
-     * @brief Loads and displays PDF, text, image, or placeholder content for @a absolutePath.
+     * @brief Loads and displays PDF, HTML/Markdown preview or source text, image, or placeholder content for @a absolutePath.
      * @param[in] absolutePath Absolute filesystem path to preview.
      */
     void previewPath(const QString &absolutePath);
@@ -329,6 +341,12 @@ private:
     /** @brief Rescales the image QLabel from m_imageOriginalPixmap and m_imageZoomFactor. */
     void updateImagePreviewScale();
 
+    /**
+     * @brief Updates visibility and checked state of the Preview/Text mode controls.
+     * @param[in] enabled @c true when current file supports dual rich preview modes.
+     */
+    void updateRichPreviewModeUi(bool enabled);
+
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
     QTreeView *m_tree = nullptr;
@@ -338,6 +356,7 @@ private:
     PdfGraphicsView *m_pdfView = nullptr;
     QPdfDocument *m_pdfDocument = nullptr;
     QPlainTextEdit *m_textView = nullptr;
+    QTextBrowser *m_richView = nullptr;
     QScrollArea *m_imageScroll = nullptr;
     QLabel *m_imageView = nullptr;
     QPixmap m_imageOriginalPixmap;
@@ -356,8 +375,12 @@ private:
     QAction *m_actPdfFindPrev = nullptr;
     QAction *m_actPdfPrint = nullptr;
     QAction *m_actCopy = nullptr;
+    QAction *m_actRichPreviewMode = nullptr;
+    QAction *m_actRichTextMode = nullptr;
+    QActionGroup *m_richModeGroup = nullptr;
     QAction *m_actGoToPageOrLine = nullptr;
     QToolBar *m_pdfFindToolBar = nullptr;
+    QToolBar *m_richModeToolBar = nullptr;
     QLineEdit *m_pdfPageEdit = nullptr;
     QIntValidator *m_pdfPageValidator = nullptr;
     QLineEdit *m_pdfFindEdit = nullptr;
@@ -371,6 +394,8 @@ private:
     int m_pdfThumbPageCount = -1;
 
     QString m_previewFilePath;
+    bool m_richPreviewMode = true;   ///< true=rendered Preview, false=raw Text for HTML/Markdown.
+    bool m_previewedFileIsRichText = false; ///< true when current file is HTML or Markdown.
     qreal m_imageZoomFactor = 1.0;
     QString m_pendingReloadPath;
     int m_pdfSearchCurrentIndex = -1;

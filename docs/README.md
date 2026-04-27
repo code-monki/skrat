@@ -1,6 +1,6 @@
 # skrat System Documentation
 
-This folder contains core engineering documentation for the `skrat` desktop viewer.
+This folder contains core engineering documentation for the `skrat` desktop viewer, including PDF/text/image behavior and HTML/Markdown Preview-vs-Text mode behavior.
 
 ## Documents
 

@@ -3,12 +3,13 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-Define functional and non-functional requirements for `skrat`, a read-only desktop viewer for PDFs, common text files, and common images.
+Define functional and non-functional requirements for `skrat`, a read-only desktop viewer for PDFs, rendered/source HTML/Markdown, common text files, and common images.
 
 ### 1.2 Scope
 `skrat` provides:
 - File browsing via a tree view
 - PDF preview, navigation, search, TOC browsing, and print workflows
+- HTML/Markdown preview with a user-selectable rendered-vs-source mode
 - Text preview for common textual formats
 - Image preview for common raster formats and basic SVG rendering
 - File-tree context action to open selected files in the OS default app
@@ -35,9 +36,21 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 
 ### FR-002 Preview Modes
 - The system shall preview PDF files in a PDF viewer.
+- The system shall preview `.html`/`.htm` and `.md`/`.markdown` files in either rendered Preview mode or raw Text mode.
+- The system shall default `.html`/`.htm` and `.md`/`.markdown` files to rendered Preview mode.
+- The system shall persist the user’s HTML/Markdown Preview/Text mode selection across launches.
 - The system shall preview supported text files in read-only text view.
 - The system shall preview supported image files (`gif`, `png`, `jpg`/`jpeg`, `tif`/`tiff`, `webp`, basic `svg`) in read-only image view.
 - The system shall show an explanatory placeholder for unsupported/unavailable files.
+
+### FR-017 Rendered Preview Link Handling
+- In rendered HTML/Markdown Preview mode, clicking `http`/`https` links shall open the URL in the system default browser.
+- In rendered HTML/Markdown Preview mode, local file links shall resolve against the current document base path and be handled in-app when the target file exists.
+
+### FR-018 HTML quick-view layout limits and fallback
+- The rendered in-app HTML/Markdown Preview mode is a lightweight quick view and shall not be treated as a full browser engine.
+- The system shall document that modern CSS layout fidelity, especially `flex`/flexbox and `grid`, may be incomplete or inaccurate in in-app rendered Preview mode.
+- The system shall provide and document external-browser fallback via file-tree context actions (**Open in Default App** and **Open With…**) for full layout fidelity.
 
 ### FR-010 Native App Handoff
 - The system shall provide a file-tree context menu action to open the selected file/folder in the system default app.
@@ -124,6 +137,9 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 
 ### AC-001 File/Preview
 - Given a selected directory, when user selects a supported PDF/text file, then corresponding preview appears.
+- Given a selected `.html`/`.htm` or `.md`/`.markdown` file, default rendered Preview appears.
+- Given user toggles HTML/Markdown mode to Text, raw source appears for that file.
+- Given app restart, previously selected HTML/Markdown mode is restored.
 - Given unsupported file, then placeholder explains unsupported type.
 - Given supported image file, then image preview appears in the preview pane.
 
@@ -178,3 +194,11 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 
 ### AC-012 Best-effort platform enumeration
 - Given platform association enumeration is partial/unavailable, user can still open the file via **Other…** without blocking errors.
+
+### AC-015 Rendered Preview links
+- Given rendered HTML/Markdown Preview mode and user clicks an external `http`/`https` link, then URL opens in system browser.
+- Given rendered HTML/Markdown Preview mode and user clicks a local file link, then skrat resolves and previews that target in-app when available.
+
+### AC-016 HTML quick-view layout limits and fallback
+- Given an HTML file that depends on flexbox/grid styling, documentation states in-app rendered Preview is a quick view and may not match a full browser.
+- Given user needs full fidelity for such files, docs direct user to file-tree context actions to open in an external browser.

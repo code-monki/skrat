@@ -6,6 +6,7 @@
 - Builds and wires all UI elements.
 - Routes user actions to preview-specific logic.
 - Maintains state for search index, current preview path, watch/debounce.
+- Maintains persisted HTML/Markdown display mode state (rendered Preview vs source Text).
 - Handles tree context menu handoff to OS-native apps.
 - Hosts Open With chooser entrypoint and delegates app selection/launch logic.
 
@@ -14,6 +15,10 @@
 - Deterministic scroll/jump behavior using scene/page geometry instead of `QPdfView` defaults.
 
 ### `QPdfSearchModel`
+### `QTextBrowser` (rich preview)
+- Renders local HTML and Markdown-derived HTML in read-only Preview mode.
+- Emits link activation signals used to route external links to system browser and local file links back through in-app preview routing.
+
 - Match extraction for active query.
 - Used for next/previous navigation and result counting.
 
@@ -42,7 +47,8 @@
 ## 2. State Flows
 
 ### 2.1 Preview Loading
-- Input path -> existence/type check -> PDF/text/image/placeholder branch.
+- Input path -> existence/type check -> PDF/rich-preview-or-rich-text/text/image/placeholder branch.
+- HTML/Markdown path updates: rich Preview mode renders via `QTextBrowser`; Text mode falls back to source in `QPlainTextEdit`; mode controls are shown only for supported suffixes.
 - PDF path updates: document load, toolbar/tab state, watcher registration.
 - Image path updates: image decode (raster formats via `QImageReader`, basic SVG via `QSvgRenderer` rasterization), image widget update, watcher registration.
 
@@ -98,6 +104,13 @@
 - User opens **Tools → Theme Settings…**, edits theme/font, and chooses Apply/OK.
 - App saves preferences and reapplies chrome palette/font immediately.
 - Theme application is scoped to app chrome; active document rendering remains unchanged.
+
+### 2.11 HTML/Markdown mode persistence + link routing
+- App reads a persisted `QSettings` flag at startup to initialize rich Preview/Text mode.
+- User toggling Preview/Text updates the same persisted flag immediately.
+- In rendered Preview mode:
+  - `http`/`https` links are opened using system browser handoff.
+  - local file links are resolved against current document base path and routed through normal preview logic.
 
 ## 3. Error and Edge Handling
 

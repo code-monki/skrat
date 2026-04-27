@@ -3,7 +3,7 @@
  * @brief Main window implementation for skrat.
  *
  * This translation unit implements:
- * - File-tree selection and preview routing (PDF/text/placeholder).
+ * - File-tree selection and preview routing (PDF/HTML/Markdown/text/image/placeholder).
  * - PDF navigation/search/print behavior.
  * - Toolbar + tabbed pane wiring and state updates.
  * - File-system watcher based reload handling.
@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include <QAction>
+#include <QActionGroup>
 #include <QApplication>
 #include <QClipboard>
 #include <QCheckBox>
@@ -104,6 +105,7 @@ constexpr int kPlaceholderPage = 0;
 constexpr int kPdfPage = 1;
 constexpr int kTextPage = 2;
 constexpr int kImagePage = 3;
+constexpr int kRichPage = 4;
 constexpr int kRasterDpiDefault = 300;
 
 enum class PrintOutputMode : int {
@@ -183,6 +185,16 @@ bool hasTextualSuffix(const QString &suffixLower)
         QStringLiteral("rst"),
     };
     return kSuffixes.contains(suffixLower);
+}
+
+bool isHtmlSuffix(const QString &suffixLower)
+{
+    return suffixLower == QStringLiteral("html") || suffixLower == QStringLiteral("htm");
+}
+
+bool isMarkdownSuffix(const QString &suffixLower)
+{
+    return suffixLower == QStringLiteral("md") || suffixLower == QStringLiteral("markdown");
 }
 
 /**
@@ -483,6 +495,8 @@ bool MainWindow::isProbablyImageFile(const QFileInfo &fi)
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    QSettings s;
+    m_richPreviewMode = s.value(QStringLiteral("preview/richModeRendered"), true).toBool();
     setupUi();
 
     m_rootPath = QDir::homePath();
@@ -595,10 +609,31 @@ void MainWindow::setupUi()
     connect(m_actPdfFindPrev, &QAction::triggered, this, &MainWindow::pdfFindPrev);
     editMenu->addAction(m_actPdfFindPrev);
 
+    editMenu->addSeparator();
+    m_richModeGroup = new QActionGroup(this);
+    m_richModeGroup->setExclusive(true);
+    m_actRichPreviewMode = new QAction(tr("HTML/Markdown &Preview"), this);
+    m_actRichPreviewMode->setCheckable(true);
+    m_actRichPreviewMode->setChecked(true);
+    m_actRichTextMode = new QAction(tr("HTML/Markdown as &Text"), this);
+    m_actRichTextMode->setCheckable(true);
+    m_richModeGroup->addAction(m_actRichPreviewMode);
+    m_richModeGroup->addAction(m_actRichTextMode);
+    connect(m_actRichPreviewMode, &QAction::triggered, this, [this]() {
+        setRichPreviewMode(true);
+    });
+    connect(m_actRichTextMode, &QAction::triggered, this, [this]() {
+        setRichPreviewMode(false);
+    });
+    editMenu->addAction(m_actRichPreviewMode);
+    editMenu->addAction(m_actRichTextMode);
+
     addAction(m_actCopy);
     addAction(m_actPdfFind);
     addAction(m_actPdfFindNext);
     addAction(m_actPdfFindPrev);
+    addAction(m_actRichPreviewMode);
+    addAction(m_actRichTextMode);
 
     auto *viewMenu = menuBar()->addMenu(tr("&View"));
     auto *actFitWidth = new QAction(tr("PDF Fit Page to &Width"), this);
@@ -739,6 +774,11 @@ void MainWindow::setupUi()
     m_textView->setLineWrapMode(QPlainTextEdit::WidgetWidth);
     m_textView->setWordWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
 
+    m_richView = new QTextBrowser;
+    m_richView->setReadOnly(true);
+    m_richView->setOpenLinks(false);
+    m_richView->setOpenExternalLinks(false);
+
     m_imageView = new QLabel;
     m_imageView->setAlignment(Qt::AlignCenter);
     m_imageView->setBackgroundRole(QPalette::Base);
@@ -794,6 +834,7 @@ void MainWindow::setupUi()
     m_stack->addWidget(m_pdfView);     // kPdfPage
     m_stack->addWidget(m_textView);    // kTextPage
     m_stack->addWidget(m_imageScroll); // kImagePage
+    m_stack->addWidget(m_richView);    // kRichPage
     m_stack->setCurrentIndex(kPlaceholderPage);
 
     m_leftTabs = new QTabWidget;
@@ -860,6 +901,17 @@ void MainWindow::setupUi()
     m_pdfFindToolBar->setVisible(false);
 
     previewLayout->addWidget(m_pdfFindToolBar);
+
+    m_richModeToolBar = new QToolBar(m_previewPane);
+    m_richModeToolBar->setWindowTitle(tr("Preview mode"));
+    m_richModeToolBar->setMovable(false);
+    m_richModeToolBar->setFloatable(false);
+    m_richModeToolBar->addWidget(new QLabel(tr("Mode:")));
+    m_richModeToolBar->addAction(m_actRichPreviewMode);
+    m_richModeToolBar->addAction(m_actRichTextMode);
+    m_richModeToolBar->setVisible(false);
+    previewLayout->addWidget(m_richModeToolBar);
+
     previewLayout->addWidget(m_stack, 1);
 
     m_splitter = new QSplitter(Qt::Horizontal);
@@ -895,11 +947,13 @@ void MainWindow::setupUi()
     connect(m_pdfBookmarkModel, &QAbstractItemModel::rowsRemoved, this, &MainWindow::onPdfBookmarksChanged);
     connect(m_pdfThumbList, &QListWidget::itemActivated, this, &MainWindow::onPdfThumbnailActivated);
     connect(m_pdfThumbList, &QListWidget::itemClicked, this, &MainWindow::onPdfThumbnailActivated);
+    connect(m_richView, &QTextBrowser::anchorClicked, this, &MainWindow::onRichPreviewLinkClicked);
 
     statusBar()->setSizeGripEnabled(true);
 
-    showPlaceholder(tr("<p><b>skrat</b> — pick a file in the tree to preview PDFs, text, and images.</p>"
+    showPlaceholder(tr("<p><b>skrat</b> — pick a file in the tree to preview PDFs, HTML/Markdown, text, and images.</p>"
                         "<p>Use <b>File → Open Folder…</b> to point the tree at a project directory.</p>"));
+    updateRichPreviewModeUi(false);
 }
 
 void MainWindow::setRootFolder(const QString &absolutePath)
@@ -1414,7 +1468,7 @@ void MainWindow::showAboutDialog()
         this,
         tr("About skrat"),
         tr("<p><b>skrat</b> %1</p>"
-           "<p>Read-only desktop viewer for PDFs and text files.</p>"
+           "<p>Read-only desktop viewer for PDFs, HTML/Markdown, and text files.</p>"
            "<p><b>Author / Maintainer:</b> CodeMonki</p>"
            "<p><b>License:</b> GPL-3.0-or-later (code), CC-BY-SA-4.0 (docs)</p>"
            "<p><b>Third-party:</b> Uses Qt framework under LGPLv3/GPL/commercial terms as applicable "
@@ -1433,7 +1487,7 @@ void MainWindow::showHelpDialog()
     browser->setOpenExternalLinks(true);
     browser->setHtml(
         tr("<h2>skrat Help</h2>"
-           "<p><b>Purpose:</b> read-only preview of PDFs, common text files, and common image formats.</p>"
+           "<p><b>Purpose:</b> read-only preview of PDFs, HTML/Markdown, common text files, and common image formats.</p>"
            "<h3>Basics</h3>"
            "<ul>"
            "<li>Use the <b>Files</b> tab on the left to browse and select files.</li>"
@@ -1441,6 +1495,8 @@ void MainWindow::showHelpDialog()
            "<li>Right-click a file or folder in the tree and choose <b>Open in Default App</b> or <b>Open With…</b> to hand off to OS-native apps.</li>"
            "<li>Use <b>Tools → Install Command-Line Tool…</b> to install a <code>skrat</code> launcher for terminal usage.</li>"
            "<li>When a PDF has bookmarks, the <b>TOC</b> tab becomes available.</li>"
+           "<li>For HTML/Markdown files, use <b>Preview/Text</b> mode to switch between rendered output and source.</li>"
+           "<li>Rendered HTML quick view is lightweight and may not fully match browser-level <b>flexbox/grid</b> layout behavior. For full fidelity, use the file-tree context menu and choose <b>Open in Default App</b> (or <b>Open With…</b>) to open in your external browser.</li>"
            "<li>Use toolbar controls to navigate pages, print, and search.</li>"
            "</ul>"
            "<h3>Printing</h3>"
@@ -1835,7 +1891,8 @@ void MainWindow::updatePdfFindActions()
         m_actPdfPrint->setEnabled(hasDocument);
     }
     if (m_actCopy) {
-        m_actCopy->setEnabled(m_stack->currentWidget() == m_pdfView || m_stack->currentWidget() == m_textView);
+        m_actCopy->setEnabled(m_stack->currentWidget() == m_pdfView || m_stack->currentWidget() == m_textView
+                              || m_stack->currentWidget() == m_richView);
     }
 }
 
@@ -1888,9 +1945,61 @@ void MainWindow::updateImagePreviewScale()
 void MainWindow::showPlaceholder(const QString &html)
 {
     setWatchedPreviewFile(QString());
+    m_previewedFileIsRichText = false;
+    updateRichPreviewModeUi(false);
     m_placeholder->setText(html);
     m_stack->setCurrentIndex(kPlaceholderPage);
     updatePdfPageUi();
+}
+
+void MainWindow::setRichPreviewMode(bool previewMode)
+{
+    if (m_richPreviewMode == previewMode) {
+        return;
+    }
+    m_richPreviewMode = previewMode;
+    QSettings s;
+    s.setValue(QStringLiteral("preview/richModeRendered"), m_richPreviewMode);
+    statusBar()->showMessage(
+        tr("HTML/Markdown mode: %1").arg(m_richPreviewMode ? tr("Preview") : tr("Text")),
+        2500);
+    if (!m_previewedFileIsRichText || m_previewFilePath.isEmpty()) {
+        updateRichPreviewModeUi(false);
+        return;
+    }
+    previewPath(m_previewFilePath);
+}
+
+void MainWindow::onRichPreviewLinkClicked(const QUrl &url)
+{
+    if (!url.isValid()) {
+        return;
+    }
+    const QString scheme = url.scheme().toLower();
+    if (scheme == QStringLiteral("http") || scheme == QStringLiteral("https")) {
+        QDesktopServices::openUrl(url);
+        return;
+    }
+    if (url.isLocalFile()) {
+        previewPath(url.toLocalFile());
+        return;
+    }
+    QDesktopServices::openUrl(url);
+}
+
+void MainWindow::updateRichPreviewModeUi(bool enabled)
+{
+    if (m_actRichPreviewMode) {
+        m_actRichPreviewMode->setEnabled(enabled);
+        m_actRichPreviewMode->setChecked(m_richPreviewMode);
+    }
+    if (m_actRichTextMode) {
+        m_actRichTextMode->setEnabled(enabled);
+        m_actRichTextMode->setChecked(!m_richPreviewMode);
+    }
+    if (m_richModeToolBar) {
+        m_richModeToolBar->setVisible(enabled);
+    }
 }
 
 void MainWindow::pauseWatching()
@@ -1986,6 +2095,8 @@ void MainWindow::previewPath(const QString &absolutePath)
 
     const QString suffix = fi.suffix().toLower();
     if (suffix == QStringLiteral("pdf")) {
+        m_previewedFileIsRichText = false;
+        updateRichPreviewModeUi(false);
         m_pdfDocument->close();
         const QPdfDocument::Error loadError = m_pdfDocument->load(fi.absoluteFilePath());
         if (loadError != QPdfDocument::Error::None) {
@@ -2033,7 +2144,51 @@ void MainWindow::previewPath(const QString &absolutePath)
         return;
     }
 
+    if (isHtmlSuffix(suffix) || isMarkdownSuffix(suffix)) {
+        QFile f(fi.absoluteFilePath());
+        if (!f.open(QIODevice::ReadOnly)) {
+            showPlaceholder(tr("<p><b>Could not open file</b></p><p>%1</p>")
+                                .arg(fi.absoluteFilePath().toHtmlEscaped()));
+            return;
+        }
+        const QByteArray bytes = f.readAll();
+        f.close();
+        const QString text = QString::fromUtf8(bytes);
+
+        m_previewedFileIsRichText = true;
+        updateRichPreviewModeUi(true);
+        setWatchedPreviewFile(fi.absoluteFilePath());
+
+        if (m_richPreviewMode) {
+            if (isMarkdownSuffix(suffix)) {
+                QTextDocument mdDoc;
+                mdDoc.setMarkdown(text);
+                m_richView->setHtml(mdDoc.toHtml());
+            } else {
+                m_richView->setHtml(text);
+            }
+            m_richView->document()->setBaseUrl(
+                QUrl::fromLocalFile(fi.absoluteDir().absolutePath() + QStringLiteral("/")));
+            m_stack->setCurrentIndex(kRichPage);
+            updatePdfPageUi();
+            return;
+        }
+
+        QFont font = m_textView->font();
+        const QFont fixed = QFont(QStringLiteral("Monospace"));
+        if (fixed.exactMatch() || !fixed.family().isEmpty()) {
+            font = fixed;
+        }
+        m_textView->setFont(font);
+        m_textView->setPlainText(text);
+        m_stack->setCurrentIndex(kTextPage);
+        updatePdfPageUi();
+        return;
+    }
+
     if (isProbablyTextFile(fi)) {
+        m_previewedFileIsRichText = false;
+        updateRichPreviewModeUi(false);
         QFile f(fi.absoluteFilePath());
         if (!f.open(QIODevice::ReadOnly)) {
             showPlaceholder(tr("<p><b>Could not open file</b></p><p>%1</p>")
@@ -2064,6 +2219,8 @@ void MainWindow::previewPath(const QString &absolutePath)
     }
 
     if (isProbablyImageFile(fi)) {
+        m_previewedFileIsRichText = false;
+        updateRichPreviewModeUi(false);
         QImage image;
         QString loadErr;
         if (suffix == QStringLiteral("svg")) {
@@ -2116,7 +2273,7 @@ void MainWindow::previewPath(const QString &absolutePath)
     showPlaceholder(
         tr("<p><b>Unsupported file type</b> for preview.</p>"
            "<p>%1</p>"
-           "<p>Supported: <b>PDF</b>, common <b>text</b> extensions (txt, md, json, code, …), and common <b>image</b> formats (gif, png, jpg/jpeg, tiff, webp, basic svg).</p>"
+           "<p>Supported: <b>PDF</b>, rendered <b>HTML/Markdown</b> (with source toggle), common <b>text</b> extensions (txt, json, code, …), and common <b>image</b> formats (gif, png, jpg/jpeg, tiff, webp, basic svg).</p>"
            "<p>Tip: right-click in the file tree and use <b>Open in Default App</b> for any type your OS can handle.</p>")
             .arg(fi.absoluteFilePath().toHtmlEscaped()));
 }
