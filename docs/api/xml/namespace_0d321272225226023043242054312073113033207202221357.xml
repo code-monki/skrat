@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespace_0d321272225226023043242054312073113033207202221357" kind="namespace" language="C++">
+    <compoundname>@321272225226023043242054312073113033207202221357</compoundname>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="namespace_0d321272225226023043242054312073113033207202221357_1af30aaf1eafcffaca3bd3102b1698210b" prot="public" static="no" strong="yes">
+        <type>int</type>
+        <name>PrintOutputMode</name>
+        <qualifiedname>@321272225226023043242054312073113033207202221357::PrintOutputMode</qualifiedname>
+        <enumvalue id="namespace_0d321272225226023043242054312073113033207202221357_1af30aaf1eafcffaca3bd3102b1698210baea2c8b7cbfe69f7ec7978a0fd5c6dcbf" prot="public">
+          <name>VectorNative</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespace_0d321272225226023043242054312073113033207202221357_1af30aaf1eafcffaca3bd3102b1698210ba4ef0f0b630fb05715af158c25ad892a1" prot="public">
+          <name>RasterQt</name>
+          <initializer>= 1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.cpp" line="109" column="1" bodyfile="src/MainWindow.cpp" bodystart="109" bodyend="112"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/MainWindow.cpp" line="101" column="1"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="indexpage" kind="page">
+    <compoundname>index</compoundname>
+    <title>skrat</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para><anchor id="index_1md_README"/></para>
+<para><computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput> is a small <bold>read-only desktop viewer</bold> with a <bold>two-pane layout</bold>: a <bold>file tree</bold> on the left and a <bold>preview</bold> on the right. It is aimed at quickly checking <bold>PDF layout</bold> (for example, PDFs exported from <bold>Playwright / Chromium</bold>), skimming <bold>plain text</bold> files, and quickly opening other files in their native apps.</para>
+<para>This is <bold>not</bold> an editor.</para>
+<sect1 id="index_1autotoc_md1">
+<title>Product Scope Guardrails</title><para><itemizedlist>
+<listitem><para><computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput> is intentionally focused on <bold>read-only document triage</bold>: open, inspect, navigate, search, print, copy, and hand off.</para>
+</listitem><listitem><para>Features that require <bold>document authoring or mutation semantics</bold> are explicitly out of scope for <computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput>.</para>
+</listitem><listitem><para>Out-of-scope examples include (non-exhaustive): fillable form workflows, annotation/markup toolchains, digital-signature authoring, and redaction editing pipelines.</para>
+</listitem><listitem><para>For those workflows, use the file-tree context actions <bold>Open in Default App</bold> or <bold>Open With…</bold> to continue in a dedicated native application.</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="index_1autotoc_md2">
+<title>Features</title><para><itemizedlist>
+<listitem><para><bold>Left tabbed view:</bold> <computeroutput>Files</computeroutput> tab is the <computeroutput>QTreeView</computeroutput> file tree (<computeroutput>QFileSystemModel</computeroutput>); <computeroutput>TOC</computeroutput> tab shows PDF <bold>Table of contents</bold> (outline/bookmarks when available; placeholder when unavailable); <computeroutput>Thumbnails</computeroutput> tab shows PDF page thumbnails for quick page jumps. <computeroutput>TOC</computeroutput> and <computeroutput>Thumbnails</computeroutput> tabs are enabled only while previewing a PDF.</para>
+</listitem><listitem><para><bold>Right pane:</bold> preview stack<itemizedlist>
+<listitem><para><bold>PDF</bold> via Qt’s <bold><computeroutput>QtPdf</computeroutput> / <computeroutput>QPdfDocument</computeroutput></bold> rendered through a custom <bold><computeroutput><ref refid="classPdfGraphicsView" kindref="compound">PdfGraphicsView</ref></computeroutput></bold> component for deterministic navigation/search positioning.</para>
+</listitem><listitem><para><bold>Text</bold> for common extensions (UTF-8; see <computeroutput><ref refid="MainWindow_8cpp" kindref="compound">MainWindow.cpp</ref></computeroutput> for the allowlist).</para>
+</listitem><listitem><para><bold>Images</bold> for common formats (<computeroutput>.gif</computeroutput>, <computeroutput>.png</computeroutput>, <computeroutput>.jpg</computeroutput>/<computeroutput>.jpeg</computeroutput>, <computeroutput>.tif</computeroutput>/<computeroutput>.tiff</computeroutput>, <computeroutput>.webp</computeroutput>) plus basic <computeroutput>.svg</computeroutput> rendering support.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para><bold>Menus</bold><itemizedlist>
+<listitem><para><bold>File → Open Folder…</bold> sets the tree root.</para>
+</listitem><listitem><para><bold>File tree context menu:</bold> right-click a file/folder and use <bold>Open in Default App</bold> to open it with your operating system association (useful for Office/OpenDocument formats and any unsupported preview type).</para>
+</listitem><listitem><para><bold>File tree context menu:</bold> <bold>Open With…</bold> chooser with per-filetype app ranking (last used / most used first) and an <bold>Other…</bold> option to pick an app manually.</para>
+</listitem><listitem><para><bold>Tools → Theme Settings…</bold> applies chrome-only UI themes (<bold>System / Light / Dark / Warm Sepia</bold>) and UI font preferences (family + size). Document content rendering remains unchanged.</para>
+</listitem><listitem><para><bold>Tools → Install Command-Line Tool…</bold> installs a small <computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput> launcher wrapper in a user-writable location so terminal commands can open directories/files in the app.</para>
+</listitem><listitem><para><bold>File → Print PDF…</bold> prints the currently selected/open PDF (<bold>Ctrl+P</bold>), with a pre-print options dialog: <bold>Native PDF (vector, opened in system viewer for native print controls)</bold> or <bold>Rasterized by skrat</bold> at <bold>300/600 DPI</bold>. Raster mode honors print dialog page ranges.</para>
+</listitem><listitem><para><bold>Edit → Copy</bold> copies selection from text/PDF; HTML payloads are sanitized to remove background color styling before paste (<bold>Ctrl+C</bold>).</para>
+</listitem><listitem><para><bold>Edit → Find in PDF… / Find Next / Find Previous</bold> searches in the active PDF (<bold>Ctrl+F</bold>, <bold>F3</bold>, <bold>Shift+F3</bold>). A <bold>Find</bold> toolbar (icon buttons + search field) shows the query and match count; hover for shortcuts and hints. On new queries, the preview auto-jumps to the first match and <bold>Find Next/Previous</bold> cycles through all matches while updating <computeroutput>Match X of Y</computeroutput>.</para>
+</listitem><listitem><para><bold>View → PDF Fit Page to Width / Zoom In / Out</bold> (shortcuts match platform defaults; zoom shortcuts also apply to image previews. <bold>Zoom Reset</bold> is available by shortcut and returns image previews to viewport-fit sizing and PDF previews to fit-width sizing).</para>
+</listitem><listitem><para><bold>View → PDF pages</bold> (and the <bold>PDF</bold> toolbars): <bold>icon-only</bold> controls with tooltips for page navigation (first / previous / next / last) plus a <bold>page number input</bold> between previous/next (press <bold>Return</bold> to jump; out-of-range values show a warning), along with <bold>print</bold> and <bold>find</bold>. The <bold>page counter</bold> is centered in the main bar over the <bold>preview</bold> (right) column so it lines up with the document, not the file tree. <bold>Ctrl+G</bold> on a PDF asks for a <bold>page number</bold>; on plain text it asks for a <bold>line number</bold> (text previews do not have PDF-style pages). First/last page also support macOS-friendly <bold>Cmd+Up / Cmd+Down</bold> in addition to <bold>Ctrl+Home / Ctrl+End</bold>. The status bar summarizes navigation when a PDF is open.</para>
+</listitem><listitem><para><bold>Help menu:</bold> <bold>Help / Shortcuts…</bold> opens an in-app usage + shortcuts screen; <bold>About skrat…</bold> shows version, author/maintainer, license summary (including Qt licensing notice), and project link.</para>
+</listitem><listitem><para><bold>Disk changes:</bold> the file shown in the preview (PDF, text, or image) is watched with <bold><computeroutput>QFileSystemWatcher</computeroutput></bold>. If it changes on disk, the preview <bold>reloads</bold> after a short debounce. If it <bold>disappears</bold> (deleted or renamed away), the preview shows that the file is <bold>no longer available</bold>.</para>
+</listitem></itemizedlist>
+</para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+<sect1 id="index_1autotoc_md3">
+<title>Requirements</title><para><itemizedlist>
+<listitem><para><bold>CMake</bold> 3.16 or newer <linebreak/>
+</para>
+</listitem><listitem><para><bold>Qt 6</bold> with these modules available to CMake: <bold>Core</bold>, <bold>Gui</bold>, <bold>Widgets</bold>, <bold>PrintSupport</bold>, <bold>Pdf</bold>, <bold>PdfWidgets</bold>, <bold>Svg</bold> <linebreak/>
+<itemizedlist>
+<listitem><para>Qt <bold>6.4+</bold> is required by <computeroutput>CMakeLists.txt</computeroutput> (PDF APIs used here); some distributions package PDF/print modules separately—if CMake cannot find <computeroutput>Qt6::PdfWidgets</computeroutput> or <computeroutput>Qt6::PrintSupport</computeroutput>, install your OS Qt6 PDF/print development packages or point <computeroutput>CMAKE_PREFIX_PATH</computeroutput> at a full Qt kit from the Qt Online Installer.</para>
+</listitem></itemizedlist>
+</para>
+</listitem><listitem><para>A <bold>C++17</bold> toolchain</para>
+</listitem></itemizedlist>
+</para>
+<sect2 id="index_1autotoc_md4">
+<title>Optional tooling (Homebrew, Chocolatey, npm)</title><para>You can install <bold>CMake</bold>, <bold>Ninja</bold>, <bold>Qt 6</bold>, and compilers through a package manager instead of (or in addition to) distro installers or the Qt Online Installer:</para>
+<para><table rows="4" cols="3"><row>
+<entry thead="yes"><para>Manager  </para>
+</entry><entry thead="yes"><para>Typical use  </para>
+</entry><entry thead="yes"><para>Notes  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold><ulink url="https://brew.sh/">Homebrew</ulink></bold> (macOS / Linux)  </para>
+</entry><entry thead="no"><para><computeroutput>brew install cmake ninja qt</computeroutput> (or <computeroutput>qt@6</computeroutput>), then set <bold><computeroutput>CMAKE_PREFIX_PATH</computeroutput></bold> to <bold><computeroutput>$(brew --prefix qt)</computeroutput></bold> (see Platform notes)  </para>
+</entry><entry thead="no"><para>A <bold><computeroutput>Brewfile</computeroutput></bold> can live in the repo for <bold><computeroutput>brew bundle</computeroutput></bold>. <bold><computeroutput>Brewfile.lock.json</computeroutput></bold> is <bold>gitignored</bold> here so it is not committed by default; remove that line from <bold><computeroutput>.gitignore</computeroutput></bold> if you want a pinned Homebrew snapshot in Git.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold><ulink url="https://chocolatey.org/">Chocolatey</ulink></bold> (Windows)  </para>
+</entry><entry thead="no"><para>e.g. <bold><computeroutput>choco install cmake ninja visualstudio2022buildtools</computeroutput></bold> — match whatever matches your MSVC / Qt layout  </para>
+</entry><entry thead="no"><para>Local <bold><computeroutput>choco pack</computeroutput></bold> output (<bold><computeroutput>*.nupkg</computeroutput></bold>) at the repo root is <bold>gitignored</bold>.  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold><ulink url="https://www.npmjs.com/">npm</ulink></bold>  </para>
+</entry><entry thead="no"><para>Only if you add <bold>Node-based scripts</bold> (release automation, lint, etc.) beside the Qt app  </para>
+</entry><entry thead="no"><para><bold><computeroutput>node_modules/</computeroutput></bold> and common npm/yarn/pnpm debug logs are <bold>gitignored</bold>. <bold><computeroutput>package.json</computeroutput> / <computeroutput>package-lock.json</computeroutput></bold> are not ignored so you can lock script dependencies when you add them.  </para>
+</entry></row>
+</table>
+</para>
+<para>The application itself stays <bold>C++/Qt</bold>; these entries are for <bold>developer environments</bold> and optional tooling, not runtime requirements for end users of the built app.</para>
+</sect2>
+<sect2 id="index_1autotoc_md5">
+<title>Cursor agent sandbox (optional)</title><para>The repo ships <bold><computeroutput>.cursor/sandbox.json</computeroutput></bold>: <bold><computeroutput>workspace_readwrite</computeroutput></bold>, <bold><computeroutput>enableSharedBuildCache</computeroutput></bold>, extra <bold>read/write</bold> on <bold><computeroutput>/private/tmp</computeroutput></bold> and <bold><computeroutput>/tmp</computeroutput></bold>, and <bold>read-only</bold> <bold><computeroutput>/usr/bin</computeroutput></bold> + <bold><computeroutput>/System/Library</computeroutput></bold> so <bold><computeroutput>packaging/macos/build-icns.sh</computeroutput></bold> (<bold><computeroutput>sips</computeroutput></bold> / <bold><computeroutput>iconutil</computeroutput></bold>) can run under a sandboxed agent. If icon generation still fails, temporarily set <bold><computeroutput>"type": "insecure_none"</computeroutput></bold> in that file (see <ulink url="https://cursor.com/docs/reference/sandbox">Cursor sandbox docs</ulink>).</para>
+</sect2>
+</sect1>
+<sect1 id="index_1autotoc_md6">
+<title>Build (Makefile orchestration)</title><para>The repository root <bold><computeroutput>Makefile</computeroutput></bold> is a thin wrapper around CMake.</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">make<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>configure<sp/>(if<sp/>needed)<sp/>+<sp/>compile</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>run<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>build,<sp/>then<sp/>launch<sp/>the<sp/>app</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>clean<sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>remove<sp/>the<sp/>build<sp/>directory</highlight></codeline>
+</programlisting></para>
+<sect2 id="index_1autotoc_md7">
+<title>Continuous integration</title><para><ulink url="https://github.com/code-monki/skrat/actions/workflows/ci.yml">GitHub Actions</ulink> builds <bold><computeroutput>master</computeroutput></bold> / <bold><computeroutput><ref refid="main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" kindref="member">main</ref></computeroutput></bold> on every push and pull request, and also runs when you push a <bold>version tag</bold> matching <bold><computeroutput>v*</computeroutput></bold> (for example <bold><computeroutput>v0.2.0</computeroutput></bold>). Workflow file: <ulink url=".github/workflows/ci.yml"><computeroutput>.github/workflows/ci.yml</computeroutput></ulink>.</para>
+<para><table rows="4" cols="2"><row>
+<entry thead="yes"><para>Where  </para>
+</entry><entry thead="yes"><para>Link  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><bold>Stable downloads (tagged releases)</bold>  </para>
+</entry><entry thead="no"><para><ulink url="https://github.com/code-monki/skrat/releases">github.com/code-monki/skrat/releases</ulink> — see also <computeroutput>releases/README.md</computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>Workflow runs (pick a green run)  </para>
+</entry><entry thead="no"><para><ulink url="https://github.com/code-monki/skrat/actions/workflows/ci.yml">github.com/code-monki/skrat/actions/workflows/ci.yml</ulink>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para>All Actions activity  </para>
+</entry><entry thead="no"><para><ulink url="https://github.com/code-monki/skrat/actions">github.com/code-monki/skrat/actions</ulink>  </para>
+</entry></row>
+</table>
+</para>
+<para><bold>Pre-built bundles</bold> from CI are attached as <bold>Artifacts</bold> (GitHub may wrap each file in a <computeroutput>.zip</computeroutput>). Open a run, scroll to <bold>Artifacts</bold>, and download the name that matches your platform. <bold>Tagged <computeroutput>v*</computeroutput> builds</bold> also publish the same portable archives on <bold>Releases</bold>.</para>
+<para>Each artifact zip often contains <bold>two files</bold> where applicable:</para>
+<para><itemizedlist>
+<listitem><para><bold><computeroutput>*-portable.tar.gz</computeroutput> / <computeroutput>*-portable.zip</computeroutput></bold>: Qt runtime bundled (<bold>linuxdeploy</bold> + Qt plugin on <bold>Ubuntu</bold> and <bold>Fedora</bold> CI, <bold>macdeployqt</bold> on macOS, <bold>windeployqt</bold> on Windows). Use these on machines <bold>without</bold> a Qt SDK.</para>
+</listitem><listitem><para><bold><computeroutput>*.dmg</computeroutput> (macOS)</bold>: drag-install image containing <computeroutput>skrat.app</computeroutput> plus an <computeroutput>Applications</computeroutput> shortcut.</para>
+</listitem><listitem><para><bold><computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput> / <computeroutput>skrat.exe</computeroutput></bold>: raw build output (still needs Qt libraries on the system, like a local compile).</para>
+</listitem></itemizedlist>
+</para>
+<para><table rows="7" cols="3"><row>
+<entry thead="yes"><para>Artifact  </para>
+</entry><entry thead="yes"><para>Portable bundle  </para>
+</entry><entry thead="yes"><para>Raw binary  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>skrat-ubuntu-x86_64</computeroutput>  </para>
+</entry><entry thead="no"><para><computeroutput>skrat-ubuntu-x86_64-portable.tar.gz</computeroutput> — extract, run <computeroutput>AppDir/AppRun</computeroutput>  </para>
+</entry><entry thead="no"><para><computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>skrat-ubuntu-aarch64</computeroutput>  </para>
+</entry><entry thead="no"><para>same pattern  </para>
+</entry><entry thead="no"><para><computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>skrat-fedora-x86_64</computeroutput>  </para>
+</entry><entry thead="no"><para><computeroutput>skrat-fedora-x86_64-portable.tar.gz</computeroutput> — extract, run <computeroutput>AppDir/AppRun</computeroutput>  </para>
+</entry><entry thead="no"><para><computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>skrat-fedora-aarch64</computeroutput>  </para>
+</entry><entry thead="no"><para>same pattern  </para>
+</entry><entry thead="no"><para><computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput>  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>skrat-macos-universal</computeroutput>  </para>
+</entry><entry thead="no"><para><computeroutput>skrat-macos-universal-portable.tar.gz</computeroutput> and <computeroutput>skrat-macos-universal.dmg</computeroutput>  </para>
+</entry><entry thead="no"><para>—  </para>
+</entry></row>
+<row>
+<entry thead="no"><para><computeroutput>skrat-windows-x86_64</computeroutput>  </para>
+</entry><entry thead="no"><para><computeroutput>skrat-windows-x86_64-portable.zip</computeroutput> — extract, run <computeroutput>skrat.exe</computeroutput>  </para>
+</entry><entry thead="no"><para><computeroutput>skrat.exe</computeroutput>  </para>
+</entry></row>
+</table>
+</para>
+<para><bold>Linux portable:</bold> run <bold><computeroutput>./AppDir/AppRun</computeroutput></bold> from the extracted tree. <bold>macOS:</bold> CI does <bold>not</bold> notarize; Gatekeeper may prompt the first open. <bold>Windows:</bold> <bold>SmartScreen</bold> may warn for unsigned builds. For raw Unix binaries after unzip, <bold><computeroutput>chmod +x <ref refid="namespaceskrat" kindref="compound">skrat</ref></computeroutput></bold> may be needed.</para>
+</sect2>
+<sect2 id="index_1autotoc_md8">
+<title>Troubleshooting: <computeroutput>Could not find a package configuration file provided by "Qt6"</computeroutput></title><para>CMake only finds Qt when <bold><computeroutput>CMAKE_PREFIX_PATH</computeroutput></bold> points at a <bold>Qt kit directory</bold> (the folder that contains <computeroutput>lib/cmake/Qt6/Qt6Config.cmake</computeroutput>), for example <bold><computeroutput>$HOME/Qt/6.9.3/macos</computeroutput></bold>.</para>
+<para>Fix it in one of these ways:</para>
+<para><orderedlist>
+<listitem><para><bold>Recommended:</bold> copy <computeroutput>config.local.mk.example</computeroutput> to <bold><computeroutput>config.local.mk</computeroutput></bold> in the repo root (that file is <bold>gitignored</bold>) and set <bold><computeroutput>CMAKE_PREFIX_PATH</computeroutput></bold> there. Then run <bold><computeroutput>make</computeroutput></bold> again.</para>
+</listitem><listitem><para><bold>One-shot:</bold> <linebreak/>
+ <computeroutput>make CMAKE_ARGS="-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos"</computeroutput> <linebreak/>
+ (change <bold><computeroutput>macos</computeroutput></bold> to your real kit name if different; use <bold><computeroutput>ls "$HOME/Qt/6.9.3"</computeroutput></bold> to list kits.)</para>
+</listitem><listitem><para><bold>Environment:</bold> <linebreak/>
+ <computeroutput>export CMAKE_PREFIX_PATH="$HOME/Qt/6.9.3/macos"</computeroutput> <linebreak/>
+ then <bold><computeroutput>make</computeroutput></bold> (CMake reads this variable).</para>
+</listitem></orderedlist>
+</para>
+<para>If you already configured without Qt, remove the stale build tree before reconfiguring: <bold><computeroutput>make clean</computeroutput></bold>, then <bold><computeroutput>make</computeroutput></bold>.</para>
+<para>Optional knobs:</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">make<sp/>BUILD_DIR=out</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>GENERATOR=Ninja</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>CMAKE_ARGS=&apos;-DCMAKE_BUILD_TYPE=Debug&apos;</highlight></codeline>
+</programlisting></para>
+<para>With <bold>Ninja</bold>, if the <computeroutput>ninja</computeroutput> binary is not on your <computeroutput>PATH</computeroutput>, point CMake at it (used only when <computeroutput>GENERATOR=Ninja</computeroutput>):</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">make<sp/>GENERATOR=Ninja<sp/>NINJA=/opt/homebrew/bin/ninja</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>or,<sp/>if<sp/>your<sp/>install<sp/>keeps<sp/>the<sp/>binary<sp/>under<sp/>/opt/homebrew/ninja:</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>GENERATOR=Ninja<sp/>NINJA=/opt/homebrew/ninja/bin/ninja</highlight></codeline>
+</programlisting></para>
+<para>If CMake cannot find Qt6, pass your Qt installation prefix (examples):</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">make<sp/>CMAKE_ARGS=&apos;-DCMAKE_PREFIX_PATH=/opt/homebrew/opt/qt&apos;</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Qt<sp/>Online<sp/>Installer<sp/>layout<sp/>(version<sp/>+<sp/>kit<sp/>directory,<sp/>often<sp/>`macos`)</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>CMAKE_ARGS=&apos;-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos&apos;</highlight></codeline>
+</programlisting></para>
+<para><bold>Your setup (Qt 6.9.3 under <computeroutput>~/Qt</computeroutput>, CMake from Homebrew):</bold> pick the kit folder that actually exists under <computeroutput>~/Qt/6.9.3/</computeroutput> (commonly <computeroutput>macos</computeroutput>; some installs use <computeroutput>macos_arm64</computeroutput>). It must be the directory that contains <computeroutput>lib/cmake/Qt6</computeroutput>.</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">ls<sp/>&quot;$HOME/Qt/6.9.3&quot;</highlight></codeline>
+</programlisting></para>
+<para>Then either pass flags once:</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">make<sp/>CMAKE=/opt/homebrew/bin/cmake<sp/>\</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>CMAKE_ARGS=&quot;-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos&quot;</highlight></codeline>
+</programlisting></para>
+<para>…or copy the template and build normally:</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">cp<sp/>config.local.mk.example<sp/>config.local.mk</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>edit<sp/>CMAKE<sp/>and<sp/>CMAKE_PREFIX_PATH<sp/>if<sp/>your<sp/>kit<sp/>name<sp/>or<sp/>cmake<sp/>path<sp/>differs</highlight></codeline>
+<codeline><highlight class="normal">make</highlight></codeline>
+</programlisting></para>
+<para>If your <computeroutput>cmake</computeroutput> binary is not on <computeroutput>PATH</computeroutput>, set <bold><computeroutput>CMAKE</computeroutput></bold> to the full path (for example <computeroutput>/opt/homebrew/bin/cmake</computeroutput>, or <computeroutput>.../cmake/bin/cmake</computeroutput> under a custom prefix).</para>
+<para>If you use <bold><computeroutput>GENERATOR=Ninja</computeroutput></bold> and <bold><computeroutput>ninja</computeroutput></bold> is not on <computeroutput>PATH</computeroutput>, set <bold><computeroutput>NINJA</computeroutput></bold> to the full path to the <computeroutput>ninja</computeroutput> executable (for example under <computeroutput>/opt/homebrew/bin</computeroutput> or <computeroutput>/opt/homebrew/ninja/bin</computeroutput>). Uncomment the <computeroutput>GENERATOR</computeroutput> / <computeroutput>NINJA</computeroutput> lines in <computeroutput>config.local.mk.example</computeroutput> when you copy it to <computeroutput>config.local.mk</computeroutput>.</para>
+<para>You can also invoke CMake directly:</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">/opt/homebrew/bin/cmake<sp/>-S<sp/>.<sp/>-B<sp/>build<sp/>-DCMAKE_BUILD_TYPE=Release<sp/>\</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-DCMAKE_PREFIX_PATH=&quot;$HOME/Qt/6.9.3/macos&quot;</highlight></codeline>
+<codeline><highlight class="normal">/opt/homebrew/bin/cmake<sp/>--build<sp/>build<sp/>--parallel</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="index_1autotoc_md9">
+<title>Platform notes</title><para><itemizedlist>
+<listitem><para><bold>macOS (Homebrew Qt):</bold> <computeroutput>brew install qt cmake</computeroutput> then use <computeroutput>-DCMAKE_PREFIX_PATH="$(brew --prefix qt)"</computeroutput> if <computeroutput>find_package(Qt6)</computeroutput> fails. Release builds use a <bold><computeroutput>skrat.app</computeroutput></bold> bundle (see <bold>Run</bold> below).</para>
+</listitem><listitem><para><bold>macOS (Qt Online Installer + Homebrew CMake):</bold> use <computeroutput>-DCMAKE_PREFIX_PATH</computeroutput> pointing at <computeroutput>~/Qt/&lt;ver&gt;/&lt;kit&gt;</computeroutput> as above; use <computeroutput>config.local.mk</computeroutput> to avoid retyping.</para>
+</listitem><listitem><para><bold>Linux:</bold> install Qt6 base <bold>and</bold> Qt6 PDF development packages for your distribution (names vary: <computeroutput>qt6-pdf-dev</computeroutput>, <computeroutput>qt6-pdf-widgets</computeroutput>, etc.).</para>
+</listitem><listitem><para><bold>Windows:</bold> install Qt 6 with the <bold>MSVC</bold> or <bold>MinGW</bold> kit including <bold>Qt PDF</bold>; configure CMake from Qt Creator or a “x64 Native Tools” prompt with <computeroutput>CMAKE_PREFIX_PATH</computeroutput> pointing at your Qt <computeroutput>lib/cmake</computeroutput> parent (for example <computeroutput>...\6.x.x\msvc2019_64</computeroutput>).</para>
+</listitem></itemizedlist>
+</para>
+</sect2>
+<sect2 id="index_1autotoc_md10">
+<title>macOS app icon</title><para>The Dock / Finder icon comes from <bold><computeroutput>packaging/macos/skrat.icns</computeroutput></bold> and <bold><computeroutput>CFBundleIconFile</computeroutput></bold> in <bold><computeroutput>Info.plist</computeroutput></bold>. CMake runs <bold><computeroutput>packaging/macos/install-bundle-icon.sh</computeroutput></bold> on each link so <bold><computeroutput>Contents/Resources/skrat.icns</computeroutput></bold> exists and the plist is set (CMake’s default plist often left <bold><computeroutput>CFBundleIconFile</computeroutput></bold> empty). <bold><computeroutput>macdeployqt</computeroutput></bold> can strip that again — re-run:</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">bash<sp/>packaging/macos/install-bundle-icon.sh<sp/>build/skrat.app</highlight></codeline>
+</programlisting></para>
+<para>After changing <bold><computeroutput>packaging/icons/</computeroutput></bold>, regenerate <bold><computeroutput>.icns</computeroutput></bold> on a Mac, then reinstall the icon:</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">./packaging/macos/build-icns.sh</highlight></codeline>
+<codeline><highlight class="normal">bash<sp/>packaging/macos/install-bundle-icon.sh<sp/>build/skrat.app</highlight></codeline>
+</programlisting></para>
+<para>If Finder still shows a generic icon, <bold><computeroutput>touch build/skrat.app</computeroutput></bold> or toggle the folder view so LaunchServices refreshes its cache.</para>
+</sect2>
+<sect2 id="index_1autotoc_md11">
+<title>Linux portable icon</title><para>The vector source is <bold><computeroutput>packaging/icons/skrat.svg</computeroutput></bold> (acorn with two circular “tooth” bites—an homage to the Ice Age squirrel). CI bundles the pre-rendered <bold><computeroutput>packaging/icons/hicolor/*/apps/skrat.png</computeroutput></bold> tree. After editing the SVG, refresh the PNGs (needs <bold><computeroutput>rsvg-convert</computeroutput></bold> from librsvg, or <bold>ImageMagick</bold> <computeroutput>convert</computeroutput> / <bold><computeroutput>magick</computeroutput></bold> on <computeroutput>PATH</computeroutput>):</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">./packaging/icons/export-pngs.sh</highlight></codeline>
+</programlisting></para>
+</sect2>
+</sect1>
+<sect1 id="index_1autotoc_md12">
+<title>Run</title><para>After a successful build, the binary is typically:</para>
+<para><itemizedlist>
+<listitem><para><bold>macOS:</bold> <computeroutput>build/skrat.app</computeroutput> (bundle) — run <bold><computeroutput>open build/skrat.app</computeroutput></bold> or <bold><computeroutput>build/skrat.app/Contents/MacOS/skrat</computeroutput></bold></para>
+</listitem><listitem><para><bold>Linux:</bold> <computeroutput>build/skrat</computeroutput></para>
+</listitem><listitem><para><bold>Windows (single-configuration generators):</bold> <computeroutput>build/Release/skrat.exe</computeroutput> or <computeroutput>build/Debug/skrat.exe</computeroutput></para>
+</listitem></itemizedlist>
+</para>
+<para>The <bold><computeroutput>make run</computeroutput></bold> target opens <bold><computeroutput>build/skrat.app</computeroutput></bold> on macOS, else tries <computeroutput>build/skrat</computeroutput>, then <computeroutput>build/Release/skrat</computeroutput>, then <computeroutput>build/Debug/skrat</computeroutput>.</para>
+<sect2 id="index_1autotoc_md13">
+<title>macOS Gatekeeper (unsigned / CI builds)</title><para>CI and local builds are <bold>not</bold> signed with a <bold>Developer ID</bold> or <bold>notarized</bold>. Gatekeeper may show <bold>“skrat.app” Not Opened</bold> and <emphasis>Apple could not verify … is free of malware</emphasis>. That is normal for this distribution model until you add your own signing pipeline.</para>
+<para><bold>First launch:</bold> In <bold>Finder</bold>, <bold>Control‑click (right‑click)</bold> <computeroutput>skrat.app</computeroutput> → <bold>Open</bold> → confirm <bold>Open</bold> once. Alternatively open <bold>System Settings → Privacy &amp; Security</bold>, attempt launch once, then use <bold>Open Anyway</bold> when macOS offers it.</para>
+<para><bold>Downloads from GitHub</bold> carry <bold>quarantine</bold> metadata. If you trust the artifact, you can clear it (advanced / at your own risk):</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">xattr<sp/>-dr<sp/>com.apple.quarantine<sp/>/path/to/skrat.app</highlight></codeline>
+</programlisting></para>
+<para><bold>Opening from Terminal:</bold> use the <bold><computeroutput>.app</computeroutput> path</bold>, not <bold><computeroutput>open -a skrat.app</computeroutput></bold> (the <bold><computeroutput>-a</computeroutput></bold> flag expects a registered <bold>application name</bold>, not a bundle filename). Examples:</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">open<sp/>build/skrat.app</highlight></codeline>
+<codeline><highlight class="normal">open<sp/>build/skrat.app<sp/>--args<sp/>.</highlight></codeline>
+<codeline><highlight class="normal">open<sp/>build/skrat.app<sp/>--args<sp/>&quot;$(pwd)&quot;</highlight></codeline>
+</programlisting></para>
+</sect2>
+<sect2 id="index_1autotoc_md14">
+<title>Apple Developer + CI (keep credentials out of Git)</title><para>Do <bold>not</bold> commit <computeroutput>.p12</computeroutput>, <computeroutput>.p8</computeroutput>, or passwords. Store them only as <bold>GitHub Actions secrets</bold> (Repository <bold>Settings → Secrets and variables → Actions</bold>). Optionally put those secrets on a protected <bold>Environment</bold> (e.g. only <bold><computeroutput>refs/tags/v*</computeroutput></bold> or manual approval) so ordinary branch runs never see them. When <bold>all</bold> required secrets are set, <bold><computeroutput>.github/workflows/ci.yml</computeroutput></bold> signs and notarizes <bold><computeroutput>skrat.app</computeroutput></bold> on the <bold>macOS</bold> job (see <bold><computeroutput>packaging/macos-ci-signing.md</computeroutput></bold> for exact secret names and troubleshooting).</para>
+</sect2>
+<sect2 id="index_1autotoc_md15">
+<title>Command-line arguments</title><para>You may pass <bold>one</bold> optional path:</para>
+<para><itemizedlist>
+<listitem><para><bold>Directory:</bold> opens that folder as the tree root.</para>
+</listitem><listitem><para><bold>File:</bold> sets the tree root to the file’s parent directory and selects the file (if it is visible under that root).</para>
+</listitem></itemizedlist>
+</para>
+<para>If you do not want to invoke the full app binary path each time, install a launcher via <bold>Tools → Install Command-Line Tool…</bold> and then run <computeroutput><ref refid="namespaceskrat" kindref="compound">skrat</ref> &lt;path&gt;</computeroutput> from your shell.</para>
+<para>Examples:</para>
+<para><programlisting filename=".bash"><codeline><highlight class="normal">./build/skrat<sp/>.</highlight></codeline>
+<codeline><highlight class="normal">./build/skrat<sp/>./101-cargos-101-travellers.pdf</highlight></codeline>
+</programlisting></para>
+</sect2>
+</sect1>
+<sect1 id="index_1autotoc_md16">
+<title>License</title><para>This application’s <bold>source code</bold> is licensed under the <bold>GNU General Public License v3.0 or later</bold> (<computeroutput>GPL-3.0-or-later</computeroutput>). Qt is used under <bold>your</bold> Qt license terms (for example the open-source Qt LGPL/GPL offerings, or a commercial Qt license).</para>
+<para><bold>Documentation</bold> in this repository (including this <computeroutput><ref refid="README_8md" kindref="compound">README.md</ref></computeroutput>) is licensed under the <ulink url="https://creativecommons.org/licenses/by-sa/4.0/"><bold>Creative Commons Attribution-ShareAlike 4.0 International</bold> license</ulink> (<computeroutput>CC-BY-SA-4.0</computeroutput>). The full legal text is in <ulink url="LICENSE-CC-BY-SA-4.0.txt"><computeroutput>LICENSE-CC-BY-SA-4.0.txt</computeroutput></ulink>.</para>
+</sect1>
+<sect1 id="index_1autotoc_md17">
+<title>System Documentation</title><para>Project system/design/test documents live under <computeroutput>docs/</computeroutput>, including:<itemizedlist>
+<listitem><para>SRS (with acceptance criteria)</para>
+</listitem><listitem><para>HLA</para>
+</listitem><listitem><para>DD</para>
+</listitem><listitem><para>RTM</para>
+</listitem><listitem><para>Test Plan </para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+    </detaileddescription>
+    <location file="README.md"/>
+  </compounddef>
+</doxygen>

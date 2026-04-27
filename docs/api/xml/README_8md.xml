@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="README_8md" kind="file" language="Markdown">
+    <compoundname>README.md</compoundname>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline><highlight class="normal">#<sp/>skrat</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">`skrat`<sp/>is<sp/>a<sp/>small<sp/>**read-only<sp/>desktop<sp/>viewer**<sp/>with<sp/>a<sp/>**two-pane<sp/>layout**:<sp/>a<sp/>**file<sp/>tree**<sp/>on<sp/>the<sp/>left<sp/>and<sp/>a<sp/>**preview**<sp/>on<sp/>the<sp/>right.<sp/>It<sp/>is<sp/>aimed<sp/>at<sp/>quickly<sp/>checking<sp/>**PDF<sp/>layout**<sp/>(for<sp/>example,<sp/>PDFs<sp/>exported<sp/>from<sp/>**Playwright<sp/>/<sp/>Chromium**),<sp/>skimming<sp/>**plain<sp/>text**<sp/>files,<sp/>and<sp/>quickly<sp/>opening<sp/>other<sp/>files<sp/>in<sp/>their<sp/>native<sp/>apps.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>is<sp/>**not**<sp/>an<sp/>editor.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Product<sp/>Scope<sp/>Guardrails</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>`skrat`<sp/>is<sp/>intentionally<sp/>focused<sp/>on<sp/>**read-only<sp/>document<sp/>triage**:<sp/>open,<sp/>inspect,<sp/>navigate,<sp/>search,<sp/>print,<sp/>copy,<sp/>and<sp/>hand<sp/>off.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Features<sp/>that<sp/>require<sp/>**document<sp/>authoring<sp/>or<sp/>mutation<sp/>semantics**<sp/>are<sp/>explicitly<sp/>out<sp/>of<sp/>scope<sp/>for<sp/>`skrat`.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Out-of-scope<sp/>examples<sp/>include<sp/>(non-exhaustive):<sp/>fillable<sp/>form<sp/>workflows,<sp/>annotation/markup<sp/>toolchains,<sp/>digital-signature<sp/>authoring,<sp/>and<sp/>redaction<sp/>editing<sp/>pipelines.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>For<sp/>those<sp/>workflows,<sp/>use<sp/>the<sp/>file-tree<sp/>context<sp/>actions<sp/>**Open<sp/>in<sp/>Default<sp/>App**<sp/>or<sp/>**Open<sp/>With…**<sp/>to<sp/>continue<sp/>in<sp/>a<sp/>dedicated<sp/>native<sp/>application.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Features</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**Left<sp/>tabbed<sp/>view:**<sp/>`Files`<sp/>tab<sp/>is<sp/>the<sp/>`QTreeView`<sp/>file<sp/>tree<sp/>(`QFileSystemModel`);<sp/>`TOC`<sp/>tab<sp/>shows<sp/>PDF<sp/>**Table<sp/>of<sp/>contents**<sp/>(outline/bookmarks<sp/>when<sp/>available;<sp/>placeholder<sp/>when<sp/>unavailable);<sp/>`Thumbnails`<sp/>tab<sp/>shows<sp/>PDF<sp/>page<sp/>thumbnails<sp/>for<sp/>quick<sp/>page<sp/>jumps.<sp/>`TOC`<sp/>and<sp/>`Thumbnails`<sp/>tabs<sp/>are<sp/>enabled<sp/>only<sp/>while<sp/>previewing<sp/>a<sp/>PDF.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Right<sp/>pane:**<sp/>preview<sp/>stack</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**PDF**<sp/>via<sp/>Qt’s<sp/>**`QtPdf`<sp/>/<sp/>`QPdfDocument`**<sp/>rendered<sp/>through<sp/>a<sp/>custom<sp/>**`PdfGraphicsView`**<sp/>component<sp/>for<sp/>deterministic<sp/>navigation/search<sp/>positioning.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Text**<sp/>for<sp/>common<sp/>extensions<sp/>(UTF-8;<sp/>see<sp/>`MainWindow.cpp`<sp/>for<sp/>the<sp/>allowlist).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Images**<sp/>for<sp/>common<sp/>formats<sp/>(`.gif`,<sp/>`.png`,<sp/>`.jpg`/`.jpeg`,<sp/>`.tif`/`.tiff`,<sp/>`.webp`)<sp/>plus<sp/>basic<sp/>`.svg`<sp/>rendering<sp/>support.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Menus**</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**File<sp/>→<sp/>Open<sp/>Folder…**<sp/>sets<sp/>the<sp/>tree<sp/>root.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**File<sp/>tree<sp/>context<sp/>menu:**<sp/>right-click<sp/>a<sp/>file/folder<sp/>and<sp/>use<sp/>**Open<sp/>in<sp/>Default<sp/>App**<sp/>to<sp/>open<sp/>it<sp/>with<sp/>your<sp/>operating<sp/>system<sp/>association<sp/>(useful<sp/>for<sp/>Office/OpenDocument<sp/>formats<sp/>and<sp/>any<sp/>unsupported<sp/>preview<sp/>type).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**File<sp/>tree<sp/>context<sp/>menu:**<sp/>**Open<sp/>With…**<sp/>chooser<sp/>with<sp/>per-filetype<sp/>app<sp/>ranking<sp/>(last<sp/>used<sp/>/<sp/>most<sp/>used<sp/>first)<sp/>and<sp/>an<sp/>**Other…**<sp/>option<sp/>to<sp/>pick<sp/>an<sp/>app<sp/>manually.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Tools<sp/>→<sp/>Theme<sp/>Settings…**<sp/>applies<sp/>chrome-only<sp/>UI<sp/>themes<sp/>(**System<sp/>/<sp/>Light<sp/>/<sp/>Dark<sp/>/<sp/>Warm<sp/>Sepia**)<sp/>and<sp/>UI<sp/>font<sp/>preferences<sp/>(family<sp/>+<sp/>size).<sp/>Document<sp/>content<sp/>rendering<sp/>remains<sp/>unchanged.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Tools<sp/>→<sp/>Install<sp/>Command-Line<sp/>Tool…**<sp/>installs<sp/>a<sp/>small<sp/>`skrat`<sp/>launcher<sp/>wrapper<sp/>in<sp/>a<sp/>user-writable<sp/>location<sp/>so<sp/>terminal<sp/>commands<sp/>can<sp/>open<sp/>directories/files<sp/>in<sp/>the<sp/>app.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**File<sp/>→<sp/>Print<sp/>PDF…**<sp/>prints<sp/>the<sp/>currently<sp/>selected/open<sp/>PDF<sp/>(**Ctrl+P**),<sp/>with<sp/>a<sp/>pre-print<sp/>options<sp/>dialog:<sp/>**Native<sp/>PDF<sp/>(vector,<sp/>opened<sp/>in<sp/>system<sp/>viewer<sp/>for<sp/>native<sp/>print<sp/>controls)**<sp/>or<sp/>**Rasterized<sp/>by<sp/>skrat**<sp/>at<sp/>**300/600<sp/>DPI**.<sp/>Raster<sp/>mode<sp/>honors<sp/>print<sp/>dialog<sp/>page<sp/>ranges.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Edit<sp/>→<sp/>Copy**<sp/>copies<sp/>selection<sp/>from<sp/>text/PDF;<sp/>HTML<sp/>payloads<sp/>are<sp/>sanitized<sp/>to<sp/>remove<sp/>background<sp/>color<sp/>styling<sp/>before<sp/>paste<sp/>(**Ctrl+C**).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Edit<sp/>→<sp/>Find<sp/>in<sp/>PDF…<sp/>/<sp/>Find<sp/>Next<sp/>/<sp/>Find<sp/>Previous**<sp/>searches<sp/>in<sp/>the<sp/>active<sp/>PDF<sp/>(**Ctrl+F**,<sp/>**F3**,<sp/>**Shift+F3**).<sp/>A<sp/>**Find**<sp/>toolbar<sp/>(icon<sp/>buttons<sp/>+<sp/>search<sp/>field)<sp/>shows<sp/>the<sp/>query<sp/>and<sp/>match<sp/>count;<sp/>hover<sp/>for<sp/>shortcuts<sp/>and<sp/>hints.<sp/>On<sp/>new<sp/>queries,<sp/>the<sp/>preview<sp/>auto-jumps<sp/>to<sp/>the<sp/>first<sp/>match<sp/>and<sp/>**Find<sp/>Next/Previous**<sp/>cycles<sp/>through<sp/>all<sp/>matches<sp/>while<sp/>updating<sp/>`Match<sp/>X<sp/>of<sp/>Y`.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**View<sp/>→<sp/>PDF<sp/>Fit<sp/>Page<sp/>to<sp/>Width<sp/>/<sp/>Zoom<sp/>In<sp/>/<sp/>Out**<sp/>(shortcuts<sp/>match<sp/>platform<sp/>defaults;<sp/>zoom<sp/>shortcuts<sp/>also<sp/>apply<sp/>to<sp/>image<sp/>previews.<sp/>**Zoom<sp/>Reset**<sp/>is<sp/>available<sp/>by<sp/>shortcut<sp/>and<sp/>returns<sp/>image<sp/>previews<sp/>to<sp/>viewport-fit<sp/>sizing<sp/>and<sp/>PDF<sp/>previews<sp/>to<sp/>fit-width<sp/>sizing).</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**View<sp/>→<sp/>PDF<sp/>pages**<sp/>(and<sp/>the<sp/>**PDF**<sp/>toolbars):<sp/>**icon-only**<sp/>controls<sp/>with<sp/>tooltips<sp/>for<sp/>page<sp/>navigation<sp/>(first<sp/>/<sp/>previous<sp/>/<sp/>next<sp/>/<sp/>last)<sp/>plus<sp/>a<sp/>**page<sp/>number<sp/>input**<sp/>between<sp/>previous/next<sp/>(press<sp/>**Return**<sp/>to<sp/>jump;<sp/>out-of-range<sp/>values<sp/>show<sp/>a<sp/>warning),<sp/>along<sp/>with<sp/>**print**<sp/>and<sp/>**find**.<sp/>The<sp/>**page<sp/>counter**<sp/>is<sp/>centered<sp/>in<sp/>the<sp/>main<sp/>bar<sp/>over<sp/>the<sp/>**preview**<sp/>(right)<sp/>column<sp/>so<sp/>it<sp/>lines<sp/>up<sp/>with<sp/>the<sp/>document,<sp/>not<sp/>the<sp/>file<sp/>tree.<sp/>**Ctrl+G**<sp/>on<sp/>a<sp/>PDF<sp/>asks<sp/>for<sp/>a<sp/>**page<sp/>number**;<sp/>on<sp/>plain<sp/>text<sp/>it<sp/>asks<sp/>for<sp/>a<sp/>**line<sp/>number**<sp/>(text<sp/>previews<sp/>do<sp/>not<sp/>have<sp/>PDF-style<sp/>pages).<sp/>First/last<sp/>page<sp/>also<sp/>support<sp/>macOS-friendly<sp/>**Cmd+Up<sp/>/<sp/>Cmd+Down**<sp/>in<sp/>addition<sp/>to<sp/>**Ctrl+Home<sp/>/<sp/>Ctrl+End**.<sp/>The<sp/>status<sp/>bar<sp/>summarizes<sp/>navigation<sp/>when<sp/>a<sp/>PDF<sp/>is<sp/>open.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Help<sp/>menu:**<sp/>**Help<sp/>/<sp/>Shortcuts…**<sp/>opens<sp/>an<sp/>in-app<sp/>usage<sp/>+<sp/>shortcuts<sp/>screen;<sp/>**About<sp/>skrat…**<sp/>shows<sp/>version,<sp/>author/maintainer,<sp/>license<sp/>summary<sp/>(including<sp/>Qt<sp/>licensing<sp/>notice),<sp/>and<sp/>project<sp/>link.</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>**Disk<sp/>changes:**<sp/>the<sp/>file<sp/>shown<sp/>in<sp/>the<sp/>preview<sp/>(PDF,<sp/>text,<sp/>or<sp/>image)<sp/>is<sp/>watched<sp/>with<sp/>**`QFileSystemWatcher`**.<sp/>If<sp/>it<sp/>changes<sp/>on<sp/>disk,<sp/>the<sp/>preview<sp/>**reloads**<sp/>after<sp/>a<sp/>short<sp/>debounce.<sp/>If<sp/>it<sp/>**disappears**<sp/>(deleted<sp/>or<sp/>renamed<sp/>away),<sp/>the<sp/>preview<sp/>shows<sp/>that<sp/>the<sp/>file<sp/>is<sp/>**no<sp/>longer<sp/>available**.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Requirements</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**CMake**<sp/>3.16<sp/>or<sp/>newer<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Qt<sp/>6**<sp/>with<sp/>these<sp/>modules<sp/>available<sp/>to<sp/>CMake:<sp/>**Core**,<sp/>**Gui**,<sp/>**Widgets**,<sp/>**PrintSupport**,<sp/>**Pdf**,<sp/>**PdfWidgets**,<sp/>**Svg**<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-<sp/>Qt<sp/>**6.4+**<sp/>is<sp/>required<sp/>by<sp/>`CMakeLists.txt`<sp/>(PDF<sp/>APIs<sp/>used<sp/>here);<sp/>some<sp/>distributions<sp/>package<sp/>PDF/print<sp/>modules<sp/>separately—if<sp/>CMake<sp/>cannot<sp/>find<sp/>`Qt6::PdfWidgets`<sp/>or<sp/>`Qt6::PrintSupport`,<sp/>install<sp/>your<sp/>OS<sp/>Qt6<sp/>PDF/print<sp/>development<sp/>packages<sp/>or<sp/>point<sp/>`CMAKE_PREFIX_PATH`<sp/>at<sp/>a<sp/>full<sp/>Qt<sp/>kit<sp/>from<sp/>the<sp/>Qt<sp/>Online<sp/>Installer.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>A<sp/>**C++17**<sp/>toolchain</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Optional<sp/>tooling<sp/>(Homebrew,<sp/>Chocolatey,<sp/>npm)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>can<sp/>install<sp/>**CMake**,<sp/>**Ninja**,<sp/>**Qt<sp/>6**,<sp/>and<sp/>compilers<sp/>through<sp/>a<sp/>package<sp/>manager<sp/>instead<sp/>of<sp/>(or<sp/>in<sp/>addition<sp/>to)<sp/>distro<sp/>installers<sp/>or<sp/>the<sp/>Qt<sp/>Online<sp/>Installer:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Manager<sp/>|<sp/>Typical<sp/>use<sp/>|<sp/>Notes<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|--------|-------------|--------|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**[Homebrew](https://brew.sh/)**<sp/>(macOS<sp/>/<sp/>Linux)<sp/>|<sp/>`brew<sp/>install<sp/>cmake<sp/>ninja<sp/>qt`<sp/>(or<sp/>`qt@6`),<sp/>then<sp/>set<sp/>**`CMAKE_PREFIX_PATH`**<sp/>to<sp/>**`$(brew<sp/>--prefix<sp/>qt)`**<sp/>(see<sp/>[Platform<sp/>notes](#platform-notes))<sp/>|<sp/>A<sp/>**`Brewfile`**<sp/>can<sp/>live<sp/>in<sp/>the<sp/>repo<sp/>for<sp/>**`brew<sp/>bundle`**.<sp/>**`Brewfile.lock.json`**<sp/>is<sp/>**gitignored**<sp/>here<sp/>so<sp/>it<sp/>is<sp/>not<sp/>committed<sp/>by<sp/>default;<sp/>remove<sp/>that<sp/>line<sp/>from<sp/>**`.gitignore`**<sp/>if<sp/>you<sp/>want<sp/>a<sp/>pinned<sp/>Homebrew<sp/>snapshot<sp/>in<sp/>Git.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**[Chocolatey](https://chocolatey.org/)**<sp/>(Windows)<sp/>|<sp/>e.g.<sp/>**`choco<sp/>install<sp/>cmake<sp/>ninja<sp/>visualstudio2022buildtools`**<sp/>—<sp/>match<sp/>whatever<sp/>matches<sp/>your<sp/>MSVC<sp/>/<sp/>Qt<sp/>layout<sp/>|<sp/>Local<sp/>**`choco<sp/>pack`**<sp/>output<sp/>(**`*.nupkg`**)<sp/>at<sp/>the<sp/>repo<sp/>root<sp/>is<sp/>**gitignored**.<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**[npm](https://www.npmjs.com/)**<sp/>|<sp/>Only<sp/>if<sp/>you<sp/>add<sp/>**Node-based<sp/>scripts**<sp/>(release<sp/>automation,<sp/>lint,<sp/>etc.)<sp/>beside<sp/>the<sp/>Qt<sp/>app<sp/>|<sp/>**`node_modules/`**<sp/>and<sp/>common<sp/>npm/yarn/pnpm<sp/>debug<sp/>logs<sp/>are<sp/>**gitignored**.<sp/>**`package.json`<sp/>/<sp/>`package-lock.json`**<sp/>are<sp/>not<sp/>ignored<sp/>so<sp/>you<sp/>can<sp/>lock<sp/>script<sp/>dependencies<sp/>when<sp/>you<sp/>add<sp/>them.<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>application<sp/>itself<sp/>stays<sp/>**C++/Qt**;<sp/>these<sp/>entries<sp/>are<sp/>for<sp/>**developer<sp/>environments**<sp/>and<sp/>optional<sp/>tooling,<sp/>not<sp/>runtime<sp/>requirements<sp/>for<sp/>end<sp/>users<sp/>of<sp/>the<sp/>built<sp/>app.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Cursor<sp/>agent<sp/>sandbox<sp/>(optional)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>repo<sp/>ships<sp/>**`.cursor/sandbox.json`**:<sp/>**`workspace_readwrite`**,<sp/>**`enableSharedBuildCache`**,<sp/>extra<sp/>**read/write**<sp/>on<sp/>**`/private/tmp`**<sp/>and<sp/>**`/tmp`**,<sp/>and<sp/>**read-only**<sp/>**`/usr/bin`**<sp/>+<sp/>**`/System/Library`**<sp/>so<sp/>**`packaging/macos/build-icns.sh`**<sp/>(**`sips`**<sp/>/<sp/>**`iconutil`**)<sp/>can<sp/>run<sp/>under<sp/>a<sp/>sandboxed<sp/>agent.<sp/>If<sp/>icon<sp/>generation<sp/>still<sp/>fails,<sp/>temporarily<sp/>set<sp/>**`&quot;type&quot;:<sp/>&quot;insecure_none&quot;`**<sp/>in<sp/>that<sp/>file<sp/>(see<sp/>[Cursor<sp/>sandbox<sp/>docs](https://cursor.com/docs/reference/sandbox)).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Build<sp/>(Makefile<sp/>orchestration)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>repository<sp/>root<sp/>**`Makefile`**<sp/>is<sp/>a<sp/>thin<sp/>wrapper<sp/>around<sp/>CMake.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">make<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>configure<sp/>(if<sp/>needed)<sp/>+<sp/>compile</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>run<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>build,<sp/>then<sp/>launch<sp/>the<sp/>app</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>clean<sp/><sp/><sp/><sp/><sp/><sp/>#<sp/>remove<sp/>the<sp/>build<sp/>directory</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Continuous<sp/>integration</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">[GitHub<sp/>Actions](https://github.com/code-monki/skrat/actions/workflows/ci.yml)<sp/>builds<sp/>**`master`**<sp/>/<sp/>**`main`**<sp/>on<sp/>every<sp/>push<sp/>and<sp/>pull<sp/>request,<sp/>and<sp/>also<sp/>runs<sp/>when<sp/>you<sp/>push<sp/>a<sp/>**version<sp/>tag**<sp/>matching<sp/>**`v*`**<sp/>(for<sp/>example<sp/>**`v0.2.0`**).<sp/>Workflow<sp/>file:<sp/>[`.github/workflows/ci.yml`](.github/workflows/ci.yml).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Where<sp/>|<sp/>Link<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|--------|------|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>**Stable<sp/>downloads<sp/>(tagged<sp/>releases)**<sp/>|<sp/>[github.com/code-monki/skrat/releases](https://github.com/code-monki/skrat/releases)<sp/>—<sp/>see<sp/>also<sp/>[`releases/README.md`](releases/README.md)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>Workflow<sp/>runs<sp/>(pick<sp/>a<sp/>green<sp/>run)<sp/>|<sp/>[github.com/code-monki/skrat/actions/workflows/ci.yml](https://github.com/code-monki/skrat/actions/workflows/ci.yml)<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>All<sp/>Actions<sp/>activity<sp/>|<sp/>[github.com/code-monki/skrat/actions](https://github.com/code-monki/skrat/actions)<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Pre-built<sp/>bundles**<sp/>from<sp/>CI<sp/>are<sp/>attached<sp/>as<sp/>**Artifacts**<sp/>(GitHub<sp/>may<sp/>wrap<sp/>each<sp/>file<sp/>in<sp/>a<sp/>`.zip`).<sp/>Open<sp/>a<sp/>run,<sp/>scroll<sp/>to<sp/>**Artifacts**,<sp/>and<sp/>download<sp/>the<sp/>name<sp/>that<sp/>matches<sp/>your<sp/>platform.<sp/>**Tagged<sp/>`v*`<sp/>builds**<sp/>also<sp/>publish<sp/>the<sp/>same<sp/>portable<sp/>archives<sp/>on<sp/>**Releases**.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Each<sp/>artifact<sp/>zip<sp/>often<sp/>contains<sp/>**two<sp/>files**<sp/>where<sp/>applicable:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**`*-portable.tar.gz`<sp/>/<sp/>`*-portable.zip`**:<sp/>Qt<sp/>runtime<sp/>bundled<sp/>(**linuxdeploy**<sp/>+<sp/>Qt<sp/>plugin<sp/>on<sp/>**Ubuntu**<sp/>and<sp/>**Fedora**<sp/>CI,<sp/>**macdeployqt**<sp/>on<sp/>macOS,<sp/>**windeployqt**<sp/>on<sp/>Windows).<sp/>Use<sp/>these<sp/>on<sp/>machines<sp/>**without**<sp/>a<sp/>Qt<sp/>SDK.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**`*.dmg`<sp/>(macOS)**:<sp/>drag-install<sp/>image<sp/>containing<sp/>`skrat.app`<sp/>plus<sp/>an<sp/>`Applications`<sp/>shortcut.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**`skrat`<sp/>/<sp/>`skrat.exe`**:<sp/>raw<sp/>build<sp/>output<sp/>(still<sp/>needs<sp/>Qt<sp/>libraries<sp/>on<sp/>the<sp/>system,<sp/>like<sp/>a<sp/>local<sp/>compile).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">|<sp/>Artifact<sp/>|<sp/>Portable<sp/>bundle<sp/>|<sp/>Raw<sp/>binary<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|----------|-----------------|------------|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`skrat-ubuntu-x86_64`<sp/>|<sp/>`skrat-ubuntu-x86_64-portable.tar.gz`<sp/>—<sp/>extract,<sp/>run<sp/>`AppDir/AppRun`<sp/>|<sp/>`skrat`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`skrat-ubuntu-aarch64`<sp/>|<sp/>same<sp/>pattern<sp/>|<sp/>`skrat`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`skrat-fedora-x86_64`<sp/>|<sp/>`skrat-fedora-x86_64-portable.tar.gz`<sp/>—<sp/>extract,<sp/>run<sp/>`AppDir/AppRun`<sp/>|<sp/>`skrat`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`skrat-fedora-aarch64`<sp/>|<sp/>same<sp/>pattern<sp/>|<sp/>`skrat`<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`skrat-macos-universal`<sp/>|<sp/>`skrat-macos-universal-portable.tar.gz`<sp/>and<sp/>`skrat-macos-universal.dmg`<sp/>|<sp/>—<sp/>|</highlight></codeline>
+<codeline><highlight class="normal">|<sp/>`skrat-windows-x86_64`<sp/>|<sp/>`skrat-windows-x86_64-portable.zip`<sp/>—<sp/>extract,<sp/>run<sp/>`skrat.exe`<sp/>|<sp/>`skrat.exe`<sp/>|</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Linux<sp/>portable:**<sp/>run<sp/>**`./AppDir/AppRun`**<sp/>from<sp/>the<sp/>extracted<sp/>tree.<sp/>**macOS:**<sp/>CI<sp/>does<sp/>**not**<sp/>notarize;<sp/>Gatekeeper<sp/>may<sp/>prompt<sp/>the<sp/>first<sp/>open.<sp/>**Windows:**<sp/>**SmartScreen**<sp/>may<sp/>warn<sp/>for<sp/>unsigned<sp/>builds.<sp/>For<sp/>raw<sp/>Unix<sp/>binaries<sp/>after<sp/>unzip,<sp/>**`chmod<sp/>+x<sp/>skrat`**<sp/>may<sp/>be<sp/>needed.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Troubleshooting:<sp/>`Could<sp/>not<sp/>find<sp/>a<sp/>package<sp/>configuration<sp/>file<sp/>provided<sp/>by<sp/>&quot;Qt6&quot;`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">CMake<sp/>only<sp/>finds<sp/>Qt<sp/>when<sp/>**`CMAKE_PREFIX_PATH`**<sp/>points<sp/>at<sp/>a<sp/>**Qt<sp/>kit<sp/>directory**<sp/>(the<sp/>folder<sp/>that<sp/>contains<sp/>`lib/cmake/Qt6/Qt6Config.cmake`),<sp/>for<sp/>example<sp/>**`$HOME/Qt/6.9.3/macos`**.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Fix<sp/>it<sp/>in<sp/>one<sp/>of<sp/>these<sp/>ways:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">1.<sp/>**Recommended:**<sp/>copy<sp/>`config.local.mk.example`<sp/>to<sp/>**`config.local.mk`**<sp/>in<sp/>the<sp/>repo<sp/>root<sp/>(that<sp/>file<sp/>is<sp/>**gitignored**)<sp/>and<sp/>set<sp/>**`CMAKE_PREFIX_PATH`**<sp/>there.<sp/>Then<sp/>run<sp/>**`make`**<sp/>again.</highlight></codeline>
+<codeline><highlight class="normal">2.<sp/>**One-shot:**<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>`make<sp/>CMAKE_ARGS=&quot;-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos&quot;`<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>(change<sp/>**`macos`**<sp/>to<sp/>your<sp/>real<sp/>kit<sp/>name<sp/>if<sp/>different;<sp/>use<sp/>**`ls<sp/>&quot;$HOME/Qt/6.9.3&quot;`**<sp/>to<sp/>list<sp/>kits.)</highlight></codeline>
+<codeline><highlight class="normal">3.<sp/>**Environment:**<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>`export<sp/>CMAKE_PREFIX_PATH=&quot;$HOME/Qt/6.9.3/macos&quot;`<sp/><sp/></highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/><sp/>then<sp/>**`make`**<sp/>(CMake<sp/>reads<sp/>this<sp/>variable).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>already<sp/>configured<sp/>without<sp/>Qt,<sp/>remove<sp/>the<sp/>stale<sp/>build<sp/>tree<sp/>before<sp/>reconfiguring:<sp/>**`make<sp/>clean`**,<sp/>then<sp/>**`make`**.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Optional<sp/>knobs:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>BUILD_DIR=out</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>GENERATOR=Ninja</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>CMAKE_ARGS=&apos;-DCMAKE_BUILD_TYPE=Debug&apos;</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">With<sp/>**Ninja**,<sp/>if<sp/>the<sp/>`ninja`<sp/>binary<sp/>is<sp/>not<sp/>on<sp/>your<sp/>`PATH`,<sp/>point<sp/>CMake<sp/>at<sp/>it<sp/>(used<sp/>only<sp/>when<sp/>`GENERATOR=Ninja`):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>GENERATOR=Ninja<sp/>NINJA=/opt/homebrew/bin/ninja</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>or,<sp/>if<sp/>your<sp/>install<sp/>keeps<sp/>the<sp/>binary<sp/>under<sp/>/opt/homebrew/ninja:</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>GENERATOR=Ninja<sp/>NINJA=/opt/homebrew/ninja/bin/ninja</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>CMake<sp/>cannot<sp/>find<sp/>Qt6,<sp/>pass<sp/>your<sp/>Qt<sp/>installation<sp/>prefix<sp/>(examples):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>CMAKE_ARGS=&apos;-DCMAKE_PREFIX_PATH=/opt/homebrew/opt/qt&apos;</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>Qt<sp/>Online<sp/>Installer<sp/>layout<sp/>(version<sp/>+<sp/>kit<sp/>directory,<sp/>often<sp/>`macos`)</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>CMAKE_ARGS=&apos;-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos&apos;</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Your<sp/>setup<sp/>(Qt<sp/>6.9.3<sp/>under<sp/>`~/Qt`,<sp/>CMake<sp/>from<sp/>Homebrew):**<sp/>pick<sp/>the<sp/>kit<sp/>folder<sp/>that<sp/>actually<sp/>exists<sp/>under<sp/>`~/Qt/6.9.3/`<sp/>(commonly<sp/>`macos`;<sp/>some<sp/>installs<sp/>use<sp/>`macos_arm64`).<sp/>It<sp/>must<sp/>be<sp/>the<sp/>directory<sp/>that<sp/>contains<sp/>`lib/cmake/Qt6`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">ls<sp/>&quot;$HOME/Qt/6.9.3&quot;</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Then<sp/>either<sp/>pass<sp/>flags<sp/>once:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">make<sp/>CMAKE=/opt/homebrew/bin/cmake<sp/>\</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>CMAKE_ARGS=&quot;-DCMAKE_PREFIX_PATH=$HOME/Qt/6.9.3/macos&quot;</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">…or<sp/>copy<sp/>the<sp/>template<sp/>and<sp/>build<sp/>normally:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">cp<sp/>config.local.mk.example<sp/>config.local.mk</highlight></codeline>
+<codeline><highlight class="normal">#<sp/>edit<sp/>CMAKE<sp/>and<sp/>CMAKE_PREFIX_PATH<sp/>if<sp/>your<sp/>kit<sp/>name<sp/>or<sp/>cmake<sp/>path<sp/>differs</highlight></codeline>
+<codeline><highlight class="normal">make</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>your<sp/>`cmake`<sp/>binary<sp/>is<sp/>not<sp/>on<sp/>`PATH`,<sp/>set<sp/>**`CMAKE`**<sp/>to<sp/>the<sp/>full<sp/>path<sp/>(for<sp/>example<sp/>`/opt/homebrew/bin/cmake`,<sp/>or<sp/>`.../cmake/bin/cmake`<sp/>under<sp/>a<sp/>custom<sp/>prefix).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>use<sp/>**`GENERATOR=Ninja`**<sp/>and<sp/>**`ninja`**<sp/>is<sp/>not<sp/>on<sp/>`PATH`,<sp/>set<sp/>**`NINJA`**<sp/>to<sp/>the<sp/>full<sp/>path<sp/>to<sp/>the<sp/>`ninja`<sp/>executable<sp/>(for<sp/>example<sp/>under<sp/>`/opt/homebrew/bin`<sp/>or<sp/>`/opt/homebrew/ninja/bin`).<sp/>Uncomment<sp/>the<sp/>`GENERATOR`<sp/>/<sp/>`NINJA`<sp/>lines<sp/>in<sp/>`config.local.mk.example`<sp/>when<sp/>you<sp/>copy<sp/>it<sp/>to<sp/>`config.local.mk`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>can<sp/>also<sp/>invoke<sp/>CMake<sp/>directly:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">/opt/homebrew/bin/cmake<sp/>-S<sp/>.<sp/>-B<sp/>build<sp/>-DCMAKE_BUILD_TYPE=Release<sp/>\</highlight></codeline>
+<codeline><highlight class="normal"><sp/><sp/>-DCMAKE_PREFIX_PATH=&quot;$HOME/Qt/6.9.3/macos&quot;</highlight></codeline>
+<codeline><highlight class="normal">/opt/homebrew/bin/cmake<sp/>--build<sp/>build<sp/>--parallel</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Platform<sp/>notes</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**macOS<sp/>(Homebrew<sp/>Qt):**<sp/>`brew<sp/>install<sp/>qt<sp/>cmake`<sp/>then<sp/>use<sp/>`-DCMAKE_PREFIX_PATH=&quot;$(brew<sp/>--prefix<sp/>qt)&quot;`<sp/>if<sp/>`find_package(Qt6)`<sp/>fails.<sp/>Release<sp/>builds<sp/>use<sp/>a<sp/>**`skrat.app`**<sp/>bundle<sp/>(see<sp/>**Run**<sp/>below).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**macOS<sp/>(Qt<sp/>Online<sp/>Installer<sp/>+<sp/>Homebrew<sp/>CMake):**<sp/>use<sp/>`-DCMAKE_PREFIX_PATH`<sp/>pointing<sp/>at<sp/>`~/Qt/&lt;ver&gt;/&lt;kit&gt;`<sp/>as<sp/>above;<sp/>use<sp/>`config.local.mk`<sp/>to<sp/>avoid<sp/>retyping.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Linux:**<sp/>install<sp/>Qt6<sp/>base<sp/>**and**<sp/>Qt6<sp/>PDF<sp/>development<sp/>packages<sp/>for<sp/>your<sp/>distribution<sp/>(names<sp/>vary:<sp/>`qt6-pdf-dev`,<sp/>`qt6-pdf-widgets`,<sp/>etc.).</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Windows:**<sp/>install<sp/>Qt<sp/>6<sp/>with<sp/>the<sp/>**MSVC**<sp/>or<sp/>**MinGW**<sp/>kit<sp/>including<sp/>**Qt<sp/>PDF**;<sp/>configure<sp/>CMake<sp/>from<sp/>Qt<sp/>Creator<sp/>or<sp/>a<sp/>“x64<sp/>Native<sp/>Tools”<sp/>prompt<sp/>with<sp/>`CMAKE_PREFIX_PATH`<sp/>pointing<sp/>at<sp/>your<sp/>Qt<sp/>`lib/cmake`<sp/>parent<sp/>(for<sp/>example<sp/>`...\6.x.x\msvc2019_64`).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>macOS<sp/>app<sp/>icon</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>Dock<sp/>/<sp/>Finder<sp/>icon<sp/>comes<sp/>from<sp/>**`packaging/macos/skrat.icns`**<sp/>and<sp/>**`CFBundleIconFile`**<sp/>in<sp/>**`Info.plist`**.<sp/>CMake<sp/>runs<sp/>**`packaging/macos/install-bundle-icon.sh`**<sp/>on<sp/>each<sp/>link<sp/>so<sp/>**`Contents/Resources/skrat.icns`**<sp/>exists<sp/>and<sp/>the<sp/>plist<sp/>is<sp/>set<sp/>(CMake’s<sp/>default<sp/>plist<sp/>often<sp/>left<sp/>**`CFBundleIconFile`**<sp/>empty).<sp/>**`macdeployqt`**<sp/>can<sp/>strip<sp/>that<sp/>again<sp/>—<sp/>re-run:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">bash<sp/>packaging/macos/install-bundle-icon.sh<sp/>build/skrat.app</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">After<sp/>changing<sp/>**`packaging/icons/`**,<sp/>regenerate<sp/>**`.icns`**<sp/>on<sp/>a<sp/>Mac,<sp/>then<sp/>reinstall<sp/>the<sp/>icon:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">./packaging/macos/build-icns.sh</highlight></codeline>
+<codeline><highlight class="normal">bash<sp/>packaging/macos/install-bundle-icon.sh<sp/>build/skrat.app</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>Finder<sp/>still<sp/>shows<sp/>a<sp/>generic<sp/>icon,<sp/>**`touch<sp/>build/skrat.app`**<sp/>or<sp/>toggle<sp/>the<sp/>folder<sp/>view<sp/>so<sp/>LaunchServices<sp/>refreshes<sp/>its<sp/>cache.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Linux<sp/>portable<sp/>icon</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>vector<sp/>source<sp/>is<sp/>**`packaging/icons/skrat.svg`**<sp/>(acorn<sp/>with<sp/>two<sp/>circular<sp/>“tooth”<sp/>bites—an<sp/>homage<sp/>to<sp/>the<sp/>Ice<sp/>Age<sp/>squirrel).<sp/>CI<sp/>bundles<sp/>the<sp/>pre-rendered<sp/>**`packaging/icons/hicolor/*/apps/skrat.png`**<sp/>tree.<sp/>After<sp/>editing<sp/>the<sp/>SVG,<sp/>refresh<sp/>the<sp/>PNGs<sp/>(needs<sp/>**`rsvg-convert`**<sp/>from<sp/>librsvg,<sp/>or<sp/>**ImageMagick**<sp/>`convert`<sp/>/<sp/>**`magick`**<sp/>on<sp/>`PATH`):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">./packaging/icons/export-pngs.sh</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>Run</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">After<sp/>a<sp/>successful<sp/>build,<sp/>the<sp/>binary<sp/>is<sp/>typically:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**macOS:**<sp/>`build/skrat.app`<sp/>(bundle)<sp/>—<sp/>run<sp/>**`open<sp/>build/skrat.app`**<sp/>or<sp/>**`build/skrat.app/Contents/MacOS/skrat`**</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Linux:**<sp/>`build/skrat`</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**Windows<sp/>(single-configuration<sp/>generators):**<sp/>`build/Release/skrat.exe`<sp/>or<sp/>`build/Debug/skrat.exe`</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">The<sp/>**`make<sp/>run`**<sp/>target<sp/>opens<sp/>**`build/skrat.app`**<sp/>on<sp/>macOS,<sp/>else<sp/>tries<sp/>`build/skrat`,<sp/>then<sp/>`build/Release/skrat`,<sp/>then<sp/>`build/Debug/skrat`.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>macOS<sp/>Gatekeeper<sp/>(unsigned<sp/>/<sp/>CI<sp/>builds)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">CI<sp/>and<sp/>local<sp/>builds<sp/>are<sp/>**not**<sp/>signed<sp/>with<sp/>a<sp/>**Developer<sp/>ID**<sp/>or<sp/>**notarized**.<sp/>Gatekeeper<sp/>may<sp/>show<sp/>**“skrat.app”<sp/>Not<sp/>Opened**<sp/>and<sp/>*Apple<sp/>could<sp/>not<sp/>verify<sp/>…<sp/>is<sp/>free<sp/>of<sp/>malware*.<sp/>That<sp/>is<sp/>normal<sp/>for<sp/>this<sp/>distribution<sp/>model<sp/>until<sp/>you<sp/>add<sp/>your<sp/>own<sp/>signing<sp/>pipeline.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**First<sp/>launch:**<sp/>In<sp/>**Finder**,<sp/>**Control‑click<sp/>(right‑click)**<sp/>`skrat.app`<sp/>→<sp/>**Open**<sp/>→<sp/>confirm<sp/>**Open**<sp/>once.<sp/>Alternatively<sp/>open<sp/>**System<sp/>Settings<sp/>→<sp/>Privacy<sp/>&amp;<sp/>Security**,<sp/>attempt<sp/>launch<sp/>once,<sp/>then<sp/>use<sp/>**Open<sp/>Anyway**<sp/>when<sp/>macOS<sp/>offers<sp/>it.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Downloads<sp/>from<sp/>GitHub**<sp/>carry<sp/>**quarantine**<sp/>metadata.<sp/>If<sp/>you<sp/>trust<sp/>the<sp/>artifact,<sp/>you<sp/>can<sp/>clear<sp/>it<sp/>(advanced<sp/>/<sp/>at<sp/>your<sp/>own<sp/>risk):</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">xattr<sp/>-dr<sp/>com.apple.quarantine<sp/>/path/to/skrat.app</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Opening<sp/>from<sp/>Terminal:**<sp/>use<sp/>the<sp/>**`.app`<sp/>path**,<sp/>not<sp/>**`open<sp/>-a<sp/>skrat.app`**<sp/>(the<sp/>**`-a`**<sp/>flag<sp/>expects<sp/>a<sp/>registered<sp/>**application<sp/>name**,<sp/>not<sp/>a<sp/>bundle<sp/>filename).<sp/>Examples:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">open<sp/>build/skrat.app</highlight></codeline>
+<codeline><highlight class="normal">open<sp/>build/skrat.app<sp/>--args<sp/>.</highlight></codeline>
+<codeline><highlight class="normal">open<sp/>build/skrat.app<sp/>--args<sp/>&quot;$(pwd)&quot;</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Apple<sp/>Developer<sp/>+<sp/>CI<sp/>(keep<sp/>credentials<sp/>out<sp/>of<sp/>Git)</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Do<sp/>**not**<sp/>commit<sp/>`.p12`,<sp/>`.p8`,<sp/>or<sp/>passwords.<sp/>Store<sp/>them<sp/>only<sp/>as<sp/>**GitHub<sp/>Actions<sp/>secrets**<sp/>(Repository<sp/>**Settings<sp/>→<sp/>Secrets<sp/>and<sp/>variables<sp/>→<sp/>Actions**).<sp/>Optionally<sp/>put<sp/>those<sp/>secrets<sp/>on<sp/>a<sp/>protected<sp/>**Environment**<sp/>(e.g.<sp/>only<sp/>**`refs/tags/v*`**<sp/>or<sp/>manual<sp/>approval)<sp/>so<sp/>ordinary<sp/>branch<sp/>runs<sp/>never<sp/>see<sp/>them.<sp/>When<sp/>**all**<sp/>required<sp/>secrets<sp/>are<sp/>set,<sp/>**`.github/workflows/ci.yml`**<sp/>signs<sp/>and<sp/>notarizes<sp/>**`skrat.app`**<sp/>on<sp/>the<sp/>**macOS**<sp/>job<sp/>(see<sp/>**`packaging/macos-ci-signing.md`**<sp/>for<sp/>exact<sp/>secret<sp/>names<sp/>and<sp/>troubleshooting).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">###<sp/>Command-line<sp/>arguments</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">You<sp/>may<sp/>pass<sp/>**one**<sp/>optional<sp/>path:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">-<sp/>**Directory:**<sp/>opens<sp/>that<sp/>folder<sp/>as<sp/>the<sp/>tree<sp/>root.</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>**File:**<sp/>sets<sp/>the<sp/>tree<sp/>root<sp/>to<sp/>the<sp/>file’s<sp/>parent<sp/>directory<sp/>and<sp/>selects<sp/>the<sp/>file<sp/>(if<sp/>it<sp/>is<sp/>visible<sp/>under<sp/>that<sp/>root).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">If<sp/>you<sp/>do<sp/>not<sp/>want<sp/>to<sp/>invoke<sp/>the<sp/>full<sp/>app<sp/>binary<sp/>path<sp/>each<sp/>time,<sp/>install<sp/>a<sp/>launcher<sp/>via<sp/>**Tools<sp/>→<sp/>Install<sp/>Command-Line<sp/>Tool…**<sp/>and<sp/>then<sp/>run<sp/>`skrat<sp/>&lt;path&gt;`<sp/>from<sp/>your<sp/>shell.</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Examples:</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">```bash</highlight></codeline>
+<codeline><highlight class="normal">./build/skrat<sp/>.</highlight></codeline>
+<codeline><highlight class="normal">./build/skrat<sp/>./101-cargos-101-travellers.pdf</highlight></codeline>
+<codeline><highlight class="normal">```</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>License</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">This<sp/>application’s<sp/>**source<sp/>code**<sp/>is<sp/>licensed<sp/>under<sp/>the<sp/>**GNU<sp/>General<sp/>Public<sp/>License<sp/>v3.0<sp/>or<sp/>later**<sp/>(`GPL-3.0-or-later`).<sp/>Qt<sp/>is<sp/>used<sp/>under<sp/>**your**<sp/>Qt<sp/>license<sp/>terms<sp/>(for<sp/>example<sp/>the<sp/>open-source<sp/>Qt<sp/>LGPL/GPL<sp/>offerings,<sp/>or<sp/>a<sp/>commercial<sp/>Qt<sp/>license).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">**Documentation**<sp/>in<sp/>this<sp/>repository<sp/>(including<sp/>this<sp/>`README.md`)<sp/>is<sp/>licensed<sp/>under<sp/>the<sp/>[**Creative<sp/>Commons<sp/>Attribution-ShareAlike<sp/>4.0<sp/>International**<sp/>license](https://creativecommons.org/licenses/by-sa/4.0/)<sp/>(`CC-BY-SA-4.0`).<sp/>The<sp/>full<sp/>legal<sp/>text<sp/>is<sp/>in<sp/>[`LICENSE-CC-BY-SA-4.0.txt`](LICENSE-CC-BY-SA-4.0.txt).</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">##<sp/>System<sp/>Documentation</highlight></codeline>
+<codeline></codeline>
+<codeline><highlight class="normal">Project<sp/>system/design/test<sp/>documents<sp/>live<sp/>under<sp/>[`docs/`](docs/README.md),<sp/>including:</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>SRS<sp/>(with<sp/>acceptance<sp/>criteria)</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>HLA</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>DD</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>RTM</highlight></codeline>
+<codeline><highlight class="normal">-<sp/>Test<sp/>Plan</highlight></codeline>
+    </programlisting>
+    <location file="README.md"/>
+  </compounddef>
+</doxygen>

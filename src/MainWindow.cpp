@@ -497,6 +497,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     QSettings s;
     m_richPreviewMode = s.value(QStringLiteral("preview/richModeRendered"), true).toBool();
+    m_svgPreviewMode = s.value(QStringLiteral("preview/svgModeRendered"), true).toBool();
     setupUi();
 
     m_rootPath = QDir::homePath();
@@ -579,12 +580,12 @@ void MainWindow::setupUi()
     editMenu->addAction(m_actCopy);
     editMenu->addSeparator();
 
-    m_actPdfFind = new QAction(tr("&Find in PDF…"), this);
+    m_actPdfFind = new QAction(tr("&Find…"), this);
     m_actPdfFind->setShortcut(QKeySequence::Find);
     m_actPdfFind->setIcon(
         iconThemedOrStandard(QStringLiteral("edit-find"), QStyle::SP_FileDialogContentsView));
     m_actPdfFind->setToolTip(
-        tr("Show the find bar and search in the PDF (%1)")
+        tr("Show the find bar and search in the current document (%1)")
             .arg(QKeySequence(QKeySequence::Find).toString(QKeySequence::NativeText)));
     connect(m_actPdfFind, &QAction::triggered, this, &MainWindow::openPdfFind);
     editMenu->addAction(m_actPdfFind);
@@ -628,12 +629,32 @@ void MainWindow::setupUi()
     editMenu->addAction(m_actRichPreviewMode);
     editMenu->addAction(m_actRichTextMode);
 
+    m_svgModeGroup = new QActionGroup(this);
+    m_svgModeGroup->setExclusive(true);
+    m_actSvgPreviewMode = new QAction(tr("SVG &preview (rendered)"), this);
+    m_actSvgPreviewMode->setCheckable(true);
+    m_actSvgSourceMode = new QAction(tr("SVG &source"), this);
+    m_actSvgSourceMode->setCheckable(true);
+    m_svgModeGroup->addAction(m_actSvgPreviewMode);
+    m_svgModeGroup->addAction(m_actSvgSourceMode);
+    connect(m_actSvgPreviewMode, &QAction::triggered, this, [this]() {
+        setSvgPreviewMode(true);
+    });
+    connect(m_actSvgSourceMode, &QAction::triggered, this, [this]() {
+        setSvgPreviewMode(false);
+    });
+    editMenu->addSeparator();
+    editMenu->addAction(m_actSvgPreviewMode);
+    editMenu->addAction(m_actSvgSourceMode);
+
     addAction(m_actCopy);
     addAction(m_actPdfFind);
     addAction(m_actPdfFindNext);
     addAction(m_actPdfFindPrev);
     addAction(m_actRichPreviewMode);
     addAction(m_actRichTextMode);
+    addAction(m_actSvgPreviewMode);
+    addAction(m_actSvgSourceMode);
 
     auto *viewMenu = menuBar()->addMenu(tr("&View"));
     auto *actFitWidth = new QAction(tr("PDF Fit Page to &Width"), this);
@@ -886,7 +907,7 @@ void MainWindow::setupUi()
     m_pdfFindToolBar->addSeparator();
     m_pdfFindEdit = new QLineEdit;
     m_pdfFindEdit->setClearButtonEnabled(true);
-    m_pdfFindEdit->setPlaceholderText(tr("Search text in the active PDF"));
+    m_pdfFindEdit->setPlaceholderText(tr("Search in current document"));
     m_pdfFindEdit->setToolTip(
         tr("Type your search, then use the arrows to step between matches. Press Return to jump to the next one."));
     m_pdfFindEdit->setMinimumWidth(280);
@@ -909,6 +930,8 @@ void MainWindow::setupUi()
     m_richModeToolBar->addWidget(new QLabel(tr("Mode:")));
     m_richModeToolBar->addAction(m_actRichPreviewMode);
     m_richModeToolBar->addAction(m_actRichTextMode);
+    m_richModeToolBar->addAction(m_actSvgPreviewMode);
+    m_richModeToolBar->addAction(m_actSvgSourceMode);
     m_richModeToolBar->setVisible(false);
     previewLayout->addWidget(m_richModeToolBar);
 
@@ -953,7 +976,7 @@ void MainWindow::setupUi()
 
     showPlaceholder(tr("<p><b>skrat</b> — pick a file in the tree to preview PDFs, HTML/Markdown, text, and images.</p>"
                         "<p>Use <b>File → Open Folder…</b> to point the tree at a project directory.</p>"));
-    updateRichPreviewModeUi(false);
+    updatePreviewModeToolbars();
 }
 
 void MainWindow::setRootFolder(const QString &absolutePath)
@@ -1160,7 +1183,7 @@ void MainWindow::pdfGoLastPage()
 
 void MainWindow::openPdfFind()
 {
-    if (m_stack->currentWidget() != m_pdfView) {
+    if (!documentFindSupported()) {
         return;
     }
     if (m_pdfFindToolBar) {
@@ -1175,11 +1198,14 @@ void MainWindow::openPdfFind()
 
 void MainWindow::onPdfFindTextChanged(const QString &text)
 {
-    if (!m_pdfSearchModel) {
-        return;
+    if (m_stack->currentWidget() == m_pdfView) {
+        if (m_pdfSearchModel) {
+            m_pdfSearchModel->setSearchString(text);
+            setCurrentPdfSearchResultIndexCompat(-1);
+        }
+    } else {
+        rebuildDocumentTextFindMatches();
     }
-    m_pdfSearchModel->setSearchString(text);
-    setCurrentPdfSearchResultIndexCompat(-1);
     updatePdfFindActions();
     updatePdfSearchStatus();
 }
@@ -1245,6 +1271,16 @@ void MainWindow::selectPdfSearchResult(int index)
 
 void MainWindow::pdfFindNext()
 {
+    if (m_stack->currentWidget() == m_textView || m_stack->currentWidget() == m_richView) {
+        const int n = m_documentFindMatchStarts.size();
+        if (n <= 0) {
+            return;
+        }
+        const int next = (m_documentFindCurrentIndex + 1 + n) % n;
+        selectDocumentTextFindMatch(next);
+        updatePdfSearchStatus();
+        return;
+    }
     if (m_stack->currentWidget() != m_pdfView || !m_pdfSearchModel || !m_pdfView) {
         return;
     }
@@ -1259,6 +1295,16 @@ void MainWindow::pdfFindNext()
 
 void MainWindow::pdfFindPrev()
 {
+    if (m_stack->currentWidget() == m_textView || m_stack->currentWidget() == m_richView) {
+        const int n = m_documentFindMatchStarts.size();
+        if (n <= 0) {
+            return;
+        }
+        const int prev = (m_documentFindCurrentIndex - 1 + n) % n;
+        selectDocumentTextFindMatch(prev);
+        updatePdfSearchStatus();
+        return;
+    }
     if (m_stack->currentWidget() != m_pdfView || !m_pdfSearchModel || !m_pdfView) {
         return;
     }
@@ -1496,6 +1542,7 @@ void MainWindow::showHelpDialog()
            "<li>Use <b>Tools → Install Command-Line Tool…</b> to install a <code>skrat</code> launcher for terminal usage.</li>"
            "<li>When a PDF has bookmarks, the <b>TOC</b> tab becomes available.</li>"
            "<li>For HTML/Markdown files, use <b>Preview/Text</b> mode to switch between rendered output and source.</li>"
+           "<li>For SVG files, use <b>SVG preview / SVG source</b> to switch between the rendered image and XML source (find works in source mode).</li>"
            "<li>Rendered HTML quick view is lightweight and may not fully match browser-level <b>flexbox/grid</b> layout behavior. For full fidelity, use the file-tree context menu and choose <b>Open in Default App</b> (or <b>Open With…</b>) to open in your external browser.</li>"
            "<li>Use toolbar controls to navigate pages, print, and search.</li>"
            "</ul>"
@@ -1509,7 +1556,7 @@ void MainWindow::showHelpDialog()
            "<ul>"
            "<li><b>Open folder:</b> %1</li>"
            "<li><b>Print PDF:</b> %2</li>"
-           "<li><b>Find in PDF:</b> %3</li>"
+           "<li><b>Find in document (PDF, text, HTML preview):</b> %3</li>"
            "<li><b>Find next / previous:</b> %4 / %5</li>"
            "<li><b>Copy:</b> %6</li>"
            "<li><b>Go to page / line:</b> Ctrl+G</li>"
@@ -1794,7 +1841,12 @@ void MainWindow::updatePdfPageUi()
             m_pdfDocumentRibbon->recenter();
         }
         if (m_pdfFindToolBar) {
-            m_pdfFindToolBar->setVisible(false);
+            const QWidget *const cw = m_stack ? m_stack->currentWidget() : nullptr;
+            const bool searchable = (cw == m_pdfView && m_pdfDocument && m_pdfDocument->pageCount() > 0)
+                                    || cw == m_textView || cw == m_richView;
+            if (!searchable) {
+                m_pdfFindToolBar->setVisible(false);
+            }
         }
         if (m_pdfActFirst) {
             m_pdfActFirst->setEnabled(false);
@@ -1873,10 +1925,15 @@ void MainWindow::updateGoToNavigationAction()
 
 void MainWindow::updatePdfFindActions()
 {
-    const bool pdfActive = (m_stack->currentWidget() == m_pdfView);
-    const bool hasDocument = pdfActive && m_pdfDocument && m_pdfDocument->pageCount() > 0;
+    const QWidget *const cw = m_stack ? m_stack->currentWidget() : nullptr;
+    const bool pdfActive = (cw == m_pdfView);
+    const bool textOrRich = (cw == m_textView || cw == m_richView);
+    const bool pdfOk = pdfActive && m_pdfDocument && m_pdfDocument->pageCount() > 0;
+    const bool hasDocument = pdfOk || textOrRich;
     const bool hasQuery = m_pdfFindEdit && !m_pdfFindEdit->text().trimmed().isEmpty();
-    const bool hasResults = (pdfSearchResultCount() > 0);
+    const bool hasResults =
+        pdfOk ? (pdfSearchResultCount() > 0)
+              : textOrRich ? !m_documentFindMatchStarts.isEmpty() : false;
 
     if (m_actPdfFind) {
         m_actPdfFind->setEnabled(hasDocument);
@@ -1898,15 +1955,32 @@ void MainWindow::updatePdfFindActions()
 
 void MainWindow::updatePdfSearchStatus()
 {
-    if (!m_pdfFindCountLabel || !m_pdfView || !m_pdfSearchModel) {
+    if (!m_pdfFindCountLabel) {
         return;
     }
     const QString query = m_pdfFindEdit ? m_pdfFindEdit->text().trimmed() : QString();
-    const int total = pdfSearchResultCount();
     if (query.isEmpty()) {
         m_pdfFindCountLabel->setText(tr("Type to search"));
         return;
     }
+
+    const QWidget *const cw = m_stack ? m_stack->currentWidget() : nullptr;
+    if (cw == m_textView || cw == m_richView) {
+        const int total = m_documentFindMatchStarts.size();
+        if (total <= 0) {
+            m_pdfFindCountLabel->setText(tr("No matches"));
+            return;
+        }
+        const int idx = m_documentFindCurrentIndex;
+        const int oneBased = (idx >= 0 && idx < total) ? idx + 1 : 0;
+        m_pdfFindCountLabel->setText(tr("Match %1 of %2").arg(oneBased).arg(total));
+        return;
+    }
+
+    if (!m_pdfView || !m_pdfSearchModel) {
+        return;
+    }
+    const int total = pdfSearchResultCount();
     if (total <= 0) {
         m_pdfFindCountLabel->setText(tr("No matches"));
         return;
@@ -1946,7 +2020,8 @@ void MainWindow::showPlaceholder(const QString &html)
 {
     setWatchedPreviewFile(QString());
     m_previewedFileIsRichText = false;
-    updateRichPreviewModeUi(false);
+    m_previewedFileIsSvg = false;
+    updatePreviewModeToolbars();
     m_placeholder->setText(html);
     m_stack->setCurrentIndex(kPlaceholderPage);
     updatePdfPageUi();
@@ -1964,7 +2039,7 @@ void MainWindow::setRichPreviewMode(bool previewMode)
         tr("HTML/Markdown mode: %1").arg(m_richPreviewMode ? tr("Preview") : tr("Text")),
         2500);
     if (!m_previewedFileIsRichText || m_previewFilePath.isEmpty()) {
-        updateRichPreviewModeUi(false);
+        updatePreviewModeToolbars();
         return;
     }
     previewPath(m_previewFilePath);
@@ -1989,16 +2064,156 @@ void MainWindow::onRichPreviewLinkClicked(const QUrl &url)
 
 void MainWindow::updateRichPreviewModeUi(bool enabled)
 {
+    if (!enabled) {
+        m_previewedFileIsRichText = false;
+    }
+    updatePreviewModeToolbars();
+}
+
+void MainWindow::updatePreviewModeToolbars()
+{
+    const bool rich = m_previewedFileIsRichText;
+    const bool svg = m_previewedFileIsSvg;
+
     if (m_actRichPreviewMode) {
-        m_actRichPreviewMode->setEnabled(enabled);
-        m_actRichPreviewMode->setChecked(m_richPreviewMode);
+        m_actRichPreviewMode->setVisible(rich);
+        m_actRichPreviewMode->setEnabled(rich);
+        if (rich) {
+            m_actRichPreviewMode->setChecked(m_richPreviewMode);
+        }
     }
     if (m_actRichTextMode) {
-        m_actRichTextMode->setEnabled(enabled);
-        m_actRichTextMode->setChecked(!m_richPreviewMode);
+        m_actRichTextMode->setVisible(rich);
+        m_actRichTextMode->setEnabled(rich);
+        if (rich) {
+            m_actRichTextMode->setChecked(!m_richPreviewMode);
+        }
+    }
+    if (m_actSvgPreviewMode) {
+        m_actSvgPreviewMode->setVisible(svg);
+        m_actSvgPreviewMode->setEnabled(svg);
+        if (svg) {
+            m_actSvgPreviewMode->setChecked(m_svgPreviewMode);
+        }
+    }
+    if (m_actSvgSourceMode) {
+        m_actSvgSourceMode->setVisible(svg);
+        m_actSvgSourceMode->setEnabled(svg);
+        if (svg) {
+            m_actSvgSourceMode->setChecked(!m_svgPreviewMode);
+        }
     }
     if (m_richModeToolBar) {
-        m_richModeToolBar->setVisible(enabled);
+        m_richModeToolBar->setVisible(rich || svg);
+    }
+}
+
+void MainWindow::setSvgPreviewMode(bool previewMode)
+{
+    if (m_svgPreviewMode == previewMode) {
+        return;
+    }
+    m_svgPreviewMode = previewMode;
+    QSettings s;
+    s.setValue(QStringLiteral("preview/svgModeRendered"), m_svgPreviewMode);
+    statusBar()->showMessage(
+        tr("SVG preview: %1").arg(m_svgPreviewMode ? tr("Rendered") : tr("Source text")),
+        2500);
+    if (!m_previewedFileIsSvg || m_previewFilePath.isEmpty()) {
+        updatePreviewModeToolbars();
+        return;
+    }
+    previewPath(m_previewFilePath);
+}
+
+bool MainWindow::documentFindSupported() const
+{
+    if (!m_stack) {
+        return false;
+    }
+    QWidget *cw = m_stack->currentWidget();
+    if (cw == m_pdfView) {
+        return m_pdfDocument && m_pdfDocument->pageCount() > 0;
+    }
+    return cw == m_textView || cw == m_richView;
+}
+
+void MainWindow::rebuildDocumentTextFindMatches()
+{
+    m_documentFindMatchStarts.clear();
+    m_documentFindCurrentIndex = -1;
+    if (!m_pdfFindEdit) {
+        return;
+    }
+    const QString query = m_pdfFindEdit->text();
+    if (query.trimmed().isEmpty()) {
+        return;
+    }
+
+    QTextDocument *doc = nullptr;
+    if (m_stack && m_stack->currentWidget() == m_textView && m_textView) {
+        doc = m_textView->document();
+    } else if (m_stack && m_stack->currentWidget() == m_richView && m_richView) {
+        doc = m_richView->document();
+    }
+    if (!doc) {
+        return;
+    }
+
+    QTextCursor cursor(doc);
+    cursor.movePosition(QTextCursor::Start);
+    while (true) {
+        QTextCursor hit = doc->find(query, cursor);
+        if (hit.isNull()) {
+            break;
+        }
+        m_documentFindMatchStarts.push_back(hit.anchor());
+        cursor.setPosition(hit.position());
+    }
+
+    if (!m_documentFindMatchStarts.isEmpty()) {
+        selectDocumentTextFindMatch(0);
+    }
+}
+
+void MainWindow::selectDocumentTextFindMatch(int index)
+{
+    if (!m_pdfFindEdit || index < 0 || index >= m_documentFindMatchStarts.size()) {
+        return;
+    }
+    const QString query = m_pdfFindEdit->text();
+    const int qlen = query.size();
+    if (qlen <= 0) {
+        return;
+    }
+
+    QTextDocument *doc = nullptr;
+    QPlainTextEdit *plain = nullptr;
+    QTextBrowser *browser = nullptr;
+    if (m_stack && m_stack->currentWidget() == m_textView && m_textView) {
+        doc = m_textView->document();
+        plain = m_textView;
+    } else if (m_stack && m_stack->currentWidget() == m_richView && m_richView) {
+        doc = m_richView->document();
+        browser = m_richView;
+    }
+    if (!doc) {
+        return;
+    }
+
+    const int start = m_documentFindMatchStarts.at(index);
+    QTextCursor c(doc);
+    c.setPosition(start);
+    c.setPosition(start + qlen, QTextCursor::KeepAnchor);
+
+    m_documentFindCurrentIndex = index;
+
+    if (plain) {
+        plain->setTextCursor(c);
+        plain->ensureCursorVisible();
+    } else if (browser) {
+        browser->setTextCursor(c);
+        browser->ensureCursorVisible();
     }
 }
 
@@ -2074,6 +2289,9 @@ void MainWindow::previewPath(const QString &absolutePath)
     pauseWatching();
     m_imageOriginalPixmap = QPixmap();
     m_imageZoomFactor = 1.0;
+    m_documentFindMatchStarts.clear();
+    m_documentFindCurrentIndex = -1;
+    m_previewedFileIsSvg = false;
 
     const QFileInfo fi(absolutePath);
 
@@ -2170,6 +2388,7 @@ void MainWindow::previewPath(const QString &absolutePath)
             m_richView->document()->setBaseUrl(
                 QUrl::fromLocalFile(fi.absoluteDir().absolutePath() + QStringLiteral("/")));
             m_stack->setCurrentIndex(kRichPage);
+            rebuildDocumentTextFindMatches();
             updatePdfPageUi();
             return;
         }
@@ -2182,6 +2401,76 @@ void MainWindow::previewPath(const QString &absolutePath)
         m_textView->setFont(font);
         m_textView->setPlainText(text);
         m_stack->setCurrentIndex(kTextPage);
+        rebuildDocumentTextFindMatches();
+        updatePdfPageUi();
+        return;
+    }
+
+    if (suffix == QStringLiteral("svg")) {
+        m_previewedFileIsRichText = false;
+        m_previewedFileIsSvg = true;
+        updatePreviewModeToolbars();
+        setWatchedPreviewFile(fi.absoluteFilePath());
+
+        if (m_svgPreviewMode) {
+            QImage image;
+            QString loadErr;
+            QSvgRenderer svg(fi.absoluteFilePath());
+            if (!svg.isValid()) {
+                loadErr = tr("Invalid or unsupported SVG.");
+            } else {
+                QSize defaultSize = svg.defaultSize();
+                if (!defaultSize.isValid()) {
+                    defaultSize = QSize(1600, 1200);
+                }
+                const QSize targetSize(qBound(64, defaultSize.width(), 4096),
+                                       qBound(64, defaultSize.height(), 4096));
+                image = QImage(targetSize, QImage::Format_ARGB32_Premultiplied);
+                image.fill(Qt::transparent);
+                QPainter painter(&image);
+                svg.render(&painter);
+            }
+            if (image.isNull()) {
+                if (loadErr.trimmed().isEmpty()) {
+                    loadErr = tr("Unknown image loading error.");
+                }
+                showPlaceholder(
+                    tr("<p><b>Could not load SVG</b></p><p>%1</p><p>Error: %2</p>"
+                       "<p>Tip: use <b>Open in Default App</b> for complex SVGs your OS viewer may handle better.</p>")
+                        .arg(fi.absoluteFilePath().toHtmlEscaped(), loadErr.toHtmlEscaped()));
+                return;
+            }
+            m_imageOriginalPixmap = QPixmap::fromImage(image);
+            m_imageZoomFactor = 1.0;
+            m_imageView->setPixmap(m_imageOriginalPixmap);
+            m_imageView->adjustSize();
+            m_stack->setCurrentIndex(kImagePage);
+            updateImagePreviewScale();
+            QTimer::singleShot(0, this, &MainWindow::updateImagePreviewScale);
+            QTimer::singleShot(40, this, &MainWindow::updateImagePreviewScale);
+            updatePdfPageUi();
+            return;
+        }
+
+        QFile f(fi.absoluteFilePath());
+        if (!f.open(QIODevice::ReadOnly)) {
+            showPlaceholder(tr("<p><b>Could not open file</b></p><p>%1</p>")
+                                .arg(fi.absoluteFilePath().toHtmlEscaped()));
+            return;
+        }
+        const QByteArray bytes = f.readAll();
+        f.close();
+        const QString svgText = QString::fromUtf8(bytes);
+
+        QFont font = m_textView->font();
+        const QFont fixed = QFont(QStringLiteral("Monospace"));
+        if (fixed.exactMatch() || !fixed.family().isEmpty()) {
+            font = fixed;
+        }
+        m_textView->setFont(font);
+        m_textView->setPlainText(svgText);
+        m_stack->setCurrentIndex(kTextPage);
+        rebuildDocumentTextFindMatches();
         updatePdfPageUi();
         return;
     }
@@ -2214,6 +2503,7 @@ void MainWindow::previewPath(const QString &absolutePath)
         m_textView->setPlainText(text);
         m_stack->setCurrentIndex(kTextPage);
         setWatchedPreviewFile(fi.absoluteFilePath());
+        rebuildDocumentTextFindMatches();
         updatePdfPageUi();
         return;
     }
@@ -2223,29 +2513,11 @@ void MainWindow::previewPath(const QString &absolutePath)
         updateRichPreviewModeUi(false);
         QImage image;
         QString loadErr;
-        if (suffix == QStringLiteral("svg")) {
-            QSvgRenderer svg(fi.absoluteFilePath());
-            if (!svg.isValid()) {
-                loadErr = tr("Invalid or unsupported SVG.");
-            } else {
-                QSize defaultSize = svg.defaultSize();
-                if (!defaultSize.isValid()) {
-                    defaultSize = QSize(1600, 1200);
-                }
-                const QSize targetSize(qBound(64, defaultSize.width(), 4096),
-                                       qBound(64, defaultSize.height(), 4096));
-                image = QImage(targetSize, QImage::Format_ARGB32_Premultiplied);
-                image.fill(Qt::transparent);
-                QPainter painter(&image);
-                svg.render(&painter);
-            }
-        } else {
-            QImageReader reader(fi.absoluteFilePath());
-            reader.setAutoTransform(true);
-            image = reader.read();
-            if (image.isNull()) {
-                loadErr = reader.errorString();
-            }
+        QImageReader reader(fi.absoluteFilePath());
+        reader.setAutoTransform(true);
+        image = reader.read();
+        if (image.isNull()) {
+            loadErr = reader.errorString();
         }
         if (image.isNull()) {
             if (loadErr.trimmed().isEmpty()) {

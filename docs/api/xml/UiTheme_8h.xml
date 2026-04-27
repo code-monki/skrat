@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="UiTheme_8h" kind="file" language="C++">
+    <compoundname>UiTheme.h</compoundname>
+    <includes local="no">QString</includes>
+    <incdepgraph>
+      <node id="1">
+        <label>UiTheme.h</label>
+        <link refid="UiTheme_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>QString</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="structskrat_1_1UiThemePrefs" prot="public">skrat::UiThemePrefs</innerclass>
+    <innernamespace refid="namespaceskrat">skrat</innernamespace>
+    <briefdescription>
+<para>Persistent UI theme (palette + chrome stylesheet) and application font preferences. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Theme modes map to QPalette overrides; optional custom UI font is stored in QSettings and applied via applyUiTheme(). </para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/**</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/>@file<sp/>UiTheme.h</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Persistent<sp/>UI<sp/>theme<sp/>(palette<sp/>+<sp/>chrome<sp/>stylesheet)<sp/>and<sp/>application<sp/>font<sp/>preferences.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>Theme<sp/>modes<sp/>map<sp/>to<sp/>QPalette<sp/>overrides;<sp/>optional<sp/>custom<sp/>UI<sp/>font<sp/>is<sp/>stored<sp/>in<sp/>QSettings</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>and<sp/>applied<sp/>via<sp/>applyUiTheme().</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#pragma<sp/>once</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="10"><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;QString&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">QApplication;</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="keyword">namespace<sp/></highlight><highlight class="normal"><ref refid="namespaceskrat" kindref="compound">skrat</ref><sp/>{</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="17"><highlight class="comment">/**<sp/>@brief<sp/>High-level<sp/>appearance<sp/>mode<sp/>for<sp/>the<sp/>Qt<sp/>application<sp/>palette.<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="18" refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982" refkind="member"><highlight class="normal"></highlight><highlight class="keyword">enum<sp/>class</highlight><highlight class="normal"><sp/><ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982" kindref="member">ThemeMode</ref><sp/>{</highlight></codeline>
+<codeline lineno="19" refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982aa45da96d0bf6575970f2d27af22be28a" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982aa45da96d0bf6575970f2d27af22be28a" kindref="member">System</ref><sp/>=<sp/>0,</highlight></codeline>
+<codeline lineno="20" refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982a9914a0ce04a7b7b6a8e39bec55064b82" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982a9914a0ce04a7b7b6a8e39bec55064b82" kindref="member">Light</ref>,</highlight></codeline>
+<codeline lineno="21" refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982aa18366b217ebf811ad1886e4f4f865b2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982aa18366b217ebf811ad1886e4f4f865b2" kindref="member">Dark</ref>,</highlight></codeline>
+<codeline lineno="22" refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982a4141b0ae492cd6205781adf9f716cc32" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982a4141b0ae492cd6205781adf9f716cc32" kindref="member">WarmSepia</ref>,</highlight></codeline>
+<codeline lineno="23"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="24"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="25"><highlight class="comment">/**<sp/>@brief<sp/>User-editable<sp/>theme<sp/>and<sp/>font<sp/>settings<sp/>persisted<sp/>under<sp/>QSettings.<sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="26" refid="structskrat_1_1UiThemePrefs" refkind="compound"><highlight class="normal"></highlight><highlight class="keyword">struct<sp/></highlight><highlight class="normal"><ref refid="structskrat_1_1UiThemePrefs" kindref="compound">UiThemePrefs</ref><sp/>{</highlight></codeline>
+<codeline lineno="27" refid="structskrat_1_1UiThemePrefs_1a772f16cb748c768b9821f7cf368174d2" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982" kindref="member">ThemeMode</ref><sp/><ref refid="structskrat_1_1UiThemePrefs_1a772f16cb748c768b9821f7cf368174d2" kindref="member">mode</ref><sp/>=<sp/><ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982aa45da96d0bf6575970f2d27af22be28a" kindref="member">ThemeMode::System</ref>;<sp/></highlight><highlight class="comment">///&lt;<sp/>Palette<sp/>mode<sp/>(system,<sp/>fixed<sp/>light/dark,<sp/>or<sp/>sepia).</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="28" refid="structskrat_1_1UiThemePrefs_1a3e97226bdfbb344d8188a0abaab3672c" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/>QString<sp/><ref refid="structskrat_1_1UiThemePrefs_1a3e97226bdfbb344d8188a0abaab3672c" kindref="member">fontFamily</ref>;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>Empty<sp/>means<sp/>“use<sp/>system<sp/>default<sp/>family”.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="29" refid="structskrat_1_1UiThemePrefs_1a6f0e81a51d7ed75075e832fb47f8fce8" refkind="member"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="structskrat_1_1UiThemePrefs_1a6f0e81a51d7ed75075e832fb47f8fce8" kindref="member">fontPointSize</ref><sp/>=<sp/>0;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">///&lt;<sp/>0<sp/>or<sp/>negative<sp/>means<sp/>“use<sp/>system<sp/>default<sp/>size”.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="30"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="31"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="32"><highlight class="comment">/**</highlight></codeline>
+<codeline lineno="33"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Reads<sp/>theme<sp/>and<sp/>UI<sp/>font<sp/>preferences<sp/>from<sp/>application<sp/>QSettings.</highlight></codeline>
+<codeline lineno="34"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="35"><highlight class="comment"><sp/>*<sp/>@return<sp/>Populated<sp/>UiThemePrefs;<sp/>missing<sp/>keys<sp/>yield<sp/>defaults<sp/>(system<sp/>theme,<sp/>system<sp/>font).</highlight></codeline>
+<codeline lineno="36"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="37" refid="namespaceskrat_1abe4c3623cb9f674080e5fc401883e101" refkind="member"><highlight class="normal"><ref refid="structskrat_1_1UiThemePrefs" kindref="compound">UiThemePrefs</ref><sp/><ref refid="namespaceskrat_1abe4c3623cb9f674080e5fc401883e101" kindref="member">loadUiThemePrefs</ref>();</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="39"><highlight class="comment">/**</highlight></codeline>
+<codeline lineno="40"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Writes<sp/>theme<sp/>and<sp/>UI<sp/>font<sp/>preferences<sp/>to<sp/>application<sp/>QSettings.</highlight></codeline>
+<codeline lineno="41"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="42"><highlight class="comment"><sp/>*<sp/>@param[in]<sp/>prefs<sp/>Values<sp/>to<sp/>persist;<sp/>font<sp/>point<sp/>size<sp/>is<sp/>clamped<sp/>to<sp/>non-negative<sp/>on<sp/>save.</highlight></codeline>
+<codeline lineno="43"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="44" refid="namespaceskrat_1a48045a898e02690d72d51b113177df2d" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceskrat_1a48045a898e02690d72d51b113177df2d" kindref="member">saveUiThemePrefs</ref>(</highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structskrat_1_1UiThemePrefs" kindref="compound">UiThemePrefs</ref><sp/>&amp;prefs);</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="46"><highlight class="comment">/**</highlight></codeline>
+<codeline lineno="47"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Applies<sp/>palette,<sp/>widget<sp/>chrome<sp/>stylesheet,<sp/>and<sp/>application<sp/>font<sp/>to<sp/>a<sp/>QApplication.</highlight></codeline>
+<codeline lineno="48"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="49"><highlight class="comment"><sp/>*<sp/>Chooses<sp/>the<sp/>palette<sp/>from<sp/>@a<sp/>prefs.mode,<sp/>rebuilds<sp/>the<sp/>tab/toolbar<sp/>stylesheet<sp/>from<sp/>the</highlight></codeline>
+<codeline lineno="50"><highlight class="comment"><sp/>*<sp/>active<sp/>palette,<sp/>then<sp/>sets<sp/>QApplication::font()<sp/>from<sp/>optional<sp/>family/size<sp/>in<sp/>@a<sp/>prefs.</highlight></codeline>
+<codeline lineno="51"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="52"><highlight class="comment"><sp/>*<sp/>@param[in,out]<sp/>app<sp/>Application<sp/>instance<sp/>whose<sp/>palette,<sp/>stylesheet,<sp/>and<sp/>font<sp/>are<sp/>updated.</highlight></codeline>
+<codeline lineno="53"><highlight class="comment"><sp/>*<sp/>@param[in]<sp/>prefs<sp/>Theme<sp/>mode<sp/>and<sp/>optional<sp/>custom<sp/>UI<sp/>font<sp/>settings.</highlight></codeline>
+<codeline lineno="54"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55" refid="namespaceskrat_1ae7244408decc4bfa7daab040f0984cfd" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/><ref refid="namespaceskrat_1ae7244408decc4bfa7daab040f0984cfd" kindref="member">applyUiTheme</ref>(QApplication<sp/>&amp;app,<sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/><ref refid="structskrat_1_1UiThemePrefs" kindref="compound">UiThemePrefs</ref><sp/>&amp;prefs);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight></codeline>
+<codeline lineno="57"><highlight class="normal">}<sp/></highlight><highlight class="comment">//<sp/>namespace<sp/>skrat</highlight><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="src/UiTheme.h"/>
+  </compounddef>
+</doxygen>

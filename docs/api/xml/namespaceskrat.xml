@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="namespaceskrat" kind="namespace" language="C++">
+    <compoundname>skrat</compoundname>
+    <innerclass refid="structskrat_1_1UiThemePrefs" prot="public">skrat::UiThemePrefs</innerclass>
+    <sectiondef kind="enum">
+      <memberdef kind="enum" id="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>ThemeMode</name>
+        <qualifiedname>skrat::ThemeMode</qualifiedname>
+        <enumvalue id="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982aa45da96d0bf6575970f2d27af22be28a" prot="public">
+          <name>System</name>
+          <initializer>= 0</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982a9914a0ce04a7b7b6a8e39bec55064b82" prot="public">
+          <name>Light</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982aa18366b217ebf811ad1886e4f4f865b2" prot="public">
+          <name>Dark</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982a4141b0ae492cd6205781adf9f716cc32" prot="public">
+          <name>WarmSepia</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>High-level appearance mode for the Qt application palette. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/UiTheme.h" line="18" column="1" bodyfile="src/UiTheme.h" bodystart="18" bodyend="23"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="namespaceskrat_1abe4c3623cb9f674080e5fc401883e101" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="structskrat_1_1UiThemePrefs" kindref="compound">UiThemePrefs</ref></type>
+        <definition>UiThemePrefs skrat::loadUiThemePrefs</definition>
+        <argsstring>()</argsstring>
+        <name>loadUiThemePrefs</name>
+        <qualifiedname>skrat::loadUiThemePrefs</qualifiedname>
+        <briefdescription>
+<para>Reads theme and UI font preferences from application QSettings. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Populated <ref refid="structskrat_1_1UiThemePrefs" kindref="compound">UiThemePrefs</ref>; missing keys yield defaults (system theme, system font). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/UiTheme.h" line="37" column="14" declfile="src/UiTheme.h" declline="37" declcolumn="14"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceskrat_1a48045a898e02690d72d51b113177df2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void skrat::saveUiThemePrefs</definition>
+        <argsstring>(const UiThemePrefs &amp;prefs)</argsstring>
+        <name>saveUiThemePrefs</name>
+        <qualifiedname>skrat::saveUiThemePrefs</qualifiedname>
+        <param>
+          <type>const <ref refid="structskrat_1_1UiThemePrefs" kindref="compound">UiThemePrefs</ref> &amp;</type>
+          <declname>prefs</declname>
+        </param>
+        <briefdescription>
+<para>Writes theme and UI font preferences to application QSettings. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">prefs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Values to persist; font point size is clamped to non-negative on save. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/UiTheme.h" line="44" column="6" declfile="src/UiTheme.h" declline="44" declcolumn="6"/>
+      </memberdef>
+      <memberdef kind="function" id="namespaceskrat_1ae7244408decc4bfa7daab040f0984cfd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void skrat::applyUiTheme</definition>
+        <argsstring>(QApplication &amp;app, const UiThemePrefs &amp;prefs)</argsstring>
+        <name>applyUiTheme</name>
+        <qualifiedname>skrat::applyUiTheme</qualifiedname>
+        <param>
+          <type>QApplication &amp;</type>
+          <declname>app</declname>
+        </param>
+        <param>
+          <type>const <ref refid="structskrat_1_1UiThemePrefs" kindref="compound">UiThemePrefs</ref> &amp;</type>
+          <declname>prefs</declname>
+        </param>
+        <briefdescription>
+<para>Applies palette, widget chrome stylesheet, and application font to a QApplication. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Chooses the palette from <emphasis>prefs.mode</emphasis>, rebuilds the tab/toolbar stylesheet from the active palette, then sets QApplication::font() from optional family/size in <emphasis>prefs</emphasis>.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">app</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Application instance whose palette, stylesheet, and font are updated. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Theme mode and optional custom UI font settings. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/UiTheme.h" line="55" column="6" declfile="src/UiTheme.h" declline="55" declcolumn="6"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/MainWindow.h" line="43" column="1"/>
+  </compounddef>
+</doxygen>

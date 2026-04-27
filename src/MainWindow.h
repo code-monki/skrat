@@ -3,6 +3,7 @@
 #include <QFileInfo>
 #include <QMainWindow>
 #include <QPixmap>
+#include <QVector>
 
 /**
  * @file MainWindow.h
@@ -121,7 +122,7 @@ private slots:
     /** @brief Jumps the PDF view to the last page when a document is loaded. */
     void pdfGoLastPage();
 
-    /** @brief Shows the find toolbar and focuses the search field for the active PDF. */
+    /** @brief Shows the find toolbar and focuses the search field for PDF, text, or rich preview. */
     void openPdfFind();
 
     /** @brief Selects the next row in the PDF search model and scrolls to that match. */
@@ -192,6 +193,9 @@ private slots:
 
     /** @brief Switches between source text and rendered preview for HTML/Markdown files. */
     void setRichPreviewMode(bool previewMode);
+
+    /** @brief Switches between raster SVG preview and XML source for .svg files. */
+    void setSvgPreviewMode(bool previewMode);
 
     /**
      * @brief Handles clicked links inside the rendered rich-text preview.
@@ -347,6 +351,18 @@ private:
      */
     void updateRichPreviewModeUi(bool enabled);
 
+    /** @brief Shows the correct Preview/Text vs SVG toolbar actions for the active file type. */
+    void updatePreviewModeToolbars();
+
+    /** @brief @c true when the preview stack shows PDF, plain text, or rendered HTML (find applies). */
+    bool documentFindSupported() const;
+
+    /** @brief Recomputes plain-text/rich HTML match ranges for the find field query. */
+    void rebuildDocumentTextFindMatches();
+
+    /** @brief Selects the @a index -th match in the text or rich preview document. */
+    void selectDocumentTextFindMatch(int index);
+
     QString m_rootPath;
     QFileSystemModel *m_fsModel = nullptr;
     QTreeView *m_tree = nullptr;
@@ -378,6 +394,9 @@ private:
     QAction *m_actRichPreviewMode = nullptr;
     QAction *m_actRichTextMode = nullptr;
     QActionGroup *m_richModeGroup = nullptr;
+    QAction *m_actSvgPreviewMode = nullptr;
+    QAction *m_actSvgSourceMode = nullptr;
+    QActionGroup *m_svgModeGroup = nullptr;
     QAction *m_actGoToPageOrLine = nullptr;
     QToolBar *m_pdfFindToolBar = nullptr;
     QToolBar *m_richModeToolBar = nullptr;
@@ -396,9 +415,13 @@ private:
     QString m_previewFilePath;
     bool m_richPreviewMode = true;   ///< true=rendered Preview, false=raw Text for HTML/Markdown.
     bool m_previewedFileIsRichText = false; ///< true when current file is HTML or Markdown.
+    bool m_previewedFileIsSvg = false; ///< true when the selected file is .svg (preview vs source).
+    bool m_svgPreviewMode = true;    ///< true=raster preview, false=XML source in text view (persisted).
     qreal m_imageZoomFactor = 1.0;
     QString m_pendingReloadPath;
     int m_pdfSearchCurrentIndex = -1;
+    QVector<int> m_documentFindMatchStarts;
+    int m_documentFindCurrentIndex = -1;
     bool m_updatingPdfPageEdit = false;
     bool m_pdfAutoSelectingFirstResult = false;
     QFileSystemWatcher *m_fileWatcher = nullptr;

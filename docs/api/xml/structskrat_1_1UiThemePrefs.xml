@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="structskrat_1_1UiThemePrefs" kind="struct" language="C++" prot="public">
+    <compoundname>skrat::UiThemePrefs</compoundname>
+    <includes refid="UiTheme_8h" local="no">UiTheme.h</includes>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structskrat_1_1UiThemePrefs_1a772f16cb748c768b9821f7cf368174d2" prot="public" static="no" mutable="no">
+        <type><ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982" kindref="member">ThemeMode</ref></type>
+        <definition>ThemeMode skrat::UiThemePrefs::mode</definition>
+        <argsstring></argsstring>
+        <name>mode</name>
+        <qualifiedname>skrat::UiThemePrefs::mode</qualifiedname>
+        <initializer>= <ref refid="namespaceskrat_1a0991329fc370f27d55a2ee50dc6f0982aa45da96d0bf6575970f2d27af22be28a" kindref="member">ThemeMode::System</ref></initializer>
+        <briefdescription>
+<para>Palette mode (system, fixed light/dark, or sepia). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/UiTheme.h" line="27" column="15" bodyfile="src/UiTheme.h" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structskrat_1_1UiThemePrefs_1a3e97226bdfbb344d8188a0abaab3672c" prot="public" static="no" mutable="no">
+        <type>QString</type>
+        <definition>QString skrat::UiThemePrefs::fontFamily</definition>
+        <argsstring></argsstring>
+        <name>fontFamily</name>
+        <qualifiedname>skrat::UiThemePrefs::fontFamily</qualifiedname>
+        <briefdescription>
+<para>Empty means “use system default family”. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/UiTheme.h" line="28" column="13" bodyfile="src/UiTheme.h" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="structskrat_1_1UiThemePrefs_1a6f0e81a51d7ed75075e832fb47f8fce8" prot="public" static="no" mutable="no">
+        <type>int</type>
+        <definition>int skrat::UiThemePrefs::fontPointSize</definition>
+        <argsstring></argsstring>
+        <name>fontPointSize</name>
+        <qualifiedname>skrat::UiThemePrefs::fontPointSize</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+<para>0 or negative means “use system default size”. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/UiTheme.h" line="29" column="9" bodyfile="src/UiTheme.h" bodystart="29" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>User-editable theme and font settings persisted under QSettings. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="src/UiTheme.h" line="26" column="1" bodyfile="src/UiTheme.h" bodystart="26" bodyend="30"/>
+    <listofallmembers>
+      <member refid="structskrat_1_1UiThemePrefs_1a3e97226bdfbb344d8188a0abaab3672c" prot="public" virt="non-virtual"><scope>skrat::UiThemePrefs</scope><name>fontFamily</name></member>
+      <member refid="structskrat_1_1UiThemePrefs_1a6f0e81a51d7ed75075e832fb47f8fce8" prot="public" virt="non-virtual"><scope>skrat::UiThemePrefs</scope><name>fontPointSize</name></member>
+      <member refid="structskrat_1_1UiThemePrefs_1a772f16cb748c768b9821f7cf368174d2" prot="public" virt="non-virtual"><scope>skrat::UiThemePrefs</scope><name>mode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

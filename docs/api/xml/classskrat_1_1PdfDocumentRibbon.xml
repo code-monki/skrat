@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classskrat_1_1PdfDocumentRibbon" kind="class" language="C++" prot="public" final="yes">
+    <compoundname>skrat::PdfDocumentRibbon</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">QFrame</basecompoundref>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classskrat_1_1PdfDocumentRibbon_1a906bf3ce5e221ffa0a0a2706c7daa7ef" prot="private" static="no" mutable="no">
+        <type>QToolBar *</type>
+        <definition>QToolBar* skrat::PdfDocumentRibbon::m_toolBar</definition>
+        <argsstring></argsstring>
+        <name>m_toolBar</name>
+        <qualifiedname>skrat::PdfDocumentRibbon::m_toolBar</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.cpp" line="452" column="14" bodyfile="src/MainWindow.cpp" bodystart="452" bodyend="-1"/>
+        <referencedby refid="classskrat_1_1PdfDocumentRibbon_1ae57b339bcbcd22001c14f9b5c32c3e4d" compoundref="MainWindow_8cpp" startline="431" endline="450">doLayout</referencedby>
+        <referencedby refid="classskrat_1_1PdfDocumentRibbon_1aa61fd392b1e479a3f77252aeb2cd3a4e" compoundref="MainWindow_8cpp" startline="379" endline="395">PdfDocumentRibbon</referencedby>
+        <referencedby refid="classskrat_1_1PdfDocumentRibbon_1ab34d85c6b258cf68a3ba7c96c766f7ae" compoundref="MainWindow_8cpp" startline="415" endline="425">sizeHint</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classskrat_1_1PdfDocumentRibbon_1a3c9cca366a363a446696658748ae2b92" prot="private" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* skrat::PdfDocumentRibbon::m_pageLabel</definition>
+        <argsstring></argsstring>
+        <name>m_pageLabel</name>
+        <qualifiedname>skrat::PdfDocumentRibbon::m_pageLabel</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.cpp" line="453" column="12" bodyfile="src/MainWindow.cpp" bodystart="453" bodyend="-1"/>
+        <referencedby refid="classskrat_1_1PdfDocumentRibbon_1ae57b339bcbcd22001c14f9b5c32c3e4d" compoundref="MainWindow_8cpp" startline="431" endline="450">doLayout</referencedby>
+        <referencedby refid="classskrat_1_1PdfDocumentRibbon_1aa61fd392b1e479a3f77252aeb2cd3a4e" compoundref="MainWindow_8cpp" startline="379" endline="395">PdfDocumentRibbon</referencedby>
+        <referencedby refid="classskrat_1_1PdfDocumentRibbon_1ab34d85c6b258cf68a3ba7c96c766f7ae" compoundref="MainWindow_8cpp" startline="415" endline="425">sizeHint</referencedby>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classskrat_1_1PdfDocumentRibbon_1aa61fd392b1e479a3f77252aeb2cd3a4e" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>skrat::PdfDocumentRibbon::PdfDocumentRibbon</definition>
+        <argsstring>(QToolBar *toolBar, QLabel *pageLabel, QWidget *parent=nullptr)</argsstring>
+        <name>PdfDocumentRibbon</name>
+        <qualifiedname>skrat::PdfDocumentRibbon::PdfDocumentRibbon</qualifiedname>
+        <param>
+          <type>QToolBar *</type>
+          <declname>toolBar</declname>
+        </param>
+        <param>
+          <type>QLabel *</type>
+          <declname>pageLabel</declname>
+        </param>
+        <param>
+          <type>QWidget *</type>
+          <declname>parent</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Constructs the ribbon, reparenting the tool bar and label into this widget. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">toolBar</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PDF navigation tool bar (may be <computeroutput>nullptr</computeroutput>; layout skips nulls). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pageLabel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Label showing “Page X of Y”; receives transparent-for-mouse-events. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional parent for lifetime; usually the preview pane widget. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.cpp" line="379" column="14" bodyfile="src/MainWindow.cpp" bodystart="379" bodyend="395"/>
+        <references refid="classskrat_1_1PdfDocumentRibbon_1a3c9cca366a363a446696658748ae2b92" compoundref="MainWindow_8cpp" startline="453">m_pageLabel</references>
+        <references refid="classskrat_1_1PdfDocumentRibbon_1a906bf3ce5e221ffa0a0a2706c7daa7ef" compoundref="MainWindow_8cpp" startline="452">m_toolBar</references>
+      </memberdef>
+      <memberdef kind="function" id="classskrat_1_1PdfDocumentRibbon_1a7e3784caacc0ab7299551cb8cf16268f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void skrat::PdfDocumentRibbon::recenter</definition>
+        <argsstring>()</argsstring>
+        <name>recenter</name>
+        <qualifiedname>skrat::PdfDocumentRibbon::recenter</qualifiedname>
+        <briefdescription>
+<para>Re-runs internal layout after label text or toolbar content changes size. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.cpp" line="398" column="10" bodyfile="src/MainWindow.cpp" bodystart="398" bodyend="398"/>
+        <references refid="classskrat_1_1PdfDocumentRibbon_1ae57b339bcbcd22001c14f9b5c32c3e4d" compoundref="MainWindow_8cpp" startline="431" endline="450">doLayout</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classskrat_1_1PdfDocumentRibbon_1a4bb76bb523525f7ca5de49118a082153" prot="protected" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void skrat::PdfDocumentRibbon::resizeEvent</definition>
+        <argsstring>(QResizeEvent *event) override</argsstring>
+        <name>resizeEvent</name>
+        <qualifiedname>skrat::PdfDocumentRibbon::resizeEvent</qualifiedname>
+        <param>
+          <type>QResizeEvent *</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Repositions children when the ribbon’s width or height changes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Qt resize event forwarded to QFrame. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.cpp" line="405" column="10" bodyfile="src/MainWindow.cpp" bodystart="405" bodyend="409"/>
+        <references refid="classskrat_1_1PdfDocumentRibbon_1ae57b339bcbcd22001c14f9b5c32c3e4d" compoundref="MainWindow_8cpp" startline="431" endline="450">doLayout</references>
+      </memberdef>
+      <memberdef kind="function" id="classskrat_1_1PdfDocumentRibbon_1ab34d85c6b258cf68a3ba7c96c766f7ae" prot="protected" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>QSize</type>
+        <definition>QSize skrat::PdfDocumentRibbon::sizeHint</definition>
+        <argsstring>() const override</argsstring>
+        <name>sizeHint</name>
+        <qualifiedname>skrat::PdfDocumentRibbon::sizeHint</qualifiedname>
+        <briefdescription>
+<para>Returns a preferred height based on toolbar and label size hints. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Size hint with unconstrained width and at least 34px height. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.cpp" line="415" column="11" bodyfile="src/MainWindow.cpp" bodystart="415" bodyend="425"/>
+        <references refid="classskrat_1_1PdfDocumentRibbon_1a3c9cca366a363a446696658748ae2b92" compoundref="MainWindow_8cpp" startline="453">m_pageLabel</references>
+        <references refid="classskrat_1_1PdfDocumentRibbon_1a906bf3ce5e221ffa0a0a2706c7daa7ef" compoundref="MainWindow_8cpp" startline="452">m_toolBar</references>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classskrat_1_1PdfDocumentRibbon_1ae57b339bcbcd22001c14f9b5c32c3e4d" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void skrat::PdfDocumentRibbon::doLayout</definition>
+        <argsstring>()</argsstring>
+        <name>doLayout</name>
+        <qualifiedname>skrat::PdfDocumentRibbon::doLayout</qualifiedname>
+        <briefdescription>
+<para>Places the tool bar flush left (vertically centered) and centers the page label. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.cpp" line="431" column="10" bodyfile="src/MainWindow.cpp" bodystart="431" bodyend="450"/>
+        <references refid="classskrat_1_1PdfDocumentRibbon_1a3c9cca366a363a446696658748ae2b92" compoundref="MainWindow_8cpp" startline="453">m_pageLabel</references>
+        <references refid="classskrat_1_1PdfDocumentRibbon_1a906bf3ce5e221ffa0a0a2706c7daa7ef" compoundref="MainWindow_8cpp" startline="452">m_toolBar</references>
+        <referencedby refid="classskrat_1_1PdfDocumentRibbon_1a7e3784caacc0ab7299551cb8cf16268f" compoundref="MainWindow_8cpp" startline="398" endline="398">recenter</referencedby>
+        <referencedby refid="classskrat_1_1PdfDocumentRibbon_1a4bb76bb523525f7ca5de49118a082153" compoundref="MainWindow_8cpp" startline="405" endline="409">resizeEvent</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Hosts the PDF tool bar with a horizontally centered page label in one row. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>QFrame</label>
+      </node>
+      <node id="1">
+        <label>skrat::PdfDocumentRibbon</label>
+        <link refid="classskrat_1_1PdfDocumentRibbon"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>QFrame</label>
+      </node>
+      <node id="1">
+        <label>skrat::PdfDocumentRibbon</label>
+        <link refid="classskrat_1_1PdfDocumentRibbon"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="src/MainWindow.cpp" line="370" column="1" bodyfile="src/MainWindow.cpp" bodystart="371" bodyend="454"/>
+    <listofallmembers>
+      <member refid="classskrat_1_1PdfDocumentRibbon_1ae57b339bcbcd22001c14f9b5c32c3e4d" prot="private" virt="non-virtual"><scope>skrat::PdfDocumentRibbon</scope><name>doLayout</name></member>
+      <member refid="classskrat_1_1PdfDocumentRibbon_1a3c9cca366a363a446696658748ae2b92" prot="private" virt="non-virtual"><scope>skrat::PdfDocumentRibbon</scope><name>m_pageLabel</name></member>
+      <member refid="classskrat_1_1PdfDocumentRibbon_1a906bf3ce5e221ffa0a0a2706c7daa7ef" prot="private" virt="non-virtual"><scope>skrat::PdfDocumentRibbon</scope><name>m_toolBar</name></member>
+      <member refid="classskrat_1_1PdfDocumentRibbon_1aa61fd392b1e479a3f77252aeb2cd3a4e" prot="public" virt="non-virtual"><scope>skrat::PdfDocumentRibbon</scope><name>PdfDocumentRibbon</name></member>
+      <member refid="classskrat_1_1PdfDocumentRibbon_1a7e3784caacc0ab7299551cb8cf16268f" prot="public" virt="non-virtual"><scope>skrat::PdfDocumentRibbon</scope><name>recenter</name></member>
+      <member refid="classskrat_1_1PdfDocumentRibbon_1a4bb76bb523525f7ca5de49118a082153" prot="protected" virt="non-virtual"><scope>skrat::PdfDocumentRibbon</scope><name>resizeEvent</name></member>
+      <member refid="classskrat_1_1PdfDocumentRibbon_1ab34d85c6b258cf68a3ba7c96c766f7ae" prot="protected" virt="non-virtual"><scope>skrat::PdfDocumentRibbon</scope><name>sizeHint</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

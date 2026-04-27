@@ -1,0 +1,2616 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classMainWindow" kind="class" language="C++" prot="public" final="yes">
+    <compoundname>MainWindow</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">QMainWindow</basecompoundref>
+    <includes refid="MainWindow_8h" local="no">MainWindow.h</includes>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classMainWindow_1a4071ffde68343b1aa7c4121d487d5b86" prot="private" static="no" mutable="no">
+        <type>QString</type>
+        <definition>QString MainWindow::m_rootPath</definition>
+        <argsstring></argsstring>
+        <name>m_rootPath</name>
+        <qualifiedname>MainWindow::m_rootPath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="366" column="13" bodyfile="src/MainWindow.h" bodystart="366" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1aeb3d24c53ac1ddc1164c9a3e2ad6c1f4" prot="private" static="no" mutable="no">
+        <type>QFileSystemModel *</type>
+        <definition>QFileSystemModel* MainWindow::m_fsModel</definition>
+        <argsstring></argsstring>
+        <name>m_fsModel</name>
+        <qualifiedname>MainWindow::m_fsModel</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="367" column="22" bodyfile="src/MainWindow.h" bodystart="367" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1af268ba94f92550e42b1876dcf4ab5c6a" prot="private" static="no" mutable="no">
+        <type>QTreeView *</type>
+        <definition>QTreeView* MainWindow::m_tree</definition>
+        <argsstring></argsstring>
+        <name>m_tree</name>
+        <qualifiedname>MainWindow::m_tree</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="368" column="15" bodyfile="src/MainWindow.h" bodystart="368" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1af8c3372054d4a8f04e8ffa68c3c65d5c" prot="private" static="no" mutable="no">
+        <type>QTabWidget *</type>
+        <definition>QTabWidget* MainWindow::m_leftTabs</definition>
+        <argsstring></argsstring>
+        <name>m_leftTabs</name>
+        <qualifiedname>MainWindow::m_leftTabs</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="369" column="16" bodyfile="src/MainWindow.h" bodystart="369" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ac4df262633ca9e12fdb724914e1df924" prot="private" static="no" mutable="no">
+        <type>QSplitter *</type>
+        <definition>QSplitter* MainWindow::m_splitter</definition>
+        <argsstring></argsstring>
+        <name>m_splitter</name>
+        <qualifiedname>MainWindow::m_splitter</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="370" column="15" bodyfile="src/MainWindow.h" bodystart="370" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a6bbdcb0a9246ee4662fbd549827f79dd" prot="private" static="no" mutable="no">
+        <type>QStackedWidget *</type>
+        <definition>QStackedWidget* MainWindow::m_stack</definition>
+        <argsstring></argsstring>
+        <name>m_stack</name>
+        <qualifiedname>MainWindow::m_stack</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="371" column="20" bodyfile="src/MainWindow.h" bodystart="371" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a57b914956170cca13f7714cedbdecca0" prot="private" static="no" mutable="no">
+        <type><ref refid="classPdfGraphicsView" kindref="compound">PdfGraphicsView</ref> *</type>
+        <definition>PdfGraphicsView* MainWindow::m_pdfView</definition>
+        <argsstring></argsstring>
+        <name>m_pdfView</name>
+        <qualifiedname>MainWindow::m_pdfView</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="372" column="21" bodyfile="src/MainWindow.h" bodystart="372" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ab24fc098febd3b86bf2bd894ead854b9" prot="private" static="no" mutable="no">
+        <type>QPdfDocument *</type>
+        <definition>QPdfDocument* MainWindow::m_pdfDocument</definition>
+        <argsstring></argsstring>
+        <name>m_pdfDocument</name>
+        <qualifiedname>MainWindow::m_pdfDocument</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="373" column="18" bodyfile="src/MainWindow.h" bodystart="373" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1aec34518057af7c31593c8d8946abc92d" prot="private" static="no" mutable="no">
+        <type>QPlainTextEdit *</type>
+        <definition>QPlainTextEdit* MainWindow::m_textView</definition>
+        <argsstring></argsstring>
+        <name>m_textView</name>
+        <qualifiedname>MainWindow::m_textView</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="374" column="20" bodyfile="src/MainWindow.h" bodystart="374" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1aa70a41efc7791d9f67a2ad6c6f72c30a" prot="private" static="no" mutable="no">
+        <type>QTextBrowser *</type>
+        <definition>QTextBrowser* MainWindow::m_richView</definition>
+        <argsstring></argsstring>
+        <name>m_richView</name>
+        <qualifiedname>MainWindow::m_richView</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="375" column="18" bodyfile="src/MainWindow.h" bodystart="375" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a418d382e4e0d59e5f066c5b5099c227b" prot="private" static="no" mutable="no">
+        <type>QScrollArea *</type>
+        <definition>QScrollArea* MainWindow::m_imageScroll</definition>
+        <argsstring></argsstring>
+        <name>m_imageScroll</name>
+        <qualifiedname>MainWindow::m_imageScroll</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="376" column="17" bodyfile="src/MainWindow.h" bodystart="376" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a9ac37226a50ca4dff5a63a9da7341e46" prot="private" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* MainWindow::m_imageView</definition>
+        <argsstring></argsstring>
+        <name>m_imageView</name>
+        <qualifiedname>MainWindow::m_imageView</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="377" column="12" bodyfile="src/MainWindow.h" bodystart="377" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a206aaba039130e2aa35339222eb12b52" prot="private" static="no" mutable="no">
+        <type>QPixmap</type>
+        <definition>QPixmap MainWindow::m_imageOriginalPixmap</definition>
+        <argsstring></argsstring>
+        <name>m_imageOriginalPixmap</name>
+        <qualifiedname>MainWindow::m_imageOriginalPixmap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="378" column="13" bodyfile="src/MainWindow.h" bodystart="378" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a55c4892be7586be5480ceeec67d49028" prot="private" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* MainWindow::m_placeholder</definition>
+        <argsstring></argsstring>
+        <name>m_placeholder</name>
+        <qualifiedname>MainWindow::m_placeholder</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="379" column="12" bodyfile="src/MainWindow.h" bodystart="379" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a4a5af1ae0abd6fd29cd723b43f5c699f" prot="private" static="no" mutable="no">
+        <type>QToolBar *</type>
+        <definition>QToolBar* MainWindow::m_pdfToolBar</definition>
+        <argsstring></argsstring>
+        <name>m_pdfToolBar</name>
+        <qualifiedname>MainWindow::m_pdfToolBar</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="381" column="14" bodyfile="src/MainWindow.h" bodystart="381" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ad1b2412954891f59646c55e26dc6c52d" prot="private" static="no" mutable="no">
+        <type>skrat::PdfDocumentRibbon *</type>
+        <definition>skrat::PdfDocumentRibbon* MainWindow::m_pdfDocumentRibbon</definition>
+        <argsstring></argsstring>
+        <name>m_pdfDocumentRibbon</name>
+        <qualifiedname>MainWindow::m_pdfDocumentRibbon</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="382" column="30" bodyfile="src/MainWindow.h" bodystart="382" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1acf2c78e62ad69074590f062fdac53b03" prot="private" static="no" mutable="no">
+        <type>QWidget *</type>
+        <definition>QWidget* MainWindow::m_previewPane</definition>
+        <argsstring></argsstring>
+        <name>m_previewPane</name>
+        <qualifiedname>MainWindow::m_previewPane</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="383" column="13" bodyfile="src/MainWindow.h" bodystart="383" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a30aca77dfed611136212cf9a5a983a8d" prot="private" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* MainWindow::m_pdfPageLabel</definition>
+        <argsstring></argsstring>
+        <name>m_pdfPageLabel</name>
+        <qualifiedname>MainWindow::m_pdfPageLabel</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="384" column="12" bodyfile="src/MainWindow.h" bodystart="384" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a10984589dca52b6997c3228a9f738f1c" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_pdfActFirst</definition>
+        <argsstring></argsstring>
+        <name>m_pdfActFirst</name>
+        <qualifiedname>MainWindow::m_pdfActFirst</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="385" column="13" bodyfile="src/MainWindow.h" bodystart="385" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a5a1309eceeedbf427ed22516e49898cc" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_pdfActPrev</definition>
+        <argsstring></argsstring>
+        <name>m_pdfActPrev</name>
+        <qualifiedname>MainWindow::m_pdfActPrev</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="386" column="13" bodyfile="src/MainWindow.h" bodystart="386" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a6fc480c9ee992d51a678a88fdc9c7d3d" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_pdfActNext</definition>
+        <argsstring></argsstring>
+        <name>m_pdfActNext</name>
+        <qualifiedname>MainWindow::m_pdfActNext</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="387" column="13" bodyfile="src/MainWindow.h" bodystart="387" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1af9b35a99cdfb3903e530e592d5120c37" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_pdfActLast</definition>
+        <argsstring></argsstring>
+        <name>m_pdfActLast</name>
+        <qualifiedname>MainWindow::m_pdfActLast</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="388" column="13" bodyfile="src/MainWindow.h" bodystart="388" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a72a12f467d862f5022167610be24b7fb" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actPdfFind</definition>
+        <argsstring></argsstring>
+        <name>m_actPdfFind</name>
+        <qualifiedname>MainWindow::m_actPdfFind</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="389" column="13" bodyfile="src/MainWindow.h" bodystart="389" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a3cf743a60f433ee9795bdb9e0f020067" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actPdfFindNext</definition>
+        <argsstring></argsstring>
+        <name>m_actPdfFindNext</name>
+        <qualifiedname>MainWindow::m_actPdfFindNext</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="390" column="13" bodyfile="src/MainWindow.h" bodystart="390" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a92019882154648171235811c3c026cb1" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actPdfFindPrev</definition>
+        <argsstring></argsstring>
+        <name>m_actPdfFindPrev</name>
+        <qualifiedname>MainWindow::m_actPdfFindPrev</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="391" column="13" bodyfile="src/MainWindow.h" bodystart="391" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a18d977e9a7e04de8de200509927bee97" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actPdfPrint</definition>
+        <argsstring></argsstring>
+        <name>m_actPdfPrint</name>
+        <qualifiedname>MainWindow::m_actPdfPrint</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="392" column="13" bodyfile="src/MainWindow.h" bodystart="392" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1aa73cdcb2f9b54729c71a5fba3ef1d5a0" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actCopy</definition>
+        <argsstring></argsstring>
+        <name>m_actCopy</name>
+        <qualifiedname>MainWindow::m_actCopy</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="393" column="13" bodyfile="src/MainWindow.h" bodystart="393" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1aed8d56c349404a225bbf2975a4c68c98" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actRichPreviewMode</definition>
+        <argsstring></argsstring>
+        <name>m_actRichPreviewMode</name>
+        <qualifiedname>MainWindow::m_actRichPreviewMode</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="394" column="13" bodyfile="src/MainWindow.h" bodystart="394" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ab082000424e35ebd6d694a9dd932533f" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actRichTextMode</definition>
+        <argsstring></argsstring>
+        <name>m_actRichTextMode</name>
+        <qualifiedname>MainWindow::m_actRichTextMode</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="395" column="13" bodyfile="src/MainWindow.h" bodystart="395" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a4c013f177c0c080b5c84447a1bda7462" prot="private" static="no" mutable="no">
+        <type>QActionGroup *</type>
+        <definition>QActionGroup* MainWindow::m_richModeGroup</definition>
+        <argsstring></argsstring>
+        <name>m_richModeGroup</name>
+        <qualifiedname>MainWindow::m_richModeGroup</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="396" column="18" bodyfile="src/MainWindow.h" bodystart="396" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ab9655c500243393fe4374378f0b78467" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actSvgPreviewMode</definition>
+        <argsstring></argsstring>
+        <name>m_actSvgPreviewMode</name>
+        <qualifiedname>MainWindow::m_actSvgPreviewMode</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="397" column="13" bodyfile="src/MainWindow.h" bodystart="397" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a6c4ad2918a47318fa65562fb365e776d" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actSvgSourceMode</definition>
+        <argsstring></argsstring>
+        <name>m_actSvgSourceMode</name>
+        <qualifiedname>MainWindow::m_actSvgSourceMode</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="398" column="13" bodyfile="src/MainWindow.h" bodystart="398" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a1fe6901f1dfa98e7d248f97433e1e704" prot="private" static="no" mutable="no">
+        <type>QActionGroup *</type>
+        <definition>QActionGroup* MainWindow::m_svgModeGroup</definition>
+        <argsstring></argsstring>
+        <name>m_svgModeGroup</name>
+        <qualifiedname>MainWindow::m_svgModeGroup</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="399" column="18" bodyfile="src/MainWindow.h" bodystart="399" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a2d27a5c6812dd0b769097842a5347c48" prot="private" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* MainWindow::m_actGoToPageOrLine</definition>
+        <argsstring></argsstring>
+        <name>m_actGoToPageOrLine</name>
+        <qualifiedname>MainWindow::m_actGoToPageOrLine</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="400" column="13" bodyfile="src/MainWindow.h" bodystart="400" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a4b7ad36ed79f3ef3c6a3db0851861d29" prot="private" static="no" mutable="no">
+        <type>QToolBar *</type>
+        <definition>QToolBar* MainWindow::m_pdfFindToolBar</definition>
+        <argsstring></argsstring>
+        <name>m_pdfFindToolBar</name>
+        <qualifiedname>MainWindow::m_pdfFindToolBar</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="401" column="14" bodyfile="src/MainWindow.h" bodystart="401" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ae6eba8396ff4a34f6ac5c50b1c56336a" prot="private" static="no" mutable="no">
+        <type>QToolBar *</type>
+        <definition>QToolBar* MainWindow::m_richModeToolBar</definition>
+        <argsstring></argsstring>
+        <name>m_richModeToolBar</name>
+        <qualifiedname>MainWindow::m_richModeToolBar</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="402" column="14" bodyfile="src/MainWindow.h" bodystart="402" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1af8c5c32483e6bd69c548745ca607cbfe" prot="private" static="no" mutable="no">
+        <type>QLineEdit *</type>
+        <definition>QLineEdit* MainWindow::m_pdfPageEdit</definition>
+        <argsstring></argsstring>
+        <name>m_pdfPageEdit</name>
+        <qualifiedname>MainWindow::m_pdfPageEdit</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="403" column="15" bodyfile="src/MainWindow.h" bodystart="403" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1aac0b78a11338c02032494293d3927da0" prot="private" static="no" mutable="no">
+        <type>QIntValidator *</type>
+        <definition>QIntValidator* MainWindow::m_pdfPageValidator</definition>
+        <argsstring></argsstring>
+        <name>m_pdfPageValidator</name>
+        <qualifiedname>MainWindow::m_pdfPageValidator</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="404" column="19" bodyfile="src/MainWindow.h" bodystart="404" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a9d28a2265d410e43008a4017472f770c" prot="private" static="no" mutable="no">
+        <type>QLineEdit *</type>
+        <definition>QLineEdit* MainWindow::m_pdfFindEdit</definition>
+        <argsstring></argsstring>
+        <name>m_pdfFindEdit</name>
+        <qualifiedname>MainWindow::m_pdfFindEdit</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="405" column="15" bodyfile="src/MainWindow.h" bodystart="405" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a146c354f4a765e3eb57e08a815c1ad59" prot="private" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* MainWindow::m_pdfFindCountLabel</definition>
+        <argsstring></argsstring>
+        <name>m_pdfFindCountLabel</name>
+        <qualifiedname>MainWindow::m_pdfFindCountLabel</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="406" column="12" bodyfile="src/MainWindow.h" bodystart="406" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a8dec1046ec4e13849dc2815ac0747d1b" prot="private" static="no" mutable="no">
+        <type>QPdfSearchModel *</type>
+        <definition>QPdfSearchModel* MainWindow::m_pdfSearchModel</definition>
+        <argsstring></argsstring>
+        <name>m_pdfSearchModel</name>
+        <qualifiedname>MainWindow::m_pdfSearchModel</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="407" column="21" bodyfile="src/MainWindow.h" bodystart="407" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a2e662087b0026c92697b23930127d4c3" prot="private" static="no" mutable="no">
+        <type>QPdfBookmarkModel *</type>
+        <definition>QPdfBookmarkModel* MainWindow::m_pdfBookmarkModel</definition>
+        <argsstring></argsstring>
+        <name>m_pdfBookmarkModel</name>
+        <qualifiedname>MainWindow::m_pdfBookmarkModel</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="408" column="23" bodyfile="src/MainWindow.h" bodystart="408" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a9508927a5b2c6e6a243a7e78182979c6" prot="private" static="no" mutable="no">
+        <type>QTreeView *</type>
+        <definition>QTreeView* MainWindow::m_tocView</definition>
+        <argsstring></argsstring>
+        <name>m_tocView</name>
+        <qualifiedname>MainWindow::m_tocView</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="409" column="15" bodyfile="src/MainWindow.h" bodystart="409" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a09c50916ed670676d783bdc9e1852603" prot="private" static="no" mutable="no">
+        <type>QStackedWidget *</type>
+        <definition>QStackedWidget* MainWindow::m_tocStack</definition>
+        <argsstring></argsstring>
+        <name>m_tocStack</name>
+        <qualifiedname>MainWindow::m_tocStack</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="410" column="20" bodyfile="src/MainWindow.h" bodystart="410" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ade52d728b76e3b8ac230e5d17ea379da" prot="private" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* MainWindow::m_tocPlaceholder</definition>
+        <argsstring></argsstring>
+        <name>m_tocPlaceholder</name>
+        <qualifiedname>MainWindow::m_tocPlaceholder</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="411" column="12" bodyfile="src/MainWindow.h" bodystart="411" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a060e7de311916b59fdd376697a582d04" prot="private" static="no" mutable="no">
+        <type>QListWidget *</type>
+        <definition>QListWidget* MainWindow::m_pdfThumbList</definition>
+        <argsstring></argsstring>
+        <name>m_pdfThumbList</name>
+        <qualifiedname>MainWindow::m_pdfThumbList</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="412" column="17" bodyfile="src/MainWindow.h" bodystart="412" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1aee818a1b60c4441fb0f05d0961d604f7" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int MainWindow::m_pdfThumbPageCount</definition>
+        <argsstring></argsstring>
+        <name>m_pdfThumbPageCount</name>
+        <qualifiedname>MainWindow::m_pdfThumbPageCount</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="413" column="9" bodyfile="src/MainWindow.h" bodystart="413" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ad743d41ac8b6600ae3a817c11c659ff8" prot="private" static="no" mutable="no">
+        <type>QString</type>
+        <definition>QString MainWindow::m_previewFilePath</definition>
+        <argsstring></argsstring>
+        <name>m_previewFilePath</name>
+        <qualifiedname>MainWindow::m_previewFilePath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="415" column="13" bodyfile="src/MainWindow.h" bodystart="415" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1aecfaced0337c207ba9349e5f23e52f78" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MainWindow::m_richPreviewMode</definition>
+        <argsstring></argsstring>
+        <name>m_richPreviewMode</name>
+        <qualifiedname>MainWindow::m_richPreviewMode</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+<para>true=rendered Preview, false=raw Text for HTML/Markdown. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="416" column="10" bodyfile="src/MainWindow.h" bodystart="416" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a75b0f4fb7dd84ac30f378b05eb4a6f06" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MainWindow::m_previewedFileIsRichText</definition>
+        <argsstring></argsstring>
+        <name>m_previewedFileIsRichText</name>
+        <qualifiedname>MainWindow::m_previewedFileIsRichText</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>true when current file is HTML or Markdown. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="417" column="10" bodyfile="src/MainWindow.h" bodystart="417" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a0ba12931573bcb9e27297caa260c2847" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MainWindow::m_previewedFileIsSvg</definition>
+        <argsstring></argsstring>
+        <name>m_previewedFileIsSvg</name>
+        <qualifiedname>MainWindow::m_previewedFileIsSvg</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>true when the selected file is .svg (preview vs source). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="418" column="10" bodyfile="src/MainWindow.h" bodystart="418" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a95f28e23dde3bcdff3550b987d19dc28" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MainWindow::m_svgPreviewMode</definition>
+        <argsstring></argsstring>
+        <name>m_svgPreviewMode</name>
+        <qualifiedname>MainWindow::m_svgPreviewMode</qualifiedname>
+        <initializer>= true</initializer>
+        <briefdescription>
+<para>true=raster preview, false=XML source in text view (persisted). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="419" column="10" bodyfile="src/MainWindow.h" bodystart="419" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a57272635168b01651c8317ac155aa4a8" prot="private" static="no" mutable="no">
+        <type>qreal</type>
+        <definition>qreal MainWindow::m_imageZoomFactor</definition>
+        <argsstring></argsstring>
+        <name>m_imageZoomFactor</name>
+        <qualifiedname>MainWindow::m_imageZoomFactor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="420" column="11" bodyfile="src/MainWindow.h" bodystart="420" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a7ec57e67b90d9a9bd2096c4b9cdcf8a3" prot="private" static="no" mutable="no">
+        <type>QString</type>
+        <definition>QString MainWindow::m_pendingReloadPath</definition>
+        <argsstring></argsstring>
+        <name>m_pendingReloadPath</name>
+        <qualifiedname>MainWindow::m_pendingReloadPath</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="421" column="13" bodyfile="src/MainWindow.h" bodystart="421" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a6a7d2b3c481a20a8ce5573c1ede425ff" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int MainWindow::m_pdfSearchCurrentIndex</definition>
+        <argsstring></argsstring>
+        <name>m_pdfSearchCurrentIndex</name>
+        <qualifiedname>MainWindow::m_pdfSearchCurrentIndex</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="422" column="9" bodyfile="src/MainWindow.h" bodystart="422" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1ae3b89986fd8814ce75e286def0cf9f77" prot="private" static="no" mutable="no">
+        <type>QVector&lt; int &gt;</type>
+        <definition>QVector&lt;int&gt; MainWindow::m_documentFindMatchStarts</definition>
+        <argsstring></argsstring>
+        <name>m_documentFindMatchStarts</name>
+        <qualifiedname>MainWindow::m_documentFindMatchStarts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="423" column="13" bodyfile="src/MainWindow.h" bodystart="423" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a76cb70e9d803224bf600c52edbf75142" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int MainWindow::m_documentFindCurrentIndex</definition>
+        <argsstring></argsstring>
+        <name>m_documentFindCurrentIndex</name>
+        <qualifiedname>MainWindow::m_documentFindCurrentIndex</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="424" column="9" bodyfile="src/MainWindow.h" bodystart="424" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a3a3cda6725c8e6b39a1a5dad59ac599e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MainWindow::m_updatingPdfPageEdit</definition>
+        <argsstring></argsstring>
+        <name>m_updatingPdfPageEdit</name>
+        <qualifiedname>MainWindow::m_updatingPdfPageEdit</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="425" column="10" bodyfile="src/MainWindow.h" bodystart="425" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a3f54f065504de2e4d5e6f3e0b899fa4e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MainWindow::m_pdfAutoSelectingFirstResult</definition>
+        <argsstring></argsstring>
+        <name>m_pdfAutoSelectingFirstResult</name>
+        <qualifiedname>MainWindow::m_pdfAutoSelectingFirstResult</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="426" column="10" bodyfile="src/MainWindow.h" bodystart="426" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a004bd901261a389a6b7f7de677d721e6" prot="private" static="no" mutable="no">
+        <type>QFileSystemWatcher *</type>
+        <definition>QFileSystemWatcher* MainWindow::m_fileWatcher</definition>
+        <argsstring></argsstring>
+        <name>m_fileWatcher</name>
+        <qualifiedname>MainWindow::m_fileWatcher</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="427" column="24" bodyfile="src/MainWindow.h" bodystart="427" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a61ef012fca9b3af40c7177d9f2b725d7" prot="private" static="no" mutable="no">
+        <type>QTimer *</type>
+        <definition>QTimer* MainWindow::m_reloadDebounceTimer</definition>
+        <argsstring></argsstring>
+        <name>m_reloadDebounceTimer</name>
+        <qualifiedname>MainWindow::m_reloadDebounceTimer</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="428" column="12" bodyfile="src/MainWindow.h" bodystart="428" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classMainWindow_1a7b0c3baffa657502095083788b21689d" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool MainWindow::m_shuttingDown</definition>
+        <argsstring></argsstring>
+        <name>m_shuttingDown</name>
+        <qualifiedname>MainWindow::m_shuttingDown</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+<para>True while destroying; suppresses late PDF UI updates. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="430" column="10" bodyfile="src/MainWindow.h" bodystart="430" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classMainWindow_1a996c5a2b6f77944776856f08ec30858d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>MainWindow::MainWindow</definition>
+        <argsstring>(QWidget *parent=nullptr)</argsstring>
+        <name>MainWindow</name>
+        <qualifiedname>MainWindow::MainWindow</qualifiedname>
+        <param>
+          <type>QWidget *</type>
+          <declname>parent</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Constructs the main window and wires models, views, menus, and actions. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional parent widget; typically <computeroutput>nullptr</computeroutput> for a top-level window. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="56" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a1f7d2c56410fc1bfa135bb907d43313f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>MainWindow::~MainWindow</definition>
+        <argsstring>() override</argsstring>
+        <name>~MainWindow</name>
+        <qualifiedname>MainWindow::~MainWindow</qualifiedname>
+        <briefdescription>
+<para>Destroys the window and blocks disconnects PDF signals before child teardown. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="61" column="5"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a36baf402fb696610dc4a5c92574070f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::setRootFolder</definition>
+        <argsstring>(const QString &amp;absolutePath)</argsstring>
+        <name>setRootFolder</name>
+        <qualifiedname>MainWindow::setRootFolder</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>absolutePath</declname>
+        </param>
+        <briefdescription>
+<para>Sets the file system model root to an existing directory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">absolutePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Absolute directory path; if invalid, shows a warning and returns. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="67" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1ad48b6c069f84e205f0d47140c4c2aa21" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::selectPath</definition>
+        <argsstring>(const QString &amp;absoluteFilePath)</argsstring>
+        <name>selectPath</name>
+        <qualifiedname>MainWindow::selectPath</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>absoluteFilePath</declname>
+        </param>
+        <briefdescription>
+<para>Selects a file or folder in the tree and previews it when under the current root. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">absoluteFilePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Absolute path to a file or directory visible from the root. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="73" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classMainWindow_1ade305265b2120df2489a5ebeb07ebbe1" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MainWindow::eventFilter</definition>
+        <argsstring>(QObject *watched, QEvent *event) override</argsstring>
+        <name>eventFilter</name>
+        <qualifiedname>MainWindow::eventFilter</qualifiedname>
+        <param>
+          <type>QObject *</type>
+          <declname>watched</declname>
+        </param>
+        <param>
+          <type>QEvent *</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Handles resize events on the image preview viewport to rescale the pixmap. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">watched</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Object receiving the event (image scroll viewport). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Qt event; <computeroutput>QEvent::Resize</computeroutput> triggers image scale refresh. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the event was handled here; otherwise base-class result. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="82" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-slot">
+      <memberdef kind="slot" id="classMainWindow_1aea9caf07014e8c7a6552676f99ef8e70" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onTreeCurrentChanged</definition>
+        <argsstring>(const QModelIndex &amp;current, const QModelIndex &amp;previous)</argsstring>
+        <name>onTreeCurrentChanged</name>
+        <qualifiedname>MainWindow::onTreeCurrentChanged</qualifiedname>
+        <param>
+          <type>const QModelIndex &amp;</type>
+          <declname>current</declname>
+        </param>
+        <param>
+          <type>const QModelIndex &amp;</type>
+          <declname>previous</declname>
+        </param>
+        <briefdescription>
+<para>Previews the path for the newly selected tree item. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">current</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New selection index; invalid shows an empty-state placeholder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previous</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Prior selection (unused). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="90" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a575bbcadf2c561272c6a038d2431051f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onTreeContextMenuRequested</definition>
+        <argsstring>(const QPoint &amp;pos)</argsstring>
+        <name>onTreeContextMenuRequested</name>
+        <qualifiedname>MainWindow::onTreeContextMenuRequested</qualifiedname>
+        <param>
+          <type>const QPoint &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+<para>Shows a context menu for Open in skrat / default app / Open With. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pos</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Viewport-local position for menu placement. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="96" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a3f056c9dc1a1362db59771d540147434" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::openFolderDialog</definition>
+        <argsstring>()</argsstring>
+        <name>openFolderDialog</name>
+        <qualifiedname>MainWindow::openFolderDialog</qualifiedname>
+        <briefdescription>
+<para>Prompts for a folder and calls <ref refid="classMainWindow_1a36baf402fb696610dc4a5c92574070f8" kindref="member">setRootFolder()</ref> when accepted. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="99" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a944e25dc70f73ab360357618a54e1d55" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::zoomInPdf</definition>
+        <argsstring>()</argsstring>
+        <name>zoomInPdf</name>
+        <qualifiedname>MainWindow::zoomInPdf</qualifiedname>
+        <briefdescription>
+<para>Zooms in the active PDF or image preview by a fixed factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="102" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1acdf293e21c23a5144404d8d8a9751f61" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::zoomOutPdf</definition>
+        <argsstring>()</argsstring>
+        <name>zoomOutPdf</name>
+        <qualifiedname>MainWindow::zoomOutPdf</qualifiedname>
+        <briefdescription>
+<para>Zooms out the active PDF or image preview by a fixed factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="105" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a44a223a646f0b7cfa5c3d9d81bfaa21c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::pdfFitWidth</definition>
+        <argsstring>()</argsstring>
+        <name>pdfFitWidth</name>
+        <qualifiedname>MainWindow::pdfFitWidth</qualifiedname>
+        <briefdescription>
+<para>Sets PDF view zoom mode to fit-to-width when a PDF is active. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="108" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1ae8d376835313b00650eb51787fd08929" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::zoomResetToViewport</definition>
+        <argsstring>()</argsstring>
+        <name>zoomResetToViewport</name>
+        <qualifiedname>MainWindow::zoomResetToViewport</qualifiedname>
+        <briefdescription>
+<para>Resets PDF zoom to fit width or image zoom to fit the viewport. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="111" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a6f939a979793d87462c271d97a075157" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::pdfGoFirstPage</definition>
+        <argsstring>()</argsstring>
+        <name>pdfGoFirstPage</name>
+        <qualifiedname>MainWindow::pdfGoFirstPage</qualifiedname>
+        <briefdescription>
+<para>Jumps the PDF view to the first page when a document is loaded. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="114" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a65f5d5f2e865a7e78422fe8b082291b0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::pdfGoPrevPage</definition>
+        <argsstring>()</argsstring>
+        <name>pdfGoPrevPage</name>
+        <qualifiedname>MainWindow::pdfGoPrevPage</qualifiedname>
+        <briefdescription>
+<para>Jumps the PDF view to the previous page if one exists. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="117" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a707eae8b5156aa045016b86f128d0433" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::pdfGoNextPage</definition>
+        <argsstring>()</argsstring>
+        <name>pdfGoNextPage</name>
+        <qualifiedname>MainWindow::pdfGoNextPage</qualifiedname>
+        <briefdescription>
+<para>Jumps the PDF view to the next page if one exists. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="120" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1afa6c7106649010aff1beecf18fdd7174" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::pdfGoLastPage</definition>
+        <argsstring>()</argsstring>
+        <name>pdfGoLastPage</name>
+        <qualifiedname>MainWindow::pdfGoLastPage</qualifiedname>
+        <briefdescription>
+<para>Jumps the PDF view to the last page when a document is loaded. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="123" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a82b228a8d3fb71f6a7f1807d529d90b6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::openPdfFind</definition>
+        <argsstring>()</argsstring>
+        <name>openPdfFind</name>
+        <qualifiedname>MainWindow::openPdfFind</qualifiedname>
+        <briefdescription>
+<para>Shows the find toolbar and focuses the search field for PDF, text, or rich preview. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="126" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1ae02937ce3c52d5819e583c03b184ec15" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::pdfFindNext</definition>
+        <argsstring>()</argsstring>
+        <name>pdfFindNext</name>
+        <qualifiedname>MainWindow::pdfFindNext</qualifiedname>
+        <briefdescription>
+<para>Selects the next row in the PDF search model and scrolls to that match. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="129" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1abc2bb4ca03ce1522f48395216dbddc49" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::pdfFindPrev</definition>
+        <argsstring>()</argsstring>
+        <name>pdfFindPrev</name>
+        <qualifiedname>MainWindow::pdfFindPrev</qualifiedname>
+        <briefdescription>
+<para>Selects the previous row in the PDF search model and scrolls to that match. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="132" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a33a6291feb3237108a8081f6b17779ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onPdfFindTextChanged</definition>
+        <argsstring>(const QString &amp;text)</argsstring>
+        <name>onPdfFindTextChanged</name>
+        <qualifiedname>MainWindow::onPdfFindTextChanged</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+<para>Updates QPdfSearchModel::setSearchString and refreshes find UI state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">text</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New query string (may be empty to clear matches). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="138" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1add87e036c0c2d7d89d6a9c613cf266f1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onPdfSearchResultsChanged</definition>
+        <argsstring>()</argsstring>
+        <name>onPdfSearchResultsChanged</name>
+        <qualifiedname>MainWindow::onPdfSearchResultsChanged</qualifiedname>
+        <briefdescription>
+<para>Updates match counts, labels, and action enablement after search model changes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="141" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a80bc827febb6c1f3a522ce136fbbd539" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::printCurrentPdf</definition>
+        <argsstring>()</argsstring>
+        <name>printCurrentPdf</name>
+        <qualifiedname>MainWindow::printCurrentPdf</qualifiedname>
+        <briefdescription>
+<para>Runs the print-options dialog then raster or native-vector print pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="144" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a8a91d114e5ba1706162f4a17da898da7" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::copyCurrentSelection</definition>
+        <argsstring>()</argsstring>
+        <name>copyCurrentSelection</name>
+        <qualifiedname>MainWindow::copyCurrentSelection</qualifiedname>
+        <briefdescription>
+<para>Copies from the focused text/PDF widget and strips background HTML from clipboard. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="147" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a63c95190fa305627c29ec601ed10a2f0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::showAboutDialog</definition>
+        <argsstring>()</argsstring>
+        <name>showAboutDialog</name>
+        <qualifiedname>MainWindow::showAboutDialog</qualifiedname>
+        <briefdescription>
+<para>Shows the About box with version, license, and project links. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="150" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a267af458809fd42db2025145bad659f0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::showHelpDialog</definition>
+        <argsstring>()</argsstring>
+        <name>showHelpDialog</name>
+        <qualifiedname>MainWindow::showHelpDialog</qualifiedname>
+        <briefdescription>
+<para>Shows an in-window help browser with shortcuts and usage summary. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="153" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1afe2f4e5f5621536de40009ad900edf6b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::installCommandLineTool</definition>
+        <argsstring>()</argsstring>
+        <name>installCommandLineTool</name>
+        <qualifiedname>MainWindow::installCommandLineTool</qualifiedname>
+        <briefdescription>
+<para>Writes a small launcher script to the user’s CLI path and explains PATH setup. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="156" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1aa927e697a756818463d9d4fbda36c7f6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::showThemeSettingsDialog</definition>
+        <argsstring>()</argsstring>
+        <name>showThemeSettingsDialog</name>
+        <qualifiedname>MainWindow::showThemeSettingsDialog</qualifiedname>
+        <briefdescription>
+<para>Opens the theme and UI font preferences dialog. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="159" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1ac859a68c6f5adb041d1fb5a82b7dc727" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onPdfPageEditReturnPressed</definition>
+        <argsstring>()</argsstring>
+        <name>onPdfPageEditReturnPressed</name>
+        <qualifiedname>MainWindow::onPdfPageEditReturnPressed</qualifiedname>
+        <briefdescription>
+<para>Parses the toolbar page field and jumps the PDF to that 1-based page. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="162" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a81bcc18e82a9fe1fc15990d76828792b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onTocActivated</definition>
+        <argsstring>(const QModelIndex &amp;index)</argsstring>
+        <name>onTocActivated</name>
+        <qualifiedname>MainWindow::onTocActivated</qualifiedname>
+        <param>
+          <type>const QModelIndex &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Navigates the PDF view to the bookmark’s page, location, and zoom. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Activated item in the TOC tree backed by QPdfBookmarkModel. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="168" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1ae0542fbc4a0d6e2e8a75fe95c55cad9b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onPdfBookmarksChanged</definition>
+        <argsstring>()</argsstring>
+        <name>onPdfBookmarksChanged</name>
+        <qualifiedname>MainWindow::onPdfBookmarksChanged</qualifiedname>
+        <briefdescription>
+<para>Expands TOC rows and refreshes TOC/thumbnail tab enablement after bookmark changes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="171" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1aa47ab718d93b81b1a53eec2a72109e37" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onPdfThumbnailActivated</definition>
+        <argsstring>(QListWidgetItem *item)</argsstring>
+        <name>onPdfThumbnailActivated</name>
+        <qualifiedname>MainWindow::onPdfThumbnailActivated</qualifiedname>
+        <param>
+          <type>QListWidgetItem *</type>
+          <declname>item</declname>
+        </param>
+        <briefdescription>
+<para>Jumps the PDF to the page encoded on the clicked thumbnail item. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">item</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Thumbnail list item whose UserRole holds the 0-based page index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="177" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1ab254e1408b8e2ad9833a7de8e08478ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::goToPageOrLine</definition>
+        <argsstring>()</argsstring>
+        <name>goToPageOrLine</name>
+        <qualifiedname>MainWindow::goToPageOrLine</qualifiedname>
+        <briefdescription>
+<para>Prompts for a PDF page or plain-text line depending on the active preview mode. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="180" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1ab2bc6fb3fbb570031b55be6a95e7061b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::updatePdfPageUi</definition>
+        <argsstring>()</argsstring>
+        <name>updatePdfPageUi</name>
+        <qualifiedname>MainWindow::updatePdfPageUi</qualifiedname>
+        <briefdescription>
+<para>Refreshes page label, toolbar state, find bar visibility, and TOC/thumbnail tabs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="183" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1abd22b6868ad0bebb9373671f6ffdcb8c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onWatchedFileChanged</definition>
+        <argsstring>(const QString &amp;path)</argsstring>
+        <name>onWatchedFileChanged</name>
+        <qualifiedname>MainWindow::onWatchedFileChanged</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>path</declname>
+        </param>
+        <briefdescription>
+<para>Starts a short debounce timer after QFileSystemWatcher reports a file change. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">path</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Path that changed (unused; reload uses the tracked preview path). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="189" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a3d011e168754dc8ff4bef4a1dc49e8b0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onReloadDebounceTimeout</definition>
+        <argsstring>()</argsstring>
+        <name>onReloadDebounceTimeout</name>
+        <qualifiedname>MainWindow::onReloadDebounceTimeout</qualifiedname>
+        <briefdescription>
+<para>Reloads the preview path after debounce, or shows unavailable if the file vanished. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="192" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a7c0e3a1f8b003887e3688157e46689f6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::setRichPreviewMode</definition>
+        <argsstring>(bool previewMode)</argsstring>
+        <name>setRichPreviewMode</name>
+        <qualifiedname>MainWindow::setRichPreviewMode</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>previewMode</declname>
+        </param>
+        <briefdescription>
+<para>Switches between source text and rendered preview for HTML/Markdown files. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="195" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a4df1efec425ac9b54b99d5d75fd160b1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::setSvgPreviewMode</definition>
+        <argsstring>(bool previewMode)</argsstring>
+        <name>setSvgPreviewMode</name>
+        <qualifiedname>MainWindow::setSvgPreviewMode</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>previewMode</declname>
+        </param>
+        <briefdescription>
+<para>Switches between raster SVG preview and XML source for .svg files. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="198" column="10"/>
+      </memberdef>
+      <memberdef kind="slot" id="classMainWindow_1a2a6af4d75a7b89dab269360dfe8d1bbb" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::onRichPreviewLinkClicked</definition>
+        <argsstring>(const QUrl &amp;url)</argsstring>
+        <name>onRichPreviewLinkClicked</name>
+        <qualifiedname>MainWindow::onRichPreviewLinkClicked</qualifiedname>
+        <param>
+          <type>const QUrl &amp;</type>
+          <declname>url</declname>
+        </param>
+        <briefdescription>
+<para>Handles clicked links inside the rendered rich-text preview. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">url</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Link target from QTextBrowser::anchorClicked. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="204" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classMainWindow_1aa353e8faed952a95e2fc62d7a5018a89" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::setupUi</definition>
+        <argsstring>()</argsstring>
+        <name>setupUi</name>
+        <qualifiedname>MainWindow::setupUi</qualifiedname>
+        <briefdescription>
+<para>Builds menus, toolbars, splitters, preview stack, and signal connections. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="208" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1ae8f6ed3773b9a1f589e30c0cd108c30d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::previewPath</definition>
+        <argsstring>(const QString &amp;absolutePath)</argsstring>
+        <name>previewPath</name>
+        <qualifiedname>MainWindow::previewPath</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>absolutePath</declname>
+        </param>
+        <briefdescription>
+<para>Loads and displays PDF, HTML/Markdown preview or source text, image, or placeholder content for <emphasis>absolutePath</emphasis>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">absolutePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Absolute filesystem path to preview. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="214" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1aed1aa96fece41d257732c1e7f8e5109b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::showPlaceholder</definition>
+        <argsstring>(const QString &amp;html)</argsstring>
+        <name>showPlaceholder</name>
+        <qualifiedname>MainWindow::showPlaceholder</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>html</declname>
+        </param>
+        <briefdescription>
+<para>Shows the stacked placeholder page with rich HTML and clears file watching. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">html</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rich text / HTML body for the placeholder QLabel. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="220" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a760b69d95606467ac26581a983fe2220" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MainWindow::openPathInDefaultApp</definition>
+        <argsstring>(const QString &amp;absolutePath)</argsstring>
+        <name>openPathInDefaultApp</name>
+        <qualifiedname>MainWindow::openPathInDefaultApp</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>absolutePath</declname>
+        </param>
+        <briefdescription>
+<para>Opens <emphasis>absolutePath</emphasis> with QDesktopServices (OS default application). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">absolutePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Absolute path to a file or folder. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the URL open request succeeded. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="241" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a0cf211ff8de1892c6f5fa5bb958e236f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MainWindow::openPathWithApp</definition>
+        <argsstring>(const QString &amp;absolutePath, const QString &amp;appPath)</argsstring>
+        <name>openPathWithApp</name>
+        <qualifiedname>MainWindow::openPathWithApp</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>absolutePath</declname>
+        </param>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>appPath</declname>
+        </param>
+        <briefdescription>
+<para>Launches <emphasis>appPath</emphasis> with <emphasis>absolutePath</emphasis> as its argument (platform-specific). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">absolutePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>File to open. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">appPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executable or macOS .app bundle path. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if QProcess::startDetached reported success. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="249" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a05eb4bfe9c2c67c9a4f1887891766963" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::openWithForPath</definition>
+        <argsstring>(const QString &amp;absolutePath)</argsstring>
+        <name>openWithForPath</name>
+        <qualifiedname>MainWindow::openWithForPath</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>absolutePath</declname>
+        </param>
+        <briefdescription>
+<para>Presents ranked “Open With” choices and records usage for future ranking. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">absolutePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>File to open with a chosen handler. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="255" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1ab2194fb46495ebb107ebdcad2816cde6" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>QString</type>
+        <definition>QString MainWindow::fileTypeKeyForPath</definition>
+        <argsstring>(const QString &amp;absolutePath) const</argsstring>
+        <name>fileTypeKeyForPath</name>
+        <qualifiedname>MainWindow::fileTypeKeyForPath</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>absolutePath</declname>
+        </param>
+        <briefdescription>
+<para>Returns a stable QSettings subgroup key for a file type (usually lower-case suffix). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">absolutePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Path whose extension (or <computeroutput>__noext__</computeroutput>) defines the key. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Non-empty type key used under Open With settings. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="262" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1acba4fccbedb88edaf0e6a3d13b625d19" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::recordOpenWithUsage</definition>
+        <argsstring>(const QString &amp;fileTypeKey, const QString &amp;appKey, const QString &amp;label, const QString &amp;appPath)</argsstring>
+        <name>recordOpenWithUsage</name>
+        <qualifiedname>MainWindow::recordOpenWithUsage</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>fileTypeKey</declname>
+        </param>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>appKey</declname>
+        </param>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>label</declname>
+        </param>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>appPath</declname>
+        </param>
+        <briefdescription>
+<para>Increments launch counters and timestamps for Open With ranking. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fileTypeKey</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Result of <ref refid="classMainWindow_1ab2194fb46495ebb107ebdcad2816cde6" kindref="member">fileTypeKeyForPath()</ref>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">appKey</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Stable identifier for the chosen application. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">label</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Human-readable label stored for menus. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">appPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Executable path stored for relaunch. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="271" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1ab9ae18cd9a0a1821e3bfac05fd579627" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>QString</type>
+        <definition>QString MainWindow::cliLauncherPath</definition>
+        <argsstring>() const</argsstring>
+        <name>cliLauncherPath</name>
+        <qualifiedname>MainWindow::cliLauncherPath</qualifiedname>
+        <briefdescription>
+<para>Returns the platform-specific path where the CLI launcher script is installed. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Native path to <computeroutput>skrat</computeroutput> or <computeroutput>skrat.cmd</computeroutput> under the user’s local bin directory. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="280" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1ad02790512f8aaeeaab9b6e80fe43e815" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>QString</type>
+        <definition>QString MainWindow::cliLauncherContent</definition>
+        <argsstring>() const</argsstring>
+        <name>cliLauncherContent</name>
+        <qualifiedname>MainWindow::cliLauncherContent</qualifiedname>
+        <briefdescription>
+<para>Returns the shell or batch script body that forwards arguments to this binary. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>UTF-8 script contents appropriate for the host OS. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="286" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a7be2737d224f3785467c708b99d96bc2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::pauseWatching</definition>
+        <argsstring>()</argsstring>
+        <name>pauseWatching</name>
+        <qualifiedname>MainWindow::pauseWatching</qualifiedname>
+        <briefdescription>
+<para>Clears all paths from QFileSystemWatcher without changing the logical preview path. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="289" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a179390431d64ab9ad325bfb6435876af" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::setWatchedPreviewFile</definition>
+        <argsstring>(const QString &amp;absoluteFilePath)</argsstring>
+        <name>setWatchedPreviewFile</name>
+        <qualifiedname>MainWindow::setWatchedPreviewFile</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>absoluteFilePath</declname>
+        </param>
+        <briefdescription>
+<para>Registers <emphasis>absoluteFilePath</emphasis> with QFileSystemWatcher for live reload. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">absoluteFilePath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>File to watch, or empty to clear watching only. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="295" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1aa2d19ed61a456220643888235736261d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::showPreviewFileUnavailable</definition>
+        <argsstring>(const QString &amp;lostPath)</argsstring>
+        <name>showPreviewFileUnavailable</name>
+        <qualifiedname>MainWindow::showPreviewFileUnavailable</qualifiedname>
+        <param>
+          <type>const QString &amp;</type>
+          <declname>lostPath</declname>
+        </param>
+        <briefdescription>
+<para>Shows a placeholder explaining the preview file disappeared (rename/delete). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lostPath</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Absolute path that is no longer available on disk. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="301" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1aca0dda06c387f4904d236f7ec1f6ba0d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::updateGoToNavigationAction</definition>
+        <argsstring>()</argsstring>
+        <name>updateGoToNavigationAction</name>
+        <qualifiedname>MainWindow::updateGoToNavigationAction</qualifiedname>
+        <briefdescription>
+<para>Enables “Go to page/line” when PDF or non-empty text preview is active. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="304" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1aaaf3c320365743dd72a3c2e12cde667d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::updatePdfFindActions</definition>
+        <argsstring>()</argsstring>
+        <name>updatePdfFindActions</name>
+        <qualifiedname>MainWindow::updatePdfFindActions</qualifiedname>
+        <briefdescription>
+<para>Enables find/copy/print actions according to stack mode and model state. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="307" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a1a5903f03615e1ba193c9a393b344f1f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::updatePdfSearchStatus</definition>
+        <argsstring>()</argsstring>
+        <name>updatePdfSearchStatus</name>
+        <qualifiedname>MainWindow::updatePdfSearchStatus</qualifiedname>
+        <briefdescription>
+<para>Updates the “Match X of Y” (or similar) label next to the find field. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="310" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1aca5cb77c9a52882a0460cd5c26ad81d5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int MainWindow::pdfSearchResultCount</definition>
+        <argsstring>() const</argsstring>
+        <name>pdfSearchResultCount</name>
+        <qualifiedname>MainWindow::pdfSearchResultCount</qualifiedname>
+        <briefdescription>
+<para>Returns the number of rows in the active QPdfSearchModel. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Match count, or 0 if no model or empty query. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="316" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1ac17580f8cedbf40288bb9e52169818f8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::selectPdfSearchResult</definition>
+        <argsstring>(int index)</argsstring>
+        <name>selectPdfSearchResult</name>
+        <qualifiedname>MainWindow::selectPdfSearchResult</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Selects search result <emphasis>index</emphasis>, jumps the PDF view, and syncs highlight state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based row in QPdfSearchModel (must be in range). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="322" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a3058f4eae9c744bfd231bfcc8dff7541" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int MainWindow::currentPdfSearchResultIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>currentPdfSearchResultIndex</name>
+        <qualifiedname>MainWindow::currentPdfSearchResultIndex</qualifiedname>
+        <briefdescription>
+<para>Returns the current match index from the view or compatibility cache. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>0-based index, or -1 if none / invalid. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="328" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a0eda0edded39004c8a17fbca452b087c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::setCurrentPdfSearchResultIndexCompat</definition>
+        <argsstring>(int index)</argsstring>
+        <name>setCurrentPdfSearchResultIndexCompat</name>
+        <qualifiedname>MainWindow::setCurrentPdfSearchResultIndexCompat</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Sets the active search-result index on the view and mirrored member state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New current index, or -1 to clear selection. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="334" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a7dbdbcd1a8cbc0b02a5d3ca2f75a066b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::updateTocPaneUi</definition>
+        <argsstring>()</argsstring>
+        <name>updateTocPaneUi</name>
+        <qualifiedname>MainWindow::updateTocPaneUi</qualifiedname>
+        <briefdescription>
+<para>Shows or hides TOC/thumbnail tabs and rebuilds thumbnails when page count changes. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="337" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a2e5f039142d2cb5a755872f3c3288caf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::rebuildPdfThumbnails</definition>
+        <argsstring>()</argsstring>
+        <name>rebuildPdfThumbnails</name>
+        <qualifiedname>MainWindow::rebuildPdfThumbnails</qualifiedname>
+        <briefdescription>
+<para>Regenerates QListWidget thumbnail icons for every PDF page. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="340" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a87c80b2a06a0e368bf469aa66b7588be" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::syncPdfThumbnailSelection</definition>
+        <argsstring>()</argsstring>
+        <name>syncPdfThumbnailSelection</name>
+        <qualifiedname>MainWindow::syncPdfThumbnailSelection</qualifiedname>
+        <briefdescription>
+<para>Selects the thumbnail row matching <ref refid="classPdfGraphicsView_1af0a4584011bebb80cfb55e62e5380238" kindref="member">PdfGraphicsView::currentPage()</ref>. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="343" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a9f2e6c0a257b3b63e43757cf54e98d99" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::updateImagePreviewScale</definition>
+        <argsstring>()</argsstring>
+        <name>updateImagePreviewScale</name>
+        <qualifiedname>MainWindow::updateImagePreviewScale</qualifiedname>
+        <briefdescription>
+<para>Rescales the image QLabel from m_imageOriginalPixmap and m_imageZoomFactor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="346" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a3f0d824ed9ae7eab3d7908ef72842f35" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::updateRichPreviewModeUi</definition>
+        <argsstring>(bool enabled)</argsstring>
+        <name>updateRichPreviewModeUi</name>
+        <qualifiedname>MainWindow::updateRichPreviewModeUi</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+<para>Updates visibility and checked state of the Preview/Text mode controls. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">enabled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> when current file supports dual rich preview modes. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="352" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a2b00d2b46eebd9395d707d1ce8971c39" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::updatePreviewModeToolbars</definition>
+        <argsstring>()</argsstring>
+        <name>updatePreviewModeToolbars</name>
+        <qualifiedname>MainWindow::updatePreviewModeToolbars</qualifiedname>
+        <briefdescription>
+<para>Shows the correct Preview/Text vs SVG toolbar actions for the active file type. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="355" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1aba7c65bb4aba4f3ab42f73b74a198fda" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool MainWindow::documentFindSupported</definition>
+        <argsstring>() const</argsstring>
+        <name>documentFindSupported</name>
+        <qualifiedname>MainWindow::documentFindSupported</qualifiedname>
+        <briefdescription>
+<para><computeroutput>true</computeroutput> when the preview stack shows PDF, plain text, or rendered HTML (find applies). </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="358" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a409189c03971d3984fc7dec40800e271" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::rebuildDocumentTextFindMatches</definition>
+        <argsstring>()</argsstring>
+        <name>rebuildDocumentTextFindMatches</name>
+        <qualifiedname>MainWindow::rebuildDocumentTextFindMatches</qualifiedname>
+        <briefdescription>
+<para>Recomputes plain-text/rich HTML match ranges for the find field query. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="361" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1a1cb722d49c59295ef157bd94a3d36c11" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void MainWindow::selectDocumentTextFindMatch</definition>
+        <argsstring>(int index)</argsstring>
+        <name>selectDocumentTextFindMatch</name>
+        <qualifiedname>MainWindow::selectDocumentTextFindMatch</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Selects the <emphasis>index</emphasis> -th match in the text or rich preview document. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="364" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="classMainWindow_1a5a6716152e7f99795427f829f2d1a3d7" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool MainWindow::isProbablyTextFile</definition>
+        <argsstring>(const QFileInfo &amp;fi)</argsstring>
+        <name>isProbablyTextFile</name>
+        <qualifiedname>MainWindow::isProbablyTextFile</qualifiedname>
+        <param>
+          <type>const QFileInfo &amp;</type>
+          <declname>fi</declname>
+        </param>
+        <briefdescription>
+<para>Heuristically classifies a path as plain text preview by extension. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fi</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>File metadata for the candidate path. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the suffix is in the allowlisted text extensions. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="227" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classMainWindow_1aced8da1e83a284c6b58abf439a92b462" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>static bool MainWindow::isProbablyImageFile</definition>
+        <argsstring>(const QFileInfo &amp;fi)</argsstring>
+        <name>isProbablyImageFile</name>
+        <qualifiedname>MainWindow::isProbablyImageFile</qualifiedname>
+        <param>
+          <type>const QFileInfo &amp;</type>
+          <declname>fi</declname>
+        </param>
+        <briefdescription>
+<para>Heuristically classifies a path as image preview by suffix or QImageReader. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">fi</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>File metadata for the candidate path. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if the file is likely displayable as a raster or vector image. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/MainWindow.h" line="234" column="17"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>MainWindow</label>
+        <link refid="classMainWindow"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>QMainWindow</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>MainWindow</label>
+        <link refid="classMainWindow"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_pdfView</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>PdfGraphicsView</label>
+        <link refid="classPdfGraphicsView"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>QGraphicsView</label>
+      </node>
+      <node id="2">
+        <label>QMainWindow</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/MainWindow.h" line="47" column="1" bodyfile="src/MainWindow.h" bodystart="48" bodyend="431"/>
+    <listofallmembers>
+      <member refid="classMainWindow_1ad02790512f8aaeeaab9b6e80fe43e815" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>cliLauncherContent</name></member>
+      <member refid="classMainWindow_1ab9ae18cd9a0a1821e3bfac05fd579627" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>cliLauncherPath</name></member>
+      <member refid="classMainWindow_1a8a91d114e5ba1706162f4a17da898da7" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>copyCurrentSelection</name></member>
+      <member refid="classMainWindow_1a3058f4eae9c744bfd231bfcc8dff7541" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>currentPdfSearchResultIndex</name></member>
+      <member refid="classMainWindow_1aba7c65bb4aba4f3ab42f73b74a198fda" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>documentFindSupported</name></member>
+      <member refid="classMainWindow_1ade305265b2120df2489a5ebeb07ebbe1" prot="protected" virt="non-virtual"><scope>MainWindow</scope><name>eventFilter</name></member>
+      <member refid="classMainWindow_1ab2194fb46495ebb107ebdcad2816cde6" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>fileTypeKeyForPath</name></member>
+      <member refid="classMainWindow_1ab254e1408b8e2ad9833a7de8e08478ba" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>goToPageOrLine</name></member>
+      <member refid="classMainWindow_1afe2f4e5f5621536de40009ad900edf6b" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>installCommandLineTool</name></member>
+      <member refid="classMainWindow_1aced8da1e83a284c6b58abf439a92b462" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>isProbablyImageFile</name></member>
+      <member refid="classMainWindow_1a5a6716152e7f99795427f829f2d1a3d7" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>isProbablyTextFile</name></member>
+      <member refid="classMainWindow_1aa73cdcb2f9b54729c71a5fba3ef1d5a0" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actCopy</name></member>
+      <member refid="classMainWindow_1a2d27a5c6812dd0b769097842a5347c48" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actGoToPageOrLine</name></member>
+      <member refid="classMainWindow_1a72a12f467d862f5022167610be24b7fb" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actPdfFind</name></member>
+      <member refid="classMainWindow_1a3cf743a60f433ee9795bdb9e0f020067" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actPdfFindNext</name></member>
+      <member refid="classMainWindow_1a92019882154648171235811c3c026cb1" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actPdfFindPrev</name></member>
+      <member refid="classMainWindow_1a18d977e9a7e04de8de200509927bee97" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actPdfPrint</name></member>
+      <member refid="classMainWindow_1aed8d56c349404a225bbf2975a4c68c98" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actRichPreviewMode</name></member>
+      <member refid="classMainWindow_1ab082000424e35ebd6d694a9dd932533f" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actRichTextMode</name></member>
+      <member refid="classMainWindow_1ab9655c500243393fe4374378f0b78467" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actSvgPreviewMode</name></member>
+      <member refid="classMainWindow_1a6c4ad2918a47318fa65562fb365e776d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_actSvgSourceMode</name></member>
+      <member refid="classMainWindow_1a76cb70e9d803224bf600c52edbf75142" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_documentFindCurrentIndex</name></member>
+      <member refid="classMainWindow_1ae3b89986fd8814ce75e286def0cf9f77" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_documentFindMatchStarts</name></member>
+      <member refid="classMainWindow_1a004bd901261a389a6b7f7de677d721e6" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_fileWatcher</name></member>
+      <member refid="classMainWindow_1aeb3d24c53ac1ddc1164c9a3e2ad6c1f4" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_fsModel</name></member>
+      <member refid="classMainWindow_1a206aaba039130e2aa35339222eb12b52" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_imageOriginalPixmap</name></member>
+      <member refid="classMainWindow_1a418d382e4e0d59e5f066c5b5099c227b" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_imageScroll</name></member>
+      <member refid="classMainWindow_1a9ac37226a50ca4dff5a63a9da7341e46" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_imageView</name></member>
+      <member refid="classMainWindow_1a57272635168b01651c8317ac155aa4a8" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_imageZoomFactor</name></member>
+      <member refid="classMainWindow_1af8c3372054d4a8f04e8ffa68c3c65d5c" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_leftTabs</name></member>
+      <member refid="classMainWindow_1a10984589dca52b6997c3228a9f738f1c" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfActFirst</name></member>
+      <member refid="classMainWindow_1af9b35a99cdfb3903e530e592d5120c37" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfActLast</name></member>
+      <member refid="classMainWindow_1a6fc480c9ee992d51a678a88fdc9c7d3d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfActNext</name></member>
+      <member refid="classMainWindow_1a5a1309eceeedbf427ed22516e49898cc" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfActPrev</name></member>
+      <member refid="classMainWindow_1a3f54f065504de2e4d5e6f3e0b899fa4e" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfAutoSelectingFirstResult</name></member>
+      <member refid="classMainWindow_1a2e662087b0026c92697b23930127d4c3" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfBookmarkModel</name></member>
+      <member refid="classMainWindow_1ab24fc098febd3b86bf2bd894ead854b9" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfDocument</name></member>
+      <member refid="classMainWindow_1ad1b2412954891f59646c55e26dc6c52d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfDocumentRibbon</name></member>
+      <member refid="classMainWindow_1a146c354f4a765e3eb57e08a815c1ad59" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfFindCountLabel</name></member>
+      <member refid="classMainWindow_1a9d28a2265d410e43008a4017472f770c" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfFindEdit</name></member>
+      <member refid="classMainWindow_1a4b7ad36ed79f3ef3c6a3db0851861d29" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfFindToolBar</name></member>
+      <member refid="classMainWindow_1af8c5c32483e6bd69c548745ca607cbfe" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfPageEdit</name></member>
+      <member refid="classMainWindow_1a30aca77dfed611136212cf9a5a983a8d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfPageLabel</name></member>
+      <member refid="classMainWindow_1aac0b78a11338c02032494293d3927da0" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfPageValidator</name></member>
+      <member refid="classMainWindow_1a6a7d2b3c481a20a8ce5573c1ede425ff" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfSearchCurrentIndex</name></member>
+      <member refid="classMainWindow_1a8dec1046ec4e13849dc2815ac0747d1b" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfSearchModel</name></member>
+      <member refid="classMainWindow_1a060e7de311916b59fdd376697a582d04" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfThumbList</name></member>
+      <member refid="classMainWindow_1aee818a1b60c4441fb0f05d0961d604f7" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfThumbPageCount</name></member>
+      <member refid="classMainWindow_1a4a5af1ae0abd6fd29cd723b43f5c699f" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfToolBar</name></member>
+      <member refid="classMainWindow_1a57b914956170cca13f7714cedbdecca0" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pdfView</name></member>
+      <member refid="classMainWindow_1a7ec57e67b90d9a9bd2096c4b9cdcf8a3" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_pendingReloadPath</name></member>
+      <member refid="classMainWindow_1a55c4892be7586be5480ceeec67d49028" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_placeholder</name></member>
+      <member refid="classMainWindow_1a75b0f4fb7dd84ac30f378b05eb4a6f06" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_previewedFileIsRichText</name></member>
+      <member refid="classMainWindow_1a0ba12931573bcb9e27297caa260c2847" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_previewedFileIsSvg</name></member>
+      <member refid="classMainWindow_1ad743d41ac8b6600ae3a817c11c659ff8" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_previewFilePath</name></member>
+      <member refid="classMainWindow_1acf2c78e62ad69074590f062fdac53b03" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_previewPane</name></member>
+      <member refid="classMainWindow_1a61ef012fca9b3af40c7177d9f2b725d7" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_reloadDebounceTimer</name></member>
+      <member refid="classMainWindow_1a4c013f177c0c080b5c84447a1bda7462" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_richModeGroup</name></member>
+      <member refid="classMainWindow_1ae6eba8396ff4a34f6ac5c50b1c56336a" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_richModeToolBar</name></member>
+      <member refid="classMainWindow_1aecfaced0337c207ba9349e5f23e52f78" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_richPreviewMode</name></member>
+      <member refid="classMainWindow_1aa70a41efc7791d9f67a2ad6c6f72c30a" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_richView</name></member>
+      <member refid="classMainWindow_1a4071ffde68343b1aa7c4121d487d5b86" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_rootPath</name></member>
+      <member refid="classMainWindow_1a7b0c3baffa657502095083788b21689d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_shuttingDown</name></member>
+      <member refid="classMainWindow_1ac4df262633ca9e12fdb724914e1df924" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_splitter</name></member>
+      <member refid="classMainWindow_1a6bbdcb0a9246ee4662fbd549827f79dd" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_stack</name></member>
+      <member refid="classMainWindow_1a1fe6901f1dfa98e7d248f97433e1e704" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_svgModeGroup</name></member>
+      <member refid="classMainWindow_1a95f28e23dde3bcdff3550b987d19dc28" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_svgPreviewMode</name></member>
+      <member refid="classMainWindow_1aec34518057af7c31593c8d8946abc92d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_textView</name></member>
+      <member refid="classMainWindow_1ade52d728b76e3b8ac230e5d17ea379da" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_tocPlaceholder</name></member>
+      <member refid="classMainWindow_1a09c50916ed670676d783bdc9e1852603" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_tocStack</name></member>
+      <member refid="classMainWindow_1a9508927a5b2c6e6a243a7e78182979c6" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_tocView</name></member>
+      <member refid="classMainWindow_1af268ba94f92550e42b1876dcf4ab5c6a" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_tree</name></member>
+      <member refid="classMainWindow_1a3a3cda6725c8e6b39a1a5dad59ac599e" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>m_updatingPdfPageEdit</name></member>
+      <member refid="classMainWindow_1a996c5a2b6f77944776856f08ec30858d" prot="public" virt="non-virtual"><scope>MainWindow</scope><name>MainWindow</name></member>
+      <member refid="classMainWindow_1ae0542fbc4a0d6e2e8a75fe95c55cad9b" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onPdfBookmarksChanged</name></member>
+      <member refid="classMainWindow_1a33a6291feb3237108a8081f6b17779ee" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onPdfFindTextChanged</name></member>
+      <member refid="classMainWindow_1ac859a68c6f5adb041d1fb5a82b7dc727" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onPdfPageEditReturnPressed</name></member>
+      <member refid="classMainWindow_1add87e036c0c2d7d89d6a9c613cf266f1" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onPdfSearchResultsChanged</name></member>
+      <member refid="classMainWindow_1aa47ab718d93b81b1a53eec2a72109e37" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onPdfThumbnailActivated</name></member>
+      <member refid="classMainWindow_1a3d011e168754dc8ff4bef4a1dc49e8b0" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onReloadDebounceTimeout</name></member>
+      <member refid="classMainWindow_1a2a6af4d75a7b89dab269360dfe8d1bbb" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onRichPreviewLinkClicked</name></member>
+      <member refid="classMainWindow_1a81bcc18e82a9fe1fc15990d76828792b" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onTocActivated</name></member>
+      <member refid="classMainWindow_1a575bbcadf2c561272c6a038d2431051f" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onTreeContextMenuRequested</name></member>
+      <member refid="classMainWindow_1aea9caf07014e8c7a6552676f99ef8e70" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onTreeCurrentChanged</name></member>
+      <member refid="classMainWindow_1abd22b6868ad0bebb9373671f6ffdcb8c" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>onWatchedFileChanged</name></member>
+      <member refid="classMainWindow_1a3f056c9dc1a1362db59771d540147434" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>openFolderDialog</name></member>
+      <member refid="classMainWindow_1a760b69d95606467ac26581a983fe2220" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>openPathInDefaultApp</name></member>
+      <member refid="classMainWindow_1a0cf211ff8de1892c6f5fa5bb958e236f" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>openPathWithApp</name></member>
+      <member refid="classMainWindow_1a82b228a8d3fb71f6a7f1807d529d90b6" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>openPdfFind</name></member>
+      <member refid="classMainWindow_1a05eb4bfe9c2c67c9a4f1887891766963" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>openWithForPath</name></member>
+      <member refid="classMainWindow_1a7be2737d224f3785467c708b99d96bc2" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pauseWatching</name></member>
+      <member refid="classMainWindow_1ae02937ce3c52d5819e583c03b184ec15" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pdfFindNext</name></member>
+      <member refid="classMainWindow_1abc2bb4ca03ce1522f48395216dbddc49" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pdfFindPrev</name></member>
+      <member refid="classMainWindow_1a44a223a646f0b7cfa5c3d9d81bfaa21c" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pdfFitWidth</name></member>
+      <member refid="classMainWindow_1a6f939a979793d87462c271d97a075157" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pdfGoFirstPage</name></member>
+      <member refid="classMainWindow_1afa6c7106649010aff1beecf18fdd7174" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pdfGoLastPage</name></member>
+      <member refid="classMainWindow_1a707eae8b5156aa045016b86f128d0433" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pdfGoNextPage</name></member>
+      <member refid="classMainWindow_1a65f5d5f2e865a7e78422fe8b082291b0" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pdfGoPrevPage</name></member>
+      <member refid="classMainWindow_1aca5cb77c9a52882a0460cd5c26ad81d5" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>pdfSearchResultCount</name></member>
+      <member refid="classMainWindow_1ae8f6ed3773b9a1f589e30c0cd108c30d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>previewPath</name></member>
+      <member refid="classMainWindow_1a80bc827febb6c1f3a522ce136fbbd539" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>printCurrentPdf</name></member>
+      <member refid="classMainWindow_1a409189c03971d3984fc7dec40800e271" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>rebuildDocumentTextFindMatches</name></member>
+      <member refid="classMainWindow_1a2e5f039142d2cb5a755872f3c3288caf" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>rebuildPdfThumbnails</name></member>
+      <member refid="classMainWindow_1acba4fccbedb88edaf0e6a3d13b625d19" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>recordOpenWithUsage</name></member>
+      <member refid="classMainWindow_1a1cb722d49c59295ef157bd94a3d36c11" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>selectDocumentTextFindMatch</name></member>
+      <member refid="classMainWindow_1ad48b6c069f84e205f0d47140c4c2aa21" prot="public" virt="non-virtual"><scope>MainWindow</scope><name>selectPath</name></member>
+      <member refid="classMainWindow_1ac17580f8cedbf40288bb9e52169818f8" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>selectPdfSearchResult</name></member>
+      <member refid="classMainWindow_1a0eda0edded39004c8a17fbca452b087c" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>setCurrentPdfSearchResultIndexCompat</name></member>
+      <member refid="classMainWindow_1a7c0e3a1f8b003887e3688157e46689f6" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>setRichPreviewMode</name></member>
+      <member refid="classMainWindow_1a36baf402fb696610dc4a5c92574070f8" prot="public" virt="non-virtual"><scope>MainWindow</scope><name>setRootFolder</name></member>
+      <member refid="classMainWindow_1a4df1efec425ac9b54b99d5d75fd160b1" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>setSvgPreviewMode</name></member>
+      <member refid="classMainWindow_1aa353e8faed952a95e2fc62d7a5018a89" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>setupUi</name></member>
+      <member refid="classMainWindow_1a179390431d64ab9ad325bfb6435876af" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>setWatchedPreviewFile</name></member>
+      <member refid="classMainWindow_1a63c95190fa305627c29ec601ed10a2f0" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>showAboutDialog</name></member>
+      <member refid="classMainWindow_1a267af458809fd42db2025145bad659f0" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>showHelpDialog</name></member>
+      <member refid="classMainWindow_1aed1aa96fece41d257732c1e7f8e5109b" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>showPlaceholder</name></member>
+      <member refid="classMainWindow_1aa2d19ed61a456220643888235736261d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>showPreviewFileUnavailable</name></member>
+      <member refid="classMainWindow_1aa927e697a756818463d9d4fbda36c7f6" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>showThemeSettingsDialog</name></member>
+      <member refid="classMainWindow_1a87c80b2a06a0e368bf469aa66b7588be" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>syncPdfThumbnailSelection</name></member>
+      <member refid="classMainWindow_1aca0dda06c387f4904d236f7ec1f6ba0d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>updateGoToNavigationAction</name></member>
+      <member refid="classMainWindow_1a9f2e6c0a257b3b63e43757cf54e98d99" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>updateImagePreviewScale</name></member>
+      <member refid="classMainWindow_1aaaf3c320365743dd72a3c2e12cde667d" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>updatePdfFindActions</name></member>
+      <member refid="classMainWindow_1ab2bc6fb3fbb570031b55be6a95e7061b" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>updatePdfPageUi</name></member>
+      <member refid="classMainWindow_1a1a5903f03615e1ba193c9a393b344f1f" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>updatePdfSearchStatus</name></member>
+      <member refid="classMainWindow_1a2b00d2b46eebd9395d707d1ce8971c39" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>updatePreviewModeToolbars</name></member>
+      <member refid="classMainWindow_1a3f0d824ed9ae7eab3d7908ef72842f35" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>updateRichPreviewModeUi</name></member>
+      <member refid="classMainWindow_1a7dbdbcd1a8cbc0b02a5d3ca2f75a066b" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>updateTocPaneUi</name></member>
+      <member refid="classMainWindow_1a944e25dc70f73ab360357618a54e1d55" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>zoomInPdf</name></member>
+      <member refid="classMainWindow_1acdf293e21c23a5144404d8d8a9751f61" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>zoomOutPdf</name></member>
+      <member refid="classMainWindow_1ae8d376835313b00650eb51787fd08929" prot="private" virt="non-virtual"><scope>MainWindow</scope><name>zoomResetToViewport</name></member>
+      <member refid="classMainWindow_1a1f7d2c56410fc1bfa135bb907d43313f" prot="public" virt="non-virtual"><scope>MainWindow</scope><name>~MainWindow</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

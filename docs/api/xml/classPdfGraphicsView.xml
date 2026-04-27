@@ -1,0 +1,1833 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="classPdfGraphicsView" kind="class" language="C++" prot="public" final="yes">
+    <compoundname>PdfGraphicsView</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">QGraphicsView</basecompoundref>
+    <includes refid="PdfGraphicsView_8h" local="no">PdfGraphicsView.h</includes>
+    <innerclass refid="structPdfGraphicsView_1_1PageItem" prot="private">PdfGraphicsView::PageItem</innerclass>
+    <sectiondef kind="public-type">
+      <memberdef kind="enum" id="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>ZoomMode</name>
+        <qualifiedname>PdfGraphicsView::ZoomMode</qualifiedname>
+        <enumvalue id="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511a90589c47f06eb971d548591f23c285af" prot="public">
+          <name>Custom</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511a8184936ce85c5e631b576415fb9581b9" prot="public">
+          <name>FitToWidth</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511a3ec6fc5b832478b3cedcf63e662a579c" prot="public">
+          <name>FitInView</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>How page scale is derived from viewport size versus an explicit zoom factor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="32" column="5" bodyfile="src/PdfGraphicsView.h" bodystart="32" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="enum" id="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>PageMode</name>
+        <qualifiedname>PdfGraphicsView::PageMode</qualifiedname>
+        <enumvalue id="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2a0f2defc382e07266311a8393ab35bec5" prot="public">
+          <name>SinglePage</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2afc263e0dbe6e0ec601ca582d50e4a0f6" prot="public">
+          <name>MultiPage</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+<para>Page layout policy (single vs multi); scene currently always stacks pages vertically. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="41" column="5" bodyfile="src/PdfGraphicsView.h" bodystart="41" bodyend="44"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classPdfGraphicsView_1a51ac263c3771c532b283db825fa54396" prot="private" static="no" mutable="no">
+        <type>QPdfDocument *</type>
+        <definition>QPdfDocument* PdfGraphicsView::m_document</definition>
+        <argsstring></argsstring>
+        <name>m_document</name>
+        <qualifiedname>PdfGraphicsView::m_document</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="339" column="18" bodyfile="src/PdfGraphicsView.h" bodystart="339" bodyend="-1"/>
+        <referencedby refid="classPdfGraphicsView_1af30b8d7dcaa1d2b490938e84677711c5" compoundref="PdfGraphicsView_8h" startline="62" endline="62">document</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a0352edc4c9a2e1f3dcb04223098cc590" prot="private" static="no" mutable="no">
+        <type>QPdfSearchModel *</type>
+        <definition>QPdfSearchModel* PdfGraphicsView::m_searchModel</definition>
+        <argsstring></argsstring>
+        <name>m_searchModel</name>
+        <qualifiedname>PdfGraphicsView::m_searchModel</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="340" column="21" bodyfile="src/PdfGraphicsView.h" bodystart="340" bodyend="-1"/>
+        <referencedby refid="classPdfGraphicsView_1af61a49e58d6fae89910a6adc2f1988b3" compoundref="PdfGraphicsView_8h" startline="74" endline="74">searchModel</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1aa4b6f210491525ac9d54a5ae3a812462" prot="private" static="no" mutable="no">
+        <type><ref refid="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2" kindref="member">PageMode</ref></type>
+        <definition>PageMode PdfGraphicsView::m_pageMode</definition>
+        <argsstring></argsstring>
+        <name>m_pageMode</name>
+        <qualifiedname>PdfGraphicsView::m_pageMode</qualifiedname>
+        <initializer>= <ref refid="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2afc263e0dbe6e0ec601ca582d50e4a0f6" kindref="member">PageMode::MultiPage</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="341" column="14" bodyfile="src/PdfGraphicsView.h" bodystart="341" bodyend="-1"/>
+        <referencedby refid="classPdfGraphicsView_1a000aa3946329fa2f3e08d3eb43ff07fb" compoundref="PdfGraphicsView_8h" startline="86" endline="86">pageMode</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a8a90c36ee07ce655238d51d83dc99abb" prot="private" static="no" mutable="no">
+        <type><ref refid="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511" kindref="member">ZoomMode</ref></type>
+        <definition>ZoomMode PdfGraphicsView::m_zoomMode</definition>
+        <argsstring></argsstring>
+        <name>m_zoomMode</name>
+        <qualifiedname>PdfGraphicsView::m_zoomMode</qualifiedname>
+        <initializer>= <ref refid="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511a3ec6fc5b832478b3cedcf63e662a579c" kindref="member">ZoomMode::FitInView</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="342" column="14" bodyfile="src/PdfGraphicsView.h" bodystart="342" bodyend="-1"/>
+        <referencedby refid="classPdfGraphicsView_1a76e3c6488eaec6231f268b628b32f392" compoundref="PdfGraphicsView_8h" startline="98" endline="98">zoomMode</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a9722a21498c30856d7505b190be8c70f" prot="private" static="no" mutable="no">
+        <type>qreal</type>
+        <definition>qreal PdfGraphicsView::m_zoomFactor</definition>
+        <argsstring></argsstring>
+        <name>m_zoomFactor</name>
+        <qualifiedname>PdfGraphicsView::m_zoomFactor</qualifiedname>
+        <initializer>= 1.0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="343" column="11" bodyfile="src/PdfGraphicsView.h" bodystart="343" bodyend="-1"/>
+        <referencedby refid="classPdfGraphicsView_1a44d82c942ceb00165b816e171f352bf5" compoundref="PdfGraphicsView_8h" startline="110" endline="110">zoomFactor</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a9ae99b16f048e85598f43c52bc47bcaf" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_pageSpacingPx</definition>
+        <argsstring></argsstring>
+        <name>m_pageSpacingPx</name>
+        <qualifiedname>PdfGraphicsView::m_pageSpacingPx</qualifiedname>
+        <initializer>= 12</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="344" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="344" bodyend="-1"/>
+        <referencedby refid="classPdfGraphicsView_1a44703a37839a452cbf48b376f34bf9b9" compoundref="PdfGraphicsView_8h" startline="116" endline="116">pageSpacing</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1ac6f3f19fd4ca10675b0f89c637be331b" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_currentPage</definition>
+        <argsstring></argsstring>
+        <name>m_currentPage</name>
+        <qualifiedname>PdfGraphicsView::m_currentPage</qualifiedname>
+        <initializer>= 0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="345" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="345" bodyend="-1"/>
+        <referencedby refid="classPdfGraphicsView_1af0a4584011bebb80cfb55e62e5380238" compoundref="PdfGraphicsView_8h" startline="122" endline="122">currentPage</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1ae1f4199a914c56adfd5dd58264c923f9" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_currentSearchResultIndex</definition>
+        <argsstring></argsstring>
+        <name>m_currentSearchResultIndex</name>
+        <qualifiedname>PdfGraphicsView::m_currentSearchResultIndex</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="346" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="346" bodyend="-1"/>
+        <referencedby refid="classPdfGraphicsView_1a5aee073916c3459635cf26ce7ce7c530" compoundref="PdfGraphicsView_8h" startline="136" endline="136">currentSearchResultIndex</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1afd88ffec007c157e17caf0fac1dd98ba" prot="private" static="no" mutable="no">
+        <type>QGraphicsScene *</type>
+        <definition>QGraphicsScene* PdfGraphicsView::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>PdfGraphicsView::m_scene</qualifiedname>
+        <initializer>= nullptr</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="348" column="20" bodyfile="src/PdfGraphicsView.h" bodystart="348" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a4e06d3d5eaf3ec3de2263d10b929d907" prot="private" static="no" mutable="no">
+        <type>QVector&lt; <ref refid="structPdfGraphicsView_1_1PageItem" kindref="compound">PageItem</ref> &gt;</type>
+        <definition>QVector&lt;PageItem&gt; PdfGraphicsView::m_pages</definition>
+        <argsstring></argsstring>
+        <name>m_pages</name>
+        <qualifiedname>PdfGraphicsView::m_pages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="349" column="13" bodyfile="src/PdfGraphicsView.h" bodystart="349" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1ae2131614ef94f99ade761a6dc14289cd" prot="private" static="no" mutable="no">
+        <type>QList&lt; QGraphicsRectItem * &gt;</type>
+        <definition>QList&lt;QGraphicsRectItem *&gt; PdfGraphicsView::m_searchHighlights</definition>
+        <argsstring></argsstring>
+        <name>m_searchHighlights</name>
+        <qualifiedname>PdfGraphicsView::m_searchHighlights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="350" column="11" bodyfile="src/PdfGraphicsView.h" bodystart="350" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a2d8fbc3e4385a6f427d070d7e4113d75" prot="private" static="no" mutable="no">
+        <type>QList&lt; QGraphicsPolygonItem * &gt;</type>
+        <definition>QList&lt;QGraphicsPolygonItem *&gt; PdfGraphicsView::m_textSelectionHighlights</definition>
+        <argsstring></argsstring>
+        <name>m_textSelectionHighlights</name>
+        <qualifiedname>PdfGraphicsView::m_textSelectionHighlights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="351" column="11" bodyfile="src/PdfGraphicsView.h" bodystart="351" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1aead8e07a0374f909df9f799070896b5e" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_selectionAnchorPage</definition>
+        <argsstring></argsstring>
+        <name>m_selectionAnchorPage</name>
+        <qualifiedname>PdfGraphicsView::m_selectionAnchorPage</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="352" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="352" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1aa927f4850b1f36921d3dcfededf1d8b2" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_selectionCurrentPage</definition>
+        <argsstring></argsstring>
+        <name>m_selectionCurrentPage</name>
+        <qualifiedname>PdfGraphicsView::m_selectionCurrentPage</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="353" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="353" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a47272003eef1192424304b49ff09ead2" prot="private" static="no" mutable="no">
+        <type>QPointF</type>
+        <definition>QPointF PdfGraphicsView::m_selectionAnchorPdf</definition>
+        <argsstring></argsstring>
+        <name>m_selectionAnchorPdf</name>
+        <qualifiedname>PdfGraphicsView::m_selectionAnchorPdf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="354" column="13" bodyfile="src/PdfGraphicsView.h" bodystart="354" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1acc76dcaf6446af6cc3c79e6ba51f6c73" prot="private" static="no" mutable="no">
+        <type>QPointF</type>
+        <definition>QPointF PdfGraphicsView::m_selectionCurrentPdf</definition>
+        <argsstring></argsstring>
+        <name>m_selectionCurrentPdf</name>
+        <qualifiedname>PdfGraphicsView::m_selectionCurrentPdf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="355" column="13" bodyfile="src/PdfGraphicsView.h" bodystart="355" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1aaafb2584b5b10203c1ad722e9fbb8bc1" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_selectionAnchorChar</definition>
+        <argsstring></argsstring>
+        <name>m_selectionAnchorChar</name>
+        <qualifiedname>PdfGraphicsView::m_selectionAnchorChar</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="356" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="356" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a31b10b4be766c7af2147f59993cfafe4" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_selectionCurrentChar</definition>
+        <argsstring></argsstring>
+        <name>m_selectionCurrentChar</name>
+        <qualifiedname>PdfGraphicsView::m_selectionCurrentChar</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="357" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="357" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a89b4b7d26333f6b01c07d5bb610ea1fd" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_selDocFromPage</definition>
+        <argsstring></argsstring>
+        <name>m_selDocFromPage</name>
+        <qualifiedname>PdfGraphicsView::m_selDocFromPage</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="358" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="358" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a76c51a388f55c709978c3577a244abd7" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_selDocFromChar</definition>
+        <argsstring></argsstring>
+        <name>m_selDocFromChar</name>
+        <qualifiedname>PdfGraphicsView::m_selDocFromChar</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="359" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="359" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a1d92f53e878c5e2a55bd7cce616bc318" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_selDocToPage</definition>
+        <argsstring></argsstring>
+        <name>m_selDocToPage</name>
+        <qualifiedname>PdfGraphicsView::m_selDocToPage</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="360" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="360" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1ab744dec09a3b6fe3f7a78731c9b918b3" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int PdfGraphicsView::m_selDocToChar</definition>
+        <argsstring></argsstring>
+        <name>m_selDocToChar</name>
+        <qualifiedname>PdfGraphicsView::m_selDocToChar</qualifiedname>
+        <initializer>= -1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="361" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="361" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1a1d370106e3cfaa7cf13a2baa0634f7b5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool PdfGraphicsView::m_selectingText</definition>
+        <argsstring></argsstring>
+        <name>m_selectingText</name>
+        <qualifiedname>PdfGraphicsView::m_selectingText</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="362" column="10" bodyfile="src/PdfGraphicsView.h" bodystart="362" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classPdfGraphicsView_1aa4123beb62b1d7c22ef8ce38179d3d4e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool PdfGraphicsView::m_hasTextSelection</definition>
+        <argsstring></argsstring>
+        <name>m_hasTextSelection</name>
+        <qualifiedname>PdfGraphicsView::m_hasTextSelection</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="363" column="10" bodyfile="src/PdfGraphicsView.h" bodystart="363" bodyend="-1"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="public-func">
+      <memberdef kind="function" id="classPdfGraphicsView_1aa1d1cfae67d8e3d8132ff3046b6a559d" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>PdfGraphicsView::PdfGraphicsView</definition>
+        <argsstring>(QWidget *parent=nullptr)</argsstring>
+        <name>PdfGraphicsView</name>
+        <qualifiedname>PdfGraphicsView::PdfGraphicsView</qualifiedname>
+        <param>
+          <type>QWidget *</type>
+          <declname>parent</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+<para>Constructs the PDF graphics view, scene, and scroll-bar current-page wiring. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Optional parent QWidget. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="50" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1ad2b0d5557686041d714c5a17099dbc6a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::setDocument</definition>
+        <argsstring>(QPdfDocument *document)</argsstring>
+        <name>setDocument</name>
+        <qualifiedname>PdfGraphicsView::setDocument</qualifiedname>
+        <param>
+          <type>QPdfDocument *</type>
+          <declname>document</declname>
+        </param>
+        <briefdescription>
+<para>Attaches a PDF document, connects status signals, and rebuilds the scene. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in"><ref refid="classPdfGraphicsView_1af30b8d7dcaa1d2b490938e84677711c5" kindref="member">document</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Document to render, or <computeroutput>nullptr</computeroutput> to clear the view. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="56" column="10"/>
+        <references refid="classPdfGraphicsView_1af30b8d7dcaa1d2b490938e84677711c5" compoundref="PdfGraphicsView_8h" startline="62" endline="62">document</references>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1af30b8d7dcaa1d2b490938e84677711c5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>QPdfDocument *</type>
+        <definition>QPdfDocument * PdfGraphicsView::document</definition>
+        <argsstring>() const</argsstring>
+        <name>document</name>
+        <qualifiedname>PdfGraphicsView::document</qualifiedname>
+        <briefdescription>
+<para>Returns the document currently bound to this view. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Pointer to QPdfDocument, or <computeroutput>nullptr</computeroutput> if none. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="62" column="18" bodyfile="src/PdfGraphicsView.h" bodystart="62" bodyend="62"/>
+        <references refid="classPdfGraphicsView_1a51ac263c3771c532b283db825fa54396" compoundref="PdfGraphicsView_8h" startline="339">m_document</references>
+        <referencedby refid="classPdfGraphicsView_1ad2b0d5557686041d714c5a17099dbc6a">setDocument</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a5e05374302e775f7880510d8db1f71f8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::setSearchModel</definition>
+        <argsstring>(QPdfSearchModel *searchModel)</argsstring>
+        <name>setSearchModel</name>
+        <qualifiedname>PdfGraphicsView::setSearchModel</qualifiedname>
+        <param>
+          <type>QPdfSearchModel *</type>
+          <declname>searchModel</declname>
+        </param>
+        <briefdescription>
+<para>Sets the search model whose rows define highlight rectangles on pages. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in"><ref refid="classPdfGraphicsView_1af61a49e58d6fae89910a6adc2f1988b3" kindref="member">searchModel</ref></parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Model from QPdfSearchModel, or <computeroutput>nullptr</computeroutput> to clear highlights. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="68" column="10"/>
+        <references refid="classPdfGraphicsView_1af61a49e58d6fae89910a6adc2f1988b3" compoundref="PdfGraphicsView_8h" startline="74" endline="74">searchModel</references>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1af61a49e58d6fae89910a6adc2f1988b3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>QPdfSearchModel *</type>
+        <definition>QPdfSearchModel * PdfGraphicsView::searchModel</definition>
+        <argsstring>() const</argsstring>
+        <name>searchModel</name>
+        <qualifiedname>PdfGraphicsView::searchModel</qualifiedname>
+        <briefdescription>
+<para>Returns the active search model. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Pointer to QPdfSearchModel, or <computeroutput>nullptr</computeroutput> if none. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="74" column="21" bodyfile="src/PdfGraphicsView.h" bodystart="74" bodyend="74"/>
+        <references refid="classPdfGraphicsView_1a0352edc4c9a2e1f3dcb04223098cc590" compoundref="PdfGraphicsView_8h" startline="340">m_searchModel</references>
+        <referencedby refid="classPdfGraphicsView_1a5e05374302e775f7880510d8db1f71f8">setSearchModel</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1ad82e84fa570e998d7212d7edf5d5e9d2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::setPageMode</definition>
+        <argsstring>(PageMode mode)</argsstring>
+        <name>setPageMode</name>
+        <qualifiedname>PdfGraphicsView::setPageMode</qualifiedname>
+        <param>
+          <type><ref refid="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2" kindref="member">PageMode</ref></type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Stores the page layout mode for API compatibility (layout is vertical stack). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Desired <ref refid="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2" kindref="member">PageMode</ref> enum value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="80" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a000aa3946329fa2f3e08d3eb43ff07fb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2" kindref="member">PageMode</ref></type>
+        <definition>PageMode PdfGraphicsView::pageMode</definition>
+        <argsstring>() const</argsstring>
+        <name>pageMode</name>
+        <qualifiedname>PdfGraphicsView::pageMode</qualifiedname>
+        <briefdescription>
+<para>Returns the stored page layout mode. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Current <ref refid="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2" kindref="member">PageMode</ref> value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="86" column="14" bodyfile="src/PdfGraphicsView.h" bodystart="86" bodyend="86"/>
+        <references refid="classPdfGraphicsView_1aa4b6f210491525ac9d54a5ae3a812462" compoundref="PdfGraphicsView_8h" startline="341">m_pageMode</references>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a26f8c2cf15a6831dc0e6b2ea4803ec65" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::setZoomMode</definition>
+        <argsstring>(ZoomMode mode)</argsstring>
+        <name>setZoomMode</name>
+        <qualifiedname>PdfGraphicsView::setZoomMode</qualifiedname>
+        <param>
+          <type><ref refid="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511" kindref="member">ZoomMode</ref></type>
+          <declname>mode</declname>
+        </param>
+        <briefdescription>
+<para>Sets zoom mode, scrollbar policy, and rebuilds layout when fit sizing changes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Custom, fit-to-width, or fit-in-view zoom behavior. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="92" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a76e3c6488eaec6231f268b628b32f392" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511" kindref="member">ZoomMode</ref></type>
+        <definition>ZoomMode PdfGraphicsView::zoomMode</definition>
+        <argsstring>() const</argsstring>
+        <name>zoomMode</name>
+        <qualifiedname>PdfGraphicsView::zoomMode</qualifiedname>
+        <briefdescription>
+<para>Returns the active zoom mode. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Current <ref refid="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511" kindref="member">ZoomMode</ref> value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="98" column="14" bodyfile="src/PdfGraphicsView.h" bodystart="98" bodyend="98"/>
+        <references refid="classPdfGraphicsView_1a8a90c36ee07ce655238d51d83dc99abb" compoundref="PdfGraphicsView_8h" startline="342">m_zoomMode</references>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1acc747d62bb310723fdc604cb1626e6fa" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::setZoomFactor</definition>
+        <argsstring>(qreal factor)</argsstring>
+        <name>setZoomFactor</name>
+        <qualifiedname>PdfGraphicsView::setZoomFactor</qualifiedname>
+        <param>
+          <type>qreal</type>
+          <declname>factor</declname>
+        </param>
+        <briefdescription>
+<para>Sets the custom zoom factor (only affects layout when mode is Custom). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">factor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Scale factor; values below an internal minimum are clamped. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="104" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a44d82c942ceb00165b816e171f352bf5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>qreal</type>
+        <definition>qreal PdfGraphicsView::zoomFactor</definition>
+        <argsstring>() const</argsstring>
+        <name>zoomFactor</name>
+        <qualifiedname>PdfGraphicsView::zoomFactor</qualifiedname>
+        <briefdescription>
+<para>Returns the current custom zoom factor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Stored zoom factor used when mode is Custom. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="110" column="11" bodyfile="src/PdfGraphicsView.h" bodystart="110" bodyend="110"/>
+        <references refid="classPdfGraphicsView_1a9722a21498c30856d7505b190be8c70f" compoundref="PdfGraphicsView_8h" startline="343">m_zoomFactor</references>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a44703a37839a452cbf48b376f34bf9b9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int PdfGraphicsView::pageSpacing</definition>
+        <argsstring>() const</argsstring>
+        <name>pageSpacing</name>
+        <qualifiedname>PdfGraphicsView::pageSpacing</qualifiedname>
+        <briefdescription>
+<para>Vertical gap between stacked pages in scene coordinates (pixels). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Page spacing in pixels. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="116" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="116" bodyend="116"/>
+        <references refid="classPdfGraphicsView_1a9ae99b16f048e85598f43c52bc47bcaf" compoundref="PdfGraphicsView_8h" startline="344">m_pageSpacingPx</references>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1af0a4584011bebb80cfb55e62e5380238" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int PdfGraphicsView::currentPage</definition>
+        <argsstring>() const</argsstring>
+        <name>currentPage</name>
+        <qualifiedname>PdfGraphicsView::currentPage</qualifiedname>
+        <briefdescription>
+<para>0-based index of the page whose vertical center is nearest the viewport center. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Current page index. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="122" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="122" bodyend="122"/>
+        <references refid="classPdfGraphicsView_1ac6f3f19fd4ca10675b0f89c637be331b" compoundref="PdfGraphicsView_8h" startline="345">m_currentPage</references>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a364139f0c4a1161688a29f405fb95a73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::jumpTo</definition>
+        <argsstring>(int page, const QPointF &amp;location=QPointF(0, 0), qreal zoom=0.0)</argsstring>
+        <name>jumpTo</name>
+        <qualifiedname>PdfGraphicsView::jumpTo</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>location</declname>
+          <defval>QPointF(0, 0)</defval>
+        </param>
+        <param>
+          <type>qreal</type>
+          <declname>zoom</declname>
+          <defval>0.0</defval>
+        </param>
+        <briefdescription>
+<para>Scrolls so <emphasis>page</emphasis> and <emphasis>location</emphasis> are visible; optionally applies zoom in Custom mode. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">location</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PDF-space point on that page (top-left if default). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">zoom</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>If greater than 0 and zoom mode is Custom, passed to <ref refid="classPdfGraphicsView_1acc747d62bb310723fdc604cb1626e6fa" kindref="member">setZoomFactor()</ref>; otherwise ignored. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="130" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a5aee073916c3459635cf26ce7ce7c530" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int</type>
+        <definition>int PdfGraphicsView::currentSearchResultIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>currentSearchResultIndex</name>
+        <qualifiedname>PdfGraphicsView::currentSearchResultIndex</qualifiedname>
+        <briefdescription>
+<para>Index of the search result drawn with the “current” highlight color. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>0-based model row, or -1 if none / invalid model. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="136" column="9" bodyfile="src/PdfGraphicsView.h" bodystart="136" bodyend="136"/>
+        <references refid="classPdfGraphicsView_1ae1f4199a914c56adfd5dd58264c923f9" compoundref="PdfGraphicsView_8h" startline="346">m_currentSearchResultIndex</references>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a44aadffb5e3b613b4ebab7090a1db7cf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::setCurrentSearchResultIndex</definition>
+        <argsstring>(int index)</argsstring>
+        <name>setCurrentSearchResultIndex</name>
+        <qualifiedname>PdfGraphicsView::setCurrentSearchResultIndex</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Highlights result <emphasis>index</emphasis> and emits currentSearchResultIndexChanged when it changes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based QPdfSearchModel row, or -1 to clear the active highlight. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="142" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a32a6ef89091a2ac465dac823f3dab049" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool PdfGraphicsView::copySelectionToClipboard</definition>
+        <argsstring>()</argsstring>
+        <name>copySelectionToClipboard</name>
+        <qualifiedname>PdfGraphicsView::copySelectionToClipboard</qualifiedname>
+        <briefdescription>
+<para>Copies trimmed text from the multi-page drag selection to the system clipboard. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if non-empty text was placed on the clipboard; otherwise <computeroutput>false</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="148" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1aff083a9a8f33069696de38e1c78c7d86" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool PdfGraphicsView::hasTextSelection</definition>
+        <argsstring>() const</argsstring>
+        <name>hasTextSelection</name>
+        <qualifiedname>PdfGraphicsView::hasTextSelection</qualifiedname>
+        <briefdescription>
+<para>Whether the user has a latched text selection after a completed drag. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if <ref refid="classPdfGraphicsView_1a32a6ef89091a2ac465dac823f3dab049" kindref="member">copySelectionToClipboard()</ref> would return text. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="154" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="signal">
+      <memberdef kind="signal" id="classPdfGraphicsView_1a6bc3a59a40507545ac37a4db702fb597" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::currentPageChanged</definition>
+        <argsstring>(int page)</argsstring>
+        <name>currentPageChanged</name>
+        <qualifiedname>PdfGraphicsView::currentPageChanged</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <briefdescription>
+<para>Emitted when the page nearest the viewport vertical center changes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New 0-based current page index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="161" column="10"/>
+      </memberdef>
+      <memberdef kind="signal" id="classPdfGraphicsView_1acbf0ed07fab59fa0970049cec16cdb54" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::currentSearchResultIndexChanged</definition>
+        <argsstring>(int index)</argsstring>
+        <name>currentSearchResultIndexChanged</name>
+        <qualifiedname>PdfGraphicsView::currentSearchResultIndexChanged</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Emitted when the highlighted search-result index changes. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>New 0-based search model row, or -1 when cleared. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="167" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="protected-func">
+      <memberdef kind="function" id="classPdfGraphicsView_1ac49b6565ec8add97fe3472a979c55c04" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::resizeEvent</definition>
+        <argsstring>(QResizeEvent *event) override</argsstring>
+        <name>resizeEvent</name>
+        <qualifiedname>PdfGraphicsView::resizeEvent</qualifiedname>
+        <param>
+          <type>QResizeEvent *</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Relayouts rasterized pages when fit modes depend on viewport size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Resize event forwarded from Qt. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="174" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1adb0eb2d40f054beb5e0f9a5b9e4d01a6" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::scrollContentsBy</definition>
+        <argsstring>(int dx, int dy) override</argsstring>
+        <name>scrollContentsBy</name>
+        <qualifiedname>PdfGraphicsView::scrollContentsBy</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>dx</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>dy</declname>
+        </param>
+        <briefdescription>
+<para>In fit modes, scrolls vertically only and pins horizontal offset; may clear selection. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">dx</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Requested horizontal scroll delta (often suppressed in fit modes). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dy</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Requested vertical scroll delta. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="181" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a59d3e87be01f2e91229e31f3a5bd382d" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::wheelEvent</definition>
+        <argsstring>(QWheelEvent *event) override</argsstring>
+        <name>wheelEvent</name>
+        <qualifiedname>PdfGraphicsView::wheelEvent</qualifiedname>
+        <param>
+          <type>QWheelEvent *</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Forwards the wheel event and clears stale selection when not actively dragging. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Wheel event from Qt. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="187" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1abff59def3ac324ac7c8b63973f15bacb" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::mousePressEvent</definition>
+        <argsstring>(QMouseEvent *event) override</argsstring>
+        <name>mousePressEvent</name>
+        <qualifiedname>PdfGraphicsView::mousePressEvent</qualifiedname>
+        <param>
+          <type>QMouseEvent *</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Starts a left-button text drag at the PDF coordinates under the cursor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mouse press event. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="193" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a90a07f5740828aea3c308dd9f94c4dea" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::mouseMoveEvent</definition>
+        <argsstring>(QMouseEvent *event) override</argsstring>
+        <name>mouseMoveEvent</name>
+        <qualifiedname>PdfGraphicsView::mouseMoveEvent</qualifiedname>
+        <param>
+          <type>QMouseEvent *</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Updates the selection end point and auto-scrolls near viewport edges while dragging. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mouse move event. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="199" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1ab527129328dbe4daaefecbbc4a660699" prot="protected" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::mouseReleaseEvent</definition>
+        <argsstring>(QMouseEvent *event) override</argsstring>
+        <name>mouseReleaseEvent</name>
+        <qualifiedname>PdfGraphicsView::mouseReleaseEvent</qualifiedname>
+        <param>
+          <type>QMouseEvent *</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+<para>Ends text selection on left-button release and recomputes highlight state. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Mouse release event. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="205" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <sectiondef kind="private-func">
+      <memberdef kind="function" id="classPdfGraphicsView_1a551af2e6411fa97f2023254efcb80c17" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::clearScene</definition>
+        <argsstring>()</argsstring>
+        <name>clearScene</name>
+        <qualifiedname>PdfGraphicsView::clearScene</qualifiedname>
+        <briefdescription>
+<para>Clears the scene and internal page/search/selection item lists. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="219" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1af4c0bf891fcade8ac566b09331e6e27b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::rebuildPages</definition>
+        <argsstring>()</argsstring>
+        <name>rebuildPages</name>
+        <qualifiedname>PdfGraphicsView::rebuildPages</qualifiedname>
+        <briefdescription>
+<para>Rasterizes every document page into the scene according to zoom mode. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="222" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a405c5b269fe469737d0a9c891dc3e40c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::rebuildSearchHighlights</definition>
+        <argsstring>()</argsstring>
+        <name>rebuildSearchHighlights</name>
+        <qualifiedname>PdfGraphicsView::rebuildSearchHighlights</qualifiedname>
+        <briefdescription>
+<para>Rebuilds search-match rectangles from m_searchModel and m_currentSearchResultIndex. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="225" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a8021a2988af19de161933e34413103f3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::rebuildTextSelectionHighlights</definition>
+        <argsstring>()</argsstring>
+        <name>rebuildTextSelectionHighlights</name>
+        <qualifiedname>PdfGraphicsView::rebuildTextSelectionHighlights</qualifiedname>
+        <briefdescription>
+<para>Rebuilds blue selection polygons from anchor/caret PDF geometry. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="228" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a2d6244a78aa7e17ac682e99b8583b506" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>QRectF</type>
+        <definition>QRectF PdfGraphicsView::mapPdfRectToSceneRect</definition>
+        <argsstring>(int page, const QRectF &amp;pdfRect) const</argsstring>
+        <name>mapPdfRectToSceneRect</name>
+        <qualifiedname>PdfGraphicsView::mapPdfRectToSceneRect</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>const QRectF &amp;</type>
+          <declname>pdfRect</declname>
+        </param>
+        <briefdescription>
+<para>Maps a PDF-space rectangle on one page into scene coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdfRect</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Rectangle in PDF point space for that page. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Corresponding scene rectangle, or null if <emphasis>page</emphasis> is out of range. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="236" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a503ea367d18f5537e4141660f4523e12" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>QPointF</type>
+        <definition>QPointF PdfGraphicsView::mapPdfPointToScenePoint</definition>
+        <argsstring>(int page, const QPointF &amp;pdfPoint) const</argsstring>
+        <name>mapPdfPointToScenePoint</name>
+        <qualifiedname>PdfGraphicsView::mapPdfPointToScenePoint</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>pdfPoint</declname>
+        </param>
+        <briefdescription>
+<para>Maps a PDF-space point on one page into scene coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdfPoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Point in PDF point space. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Scene coordinates, or (0,0) if <emphasis>page</emphasis> is out of range. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="244" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1aab2d47507f402d64be1c9f2151ff05ce" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>QPointF</type>
+        <definition>QPointF PdfGraphicsView::mapScenePointToPdfPoint</definition>
+        <argsstring>(int page, const QPointF &amp;scenePoint) const</argsstring>
+        <name>mapScenePointToPdfPoint</name>
+        <qualifiedname>PdfGraphicsView::mapScenePointToPdfPoint</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>scenePoint</declname>
+        </param>
+        <briefdescription>
+<para>Maps a scene point into PDF-space for a known <emphasis>page</emphasis>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scenePoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Point in scene coordinates. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>PDF-space point before clamping to the page box. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="252" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1ab11e22330c8e0748afc184741a4229d4" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool PdfGraphicsView::scenePointToPdfPoint</definition>
+        <argsstring>(const QPointF &amp;scenePoint, int *page, QPointF *pdfPoint) const</argsstring>
+        <name>scenePointToPdfPoint</name>
+        <qualifiedname>PdfGraphicsView::scenePointToPdfPoint</qualifiedname>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>scenePoint</declname>
+        </param>
+        <param>
+          <type>int *</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>QPointF *</type>
+          <declname>pdfPoint</declname>
+        </param>
+        <briefdescription>
+<para>Resolves a scene position to a page index and clamped PDF coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scenePoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Point in scene coordinates (e.g. from mapToScene). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives 0-based page index on success. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">pdfPoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives PDF coordinates clamped to the page media box. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if a page could be resolved; <computeroutput>false</computeroutput> if arguments are null or no pages exist. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="261" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1ad02f87b9339b9a70c37ac0ff1794ce0e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>QPointF</type>
+        <definition>QPointF PdfGraphicsView::clampPdfPointToPage</definition>
+        <argsstring>(int page, const QPointF &amp;pdfPoint) const</argsstring>
+        <name>clampPdfPointToPage</name>
+        <qualifiedname>PdfGraphicsView::clampPdfPointToPage</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>pdfPoint</declname>
+        </param>
+        <briefdescription>
+<para>Clamps a PDF-space point to the page’s width and height in points. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdfPoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Candidate PDF coordinates. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Clamped point, or (0,0) if <emphasis>page</emphasis> is out of range. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="269" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1ad4e335c69129df57a13a25d415fc979e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool PdfGraphicsView::selectionAnchorComesBeforeCurrent</definition>
+        <argsstring>() const</argsstring>
+        <name>selectionAnchorComesBeforeCurrent</name>
+        <qualifiedname>PdfGraphicsView::selectionAnchorComesBeforeCurrent</qualifiedname>
+        <briefdescription>
+<para>Returns whether the selection anchor precedes the caret in document order. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if anchor is before caret using character indices or geometric fallback. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="275" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1acc91769d65ac266f0dbaf2ed5f41cf6a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::clearTextSelection</definition>
+        <argsstring>()</argsstring>
+        <name>clearTextSelection</name>
+        <qualifiedname>PdfGraphicsView::clearTextSelection</qualifiedname>
+        <briefdescription>
+<para>Clears drag/selection state and removes selection highlight items. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="278" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a96b04d3dcdcce02da926e7794030da18" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::updateTextSelection</definition>
+        <argsstring>(int page, const QPointF &amp;pdfPoint)</argsstring>
+        <name>updateTextSelection</name>
+        <qualifiedname>PdfGraphicsView::updateTextSelection</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>pdfPoint</declname>
+        </param>
+        <briefdescription>
+<para>Updates the caret endpoint during a drag and refreshes selection highlights. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index under the pointer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdfPoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PDF-space point on that page (clamped internally). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="285" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a46754363d88a2f242b4d6d32133eca11" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool PdfGraphicsView::selectionRangeHasText</definition>
+        <argsstring>()</argsstring>
+        <name>selectionRangeHasText</name>
+        <qualifiedname>PdfGraphicsView::selectionRangeHasText</qualifiedname>
+        <briefdescription>
+<para>Returns whether any page in the anchor–caret span has non-empty trimmed selection text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if at least one QPdfSelection in the span has visible text. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="291" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1aaed37068f1dc8ce1a25067d4930a45f2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::updateCurrentPageFromViewport</definition>
+        <argsstring>()</argsstring>
+        <name>updateCurrentPageFromViewport</name>
+        <qualifiedname>PdfGraphicsView::updateCurrentPageFromViewport</qualifiedname>
+        <briefdescription>
+<para>Recomputes m_currentPage from viewport geometry and emits currentPageChanged if needed. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="294" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a942b1525e2c8662be64d3c353297f9d1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>QPdfSelection</type>
+        <definition>QPdfSelection PdfGraphicsView::pdfRangeForPageInSelection</definition>
+        <argsstring>(int page, bool isStartPage, bool isEndPage, const QPointF &amp;startPoint, const QPointF &amp;endPoint) const</argsstring>
+        <name>pdfRangeForPageInSelection</name>
+        <qualifiedname>PdfGraphicsView::pdfRangeForPageInSelection</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isStartPage</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isEndPage</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>startPoint</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>endPoint</declname>
+        </param>
+        <briefdescription>
+<para>Builds the QPdfSelection slice for one page within a multi-page drag range. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>QPdfSelection is per-page; this maps logical anchor/caret across pages to per-page ranges.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index to query. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isStartPage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> if this page contains the range start point. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isEndPage</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> if this page contains the range end point. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">startPoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PDF-space start of the overall drag (on the start page). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">endPoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PDF-space end of the overall drag (on the end page). </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>QPdfSelection for <emphasis>page</emphasis>; may be empty if geometry does not intersect text. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="308" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1afc18f3d721447ace2aa78935e37475c6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void PdfGraphicsView::syncDocSelectionCharRange</definition>
+        <argsstring>()</argsstring>
+        <name>syncDocSelectionCharRange</name>
+        <qualifiedname>PdfGraphicsView::syncDocSelectionCharRange</qualifiedname>
+        <briefdescription>
+<para>Fills m_selDoc* from anchor/caret character indices for index-based spans. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="315" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a18fa77315c563c7af24f34a52fee14e1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int PdfGraphicsView::pdfCharStartIndexAtPoint</definition>
+        <argsstring>(int page, const QPointF &amp;pdfPt) const</argsstring>
+        <name>pdfCharStartIndexAtPoint</name>
+        <qualifiedname>PdfGraphicsView::pdfCharStartIndexAtPoint</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>pdfPt</declname>
+        </param>
+        <briefdescription>
+<para>Probes QPdfDocument::getSelection to find a stable start character index near <emphasis>pdfPt</emphasis>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdfPt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PDF-space reference point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Start character index, or -1 if none found. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="323" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1abd70c8f5b07c00ef9853e1e22d4b1357" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int PdfGraphicsView::pdfCharInclusiveEndIndexAtPoint</definition>
+        <argsstring>(int page, const QPointF &amp;pdfPt) const</argsstring>
+        <name>pdfCharInclusiveEndIndexAtPoint</name>
+        <qualifiedname>PdfGraphicsView::pdfCharInclusiveEndIndexAtPoint</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>page</declname>
+        </param>
+        <param>
+          <type>const QPointF &amp;</type>
+          <declname>pdfPt</declname>
+        </param>
+        <briefdescription>
+<para>Probes getSelection to find an inclusive end character index near <emphasis>pdfPt</emphasis>. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">page</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>0-based page index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pdfPt</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>PDF-space reference point. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Inclusive end character index, or -1 if none found. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="331" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="classPdfGraphicsView_1a96f4d6d4651c77491179e33b8fa6ce4e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool PdfGraphicsView::selectionAnchorComesBeforeCurrentCharOrder</definition>
+        <argsstring>() const</argsstring>
+        <name>selectionAnchorComesBeforeCurrentCharOrder</name>
+        <qualifiedname>PdfGraphicsView::selectionAnchorComesBeforeCurrentCharOrder</qualifiedname>
+        <briefdescription>
+<para>Compares anchor and caret using stored character indices on the same or different pages. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if anchor precedes caret in (page, character) order. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/PdfGraphicsView.h" line="337" column="10"/>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>PdfGraphicsView</label>
+        <link refid="classPdfGraphicsView"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>QGraphicsView</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>PdfGraphicsView</label>
+        <link refid="classPdfGraphicsView"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>QGraphicsView</label>
+      </node>
+    </collaborationgraph>
+    <location file="src/PdfGraphicsView.h" line="26" column="1" bodyfile="src/PdfGraphicsView.h" bodystart="27" bodyend="364"/>
+    <listofallmembers>
+      <member refid="classPdfGraphicsView_1ad02f87b9339b9a70c37ac0ff1794ce0e" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>clampPdfPointToPage</name></member>
+      <member refid="classPdfGraphicsView_1a551af2e6411fa97f2023254efcb80c17" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>clearScene</name></member>
+      <member refid="classPdfGraphicsView_1acc91769d65ac266f0dbaf2ed5f41cf6a" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>clearTextSelection</name></member>
+      <member refid="classPdfGraphicsView_1a32a6ef89091a2ac465dac823f3dab049" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>copySelectionToClipboard</name></member>
+      <member refid="classPdfGraphicsView_1af0a4584011bebb80cfb55e62e5380238" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>currentPage</name></member>
+      <member refid="classPdfGraphicsView_1a6bc3a59a40507545ac37a4db702fb597" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>currentPageChanged</name></member>
+      <member refid="classPdfGraphicsView_1a5aee073916c3459635cf26ce7ce7c530" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>currentSearchResultIndex</name></member>
+      <member refid="classPdfGraphicsView_1acbf0ed07fab59fa0970049cec16cdb54" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>currentSearchResultIndexChanged</name></member>
+      <member refid="classPdfGraphicsView_1af30b8d7dcaa1d2b490938e84677711c5" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>document</name></member>
+      <member refid="classPdfGraphicsView_1aff083a9a8f33069696de38e1c78c7d86" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>hasTextSelection</name></member>
+      <member refid="classPdfGraphicsView_1a364139f0c4a1161688a29f405fb95a73" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>jumpTo</name></member>
+      <member refid="classPdfGraphicsView_1ac6f3f19fd4ca10675b0f89c637be331b" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_currentPage</name></member>
+      <member refid="classPdfGraphicsView_1ae1f4199a914c56adfd5dd58264c923f9" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_currentSearchResultIndex</name></member>
+      <member refid="classPdfGraphicsView_1a51ac263c3771c532b283db825fa54396" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_document</name></member>
+      <member refid="classPdfGraphicsView_1aa4123beb62b1d7c22ef8ce38179d3d4e" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_hasTextSelection</name></member>
+      <member refid="classPdfGraphicsView_1aa4b6f210491525ac9d54a5ae3a812462" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_pageMode</name></member>
+      <member refid="classPdfGraphicsView_1a4e06d3d5eaf3ec3de2263d10b929d907" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_pages</name></member>
+      <member refid="classPdfGraphicsView_1a9ae99b16f048e85598f43c52bc47bcaf" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_pageSpacingPx</name></member>
+      <member refid="classPdfGraphicsView_1afd88ffec007c157e17caf0fac1dd98ba" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_scene</name></member>
+      <member refid="classPdfGraphicsView_1ae2131614ef94f99ade761a6dc14289cd" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_searchHighlights</name></member>
+      <member refid="classPdfGraphicsView_1a0352edc4c9a2e1f3dcb04223098cc590" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_searchModel</name></member>
+      <member refid="classPdfGraphicsView_1a76c51a388f55c709978c3577a244abd7" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selDocFromChar</name></member>
+      <member refid="classPdfGraphicsView_1a89b4b7d26333f6b01c07d5bb610ea1fd" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selDocFromPage</name></member>
+      <member refid="classPdfGraphicsView_1ab744dec09a3b6fe3f7a78731c9b918b3" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selDocToChar</name></member>
+      <member refid="classPdfGraphicsView_1a1d92f53e878c5e2a55bd7cce616bc318" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selDocToPage</name></member>
+      <member refid="classPdfGraphicsView_1a1d370106e3cfaa7cf13a2baa0634f7b5" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selectingText</name></member>
+      <member refid="classPdfGraphicsView_1aaafb2584b5b10203c1ad722e9fbb8bc1" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selectionAnchorChar</name></member>
+      <member refid="classPdfGraphicsView_1aead8e07a0374f909df9f799070896b5e" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selectionAnchorPage</name></member>
+      <member refid="classPdfGraphicsView_1a47272003eef1192424304b49ff09ead2" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selectionAnchorPdf</name></member>
+      <member refid="classPdfGraphicsView_1a31b10b4be766c7af2147f59993cfafe4" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selectionCurrentChar</name></member>
+      <member refid="classPdfGraphicsView_1aa927f4850b1f36921d3dcfededf1d8b2" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selectionCurrentPage</name></member>
+      <member refid="classPdfGraphicsView_1acc76dcaf6446af6cc3c79e6ba51f6c73" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_selectionCurrentPdf</name></member>
+      <member refid="classPdfGraphicsView_1a2d8fbc3e4385a6f427d070d7e4113d75" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_textSelectionHighlights</name></member>
+      <member refid="classPdfGraphicsView_1a9722a21498c30856d7505b190be8c70f" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_zoomFactor</name></member>
+      <member refid="classPdfGraphicsView_1a8a90c36ee07ce655238d51d83dc99abb" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>m_zoomMode</name></member>
+      <member refid="classPdfGraphicsView_1a503ea367d18f5537e4141660f4523e12" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>mapPdfPointToScenePoint</name></member>
+      <member refid="classPdfGraphicsView_1a2d6244a78aa7e17ac682e99b8583b506" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>mapPdfRectToSceneRect</name></member>
+      <member refid="classPdfGraphicsView_1aab2d47507f402d64be1c9f2151ff05ce" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>mapScenePointToPdfPoint</name></member>
+      <member refid="classPdfGraphicsView_1a90a07f5740828aea3c308dd9f94c4dea" prot="protected" virt="non-virtual"><scope>PdfGraphicsView</scope><name>mouseMoveEvent</name></member>
+      <member refid="classPdfGraphicsView_1abff59def3ac324ac7c8b63973f15bacb" prot="protected" virt="non-virtual"><scope>PdfGraphicsView</scope><name>mousePressEvent</name></member>
+      <member refid="classPdfGraphicsView_1ab527129328dbe4daaefecbbc4a660699" prot="protected" virt="non-virtual"><scope>PdfGraphicsView</scope><name>mouseReleaseEvent</name></member>
+      <member refid="classPdfGraphicsView_1a3847c7018271fa35e7fcb82bfb845ef2" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>PageMode</name></member>
+      <member refid="classPdfGraphicsView_1a000aa3946329fa2f3e08d3eb43ff07fb" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>pageMode</name></member>
+      <member refid="classPdfGraphicsView_1a44703a37839a452cbf48b376f34bf9b9" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>pageSpacing</name></member>
+      <member refid="classPdfGraphicsView_1abd70c8f5b07c00ef9853e1e22d4b1357" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>pdfCharInclusiveEndIndexAtPoint</name></member>
+      <member refid="classPdfGraphicsView_1a18fa77315c563c7af24f34a52fee14e1" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>pdfCharStartIndexAtPoint</name></member>
+      <member refid="classPdfGraphicsView_1aa1d1cfae67d8e3d8132ff3046b6a559d" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>PdfGraphicsView</name></member>
+      <member refid="classPdfGraphicsView_1a942b1525e2c8662be64d3c353297f9d1" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>pdfRangeForPageInSelection</name></member>
+      <member refid="classPdfGraphicsView_1af4c0bf891fcade8ac566b09331e6e27b" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>rebuildPages</name></member>
+      <member refid="classPdfGraphicsView_1a405c5b269fe469737d0a9c891dc3e40c" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>rebuildSearchHighlights</name></member>
+      <member refid="classPdfGraphicsView_1a8021a2988af19de161933e34413103f3" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>rebuildTextSelectionHighlights</name></member>
+      <member refid="classPdfGraphicsView_1ac49b6565ec8add97fe3472a979c55c04" prot="protected" virt="non-virtual"><scope>PdfGraphicsView</scope><name>resizeEvent</name></member>
+      <member refid="classPdfGraphicsView_1ab11e22330c8e0748afc184741a4229d4" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>scenePointToPdfPoint</name></member>
+      <member refid="classPdfGraphicsView_1adb0eb2d40f054beb5e0f9a5b9e4d01a6" prot="protected" virt="non-virtual"><scope>PdfGraphicsView</scope><name>scrollContentsBy</name></member>
+      <member refid="classPdfGraphicsView_1af61a49e58d6fae89910a6adc2f1988b3" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>searchModel</name></member>
+      <member refid="classPdfGraphicsView_1ad4e335c69129df57a13a25d415fc979e" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>selectionAnchorComesBeforeCurrent</name></member>
+      <member refid="classPdfGraphicsView_1a96f4d6d4651c77491179e33b8fa6ce4e" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>selectionAnchorComesBeforeCurrentCharOrder</name></member>
+      <member refid="classPdfGraphicsView_1a46754363d88a2f242b4d6d32133eca11" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>selectionRangeHasText</name></member>
+      <member refid="classPdfGraphicsView_1a44aadffb5e3b613b4ebab7090a1db7cf" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>setCurrentSearchResultIndex</name></member>
+      <member refid="classPdfGraphicsView_1ad2b0d5557686041d714c5a17099dbc6a" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>setDocument</name></member>
+      <member refid="classPdfGraphicsView_1ad82e84fa570e998d7212d7edf5d5e9d2" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>setPageMode</name></member>
+      <member refid="classPdfGraphicsView_1a5e05374302e775f7880510d8db1f71f8" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>setSearchModel</name></member>
+      <member refid="classPdfGraphicsView_1acc747d62bb310723fdc604cb1626e6fa" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>setZoomFactor</name></member>
+      <member refid="classPdfGraphicsView_1a26f8c2cf15a6831dc0e6b2ea4803ec65" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>setZoomMode</name></member>
+      <member refid="classPdfGraphicsView_1afc18f3d721447ace2aa78935e37475c6" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>syncDocSelectionCharRange</name></member>
+      <member refid="classPdfGraphicsView_1aaed37068f1dc8ce1a25067d4930a45f2" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>updateCurrentPageFromViewport</name></member>
+      <member refid="classPdfGraphicsView_1a96b04d3dcdcce02da926e7794030da18" prot="private" virt="non-virtual"><scope>PdfGraphicsView</scope><name>updateTextSelection</name></member>
+      <member refid="classPdfGraphicsView_1a59d3e87be01f2e91229e31f3a5bd382d" prot="protected" virt="non-virtual"><scope>PdfGraphicsView</scope><name>wheelEvent</name></member>
+      <member refid="classPdfGraphicsView_1a44d82c942ceb00165b816e171f352bf5" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>zoomFactor</name></member>
+      <member refid="classPdfGraphicsView_1a0b2ff44a0c15738f10d3615dfdbf4511" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>ZoomMode</name></member>
+      <member refid="classPdfGraphicsView_1a76e3c6488eaec6231f268b628b32f392" prot="public" virt="non-virtual"><scope>PdfGraphicsView</scope><name>zoomMode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

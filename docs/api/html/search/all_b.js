@@ -1,0 +1,19 @@
+var searchData=
+[
+  ['onpdfbookmarkschanged_0',['onPdfBookmarksChanged',['../classMainWindow.html#ae0542fbc4a0d6e2e8a75fe95c55cad9b',1,'MainWindow']]],
+  ['onpdffindtextchanged_1',['onPdfFindTextChanged',['../classMainWindow.html#a33a6291feb3237108a8081f6b17779ee',1,'MainWindow']]],
+  ['onpdfpageeditreturnpressed_2',['onPdfPageEditReturnPressed',['../classMainWindow.html#ac859a68c6f5adb041d1fb5a82b7dc727',1,'MainWindow']]],
+  ['onpdfsearchresultschanged_3',['onPdfSearchResultsChanged',['../classMainWindow.html#add87e036c0c2d7d89d6a9c613cf266f1',1,'MainWindow']]],
+  ['onpdfthumbnailactivated_4',['onPdfThumbnailActivated',['../classMainWindow.html#aa47ab718d93b81b1a53eec2a72109e37',1,'MainWindow']]],
+  ['onreloaddebouncetimeout_5',['onReloadDebounceTimeout',['../classMainWindow.html#a3d011e168754dc8ff4bef4a1dc49e8b0',1,'MainWindow']]],
+  ['onrichpreviewlinkclicked_6',['onRichPreviewLinkClicked',['../classMainWindow.html#a2a6af4d75a7b89dab269360dfe8d1bbb',1,'MainWindow']]],
+  ['ontocactivated_7',['onTocActivated',['../classMainWindow.html#a81bcc18e82a9fe1fc15990d76828792b',1,'MainWindow']]],
+  ['ontreecontextmenurequested_8',['onTreeContextMenuRequested',['../classMainWindow.html#a575bbcadf2c561272c6a038d2431051f',1,'MainWindow']]],
+  ['ontreecurrentchanged_9',['onTreeCurrentChanged',['../classMainWindow.html#aea9caf07014e8c7a6552676f99ef8e70',1,'MainWindow']]],
+  ['onwatchedfilechanged_10',['onWatchedFileChanged',['../classMainWindow.html#abd22b6868ad0bebb9373671f6ffdcb8c',1,'MainWindow']]],
+  ['openfolderdialog_11',['openFolderDialog',['../classMainWindow.html#a3f056c9dc1a1362db59771d540147434',1,'MainWindow']]],
+  ['openpathindefaultapp_12',['openPathInDefaultApp',['../classMainWindow.html#a760b69d95606467ac26581a983fe2220',1,'MainWindow']]],
+  ['openpathwithapp_13',['openPathWithApp',['../classMainWindow.html#a0cf211ff8de1892c6f5fa5bb958e236f',1,'MainWindow']]],
+  ['openpdffind_14',['openPdfFind',['../classMainWindow.html#a82b228a8d3fb71f6a7f1807d529d90b6',1,'MainWindow']]],
+  ['openwithforpath_15',['openWithForPath',['../classMainWindow.html#a05eb4bfe9c2c67c9a4f1887891766963',1,'MainWindow']]]
+];

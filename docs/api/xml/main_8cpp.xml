@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.16.1" xml:lang="en-US">
+  <compounddef id="main_8cpp" kind="file" language="C++">
+    <compoundname>main.cpp</compoundname>
+    <includes local="no">QApplication</includes>
+    <includes local="no">QFileInfo</includes>
+    <includes refid="MainWindow_8h" local="yes">MainWindow.h</includes>
+    <includes refid="UiTheme_8h" local="yes">UiTheme.h</includes>
+    <incdepgraph>
+      <node id="4">
+        <label>MainWindow.h</label>
+        <link refid="MainWindow_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>UiTheme.h</label>
+        <link refid="UiTheme_8h"/>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>main.cpp</label>
+        <link refid="main_8cpp"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>QApplication</label>
+      </node>
+      <node id="3">
+        <label>QFileInfo</label>
+      </node>
+      <node id="5">
+        <label>QMainWindow</label>
+      </node>
+      <node id="6">
+        <label>QPixmap</label>
+      </node>
+      <node id="8">
+        <label>QString</label>
+      </node>
+    </incdepgraph>
+    <sectiondef kind="func">
+      <memberdef kind="function" id="main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int main</definition>
+        <argsstring>(int argc, char *argv[])</argsstring>
+        <name>main</name>
+        <param>
+          <type>int</type>
+          <declname>argc</declname>
+        </param>
+        <param>
+          <type>char *</type>
+          <declname>argv</declname>
+          <array>[]</array>
+        </param>
+        <briefdescription>
+<para>Runs the Qt event loop for the skrat application. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets application metadata, applies saved UI theme, optionally sets the window icon from the macOS bundle, constructs <ref refid="classMainWindow" kindref="compound">MainWindow</ref>, and if a path is passed as the first argument, opens that folder or selects that file in the tree.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">argc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number of elements in <emphasis>argv</emphasis> (including the program name). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">argv</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Argument vector; <computeroutput>argv</computeroutput>[1] may be an initial folder or file path. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>Exit code from QApplication::exec() (typically 0 on normal quit). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="src/main.cpp" line="32" column="5" bodyfile="src/main.cpp" bodystart="32" bodyend="66"/>
+        <references refid="namespaceskrat_1ae7244408decc4bfa7daab040f0984cfd" compoundref="UiTheme_8cpp" startline="193" endline="223">skrat::applyUiTheme</references>
+        <references refid="namespaceskrat_1abe4c3623cb9f674080e5fc401883e101" compoundref="UiTheme_8cpp" startline="173" endline="181">skrat::loadUiThemePrefs</references>
+        <references refid="classMainWindow_1ad48b6c069f84e205f0d47140c4c2aa21" compoundref="MainWindow_8cpp" startline="918" endline="940">MainWindow::selectPath</references>
+        <references refid="classMainWindow_1a36baf402fb696610dc4a5c92574070f8" compoundref="MainWindow_8cpp" startline="905" endline="916">MainWindow::setRootFolder</references>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>Application bootstrap entry point for skrat. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>Responsibilities:<itemizedlist>
+<listitem><para>Initialize QApplication metadata.</para>
+</listitem><listitem><para>Apply platform-specific app icon behavior (macOS bundle icon).</para>
+</listitem><listitem><para>Create/show <ref refid="classMainWindow" kindref="compound">MainWindow</ref>.</para>
+</listitem><listitem><para>Optionally open an initial directory or file from argv[1]. </para>
+</listitem></itemizedlist>
+</para>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/**</highlight></codeline>
+<codeline lineno="2"><highlight class="comment"><sp/>*<sp/>@file<sp/>main.cpp</highlight></codeline>
+<codeline lineno="3"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Application<sp/>bootstrap<sp/>entry<sp/>point<sp/>for<sp/>skrat.</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>Responsibilities:</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>-<sp/>Initialize<sp/>QApplication<sp/>metadata.</highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*<sp/>-<sp/>Apply<sp/>platform-specific<sp/>app<sp/>icon<sp/>behavior<sp/>(macOS<sp/>bundle<sp/>icon).</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"><sp/>*<sp/>-<sp/>Create/show<sp/>MainWindow.</highlight></codeline>
+<codeline lineno="9"><highlight class="comment"><sp/>*<sp/>-<sp/>Optionally<sp/>open<sp/>an<sp/>initial<sp/>directory<sp/>or<sp/>file<sp/>from<sp/>argv[1].</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;QApplication&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;QFileInfo&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="14"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(Q_OS_MACOS)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;QIcon&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight></codeline>
+<codeline lineno="18"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="MainWindow_8h" kindref="compound">MainWindow.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="19"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&quot;<ref refid="UiTheme_8h" kindref="compound">UiTheme.h</ref>&quot;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="comment"></highlight></codeline>
+<codeline lineno="21"><highlight class="comment">/**</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/>*<sp/>@brief<sp/>Runs<sp/>the<sp/>Qt<sp/>event<sp/>loop<sp/>for<sp/>the<sp/>skrat<sp/>application.</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="24"><highlight class="comment"><sp/>*<sp/>Sets<sp/>application<sp/>metadata,<sp/>applies<sp/>saved<sp/>UI<sp/>theme,<sp/>optionally<sp/>sets<sp/>the<sp/>window<sp/>icon<sp/>from</highlight></codeline>
+<codeline lineno="25"><highlight class="comment"><sp/>*<sp/>the<sp/>macOS<sp/>bundle,<sp/>constructs<sp/>MainWindow,<sp/>and<sp/>if<sp/>a<sp/>path<sp/>is<sp/>passed<sp/>as<sp/>the<sp/>first<sp/>argument,</highlight></codeline>
+<codeline lineno="26"><highlight class="comment"><sp/>*<sp/>opens<sp/>that<sp/>folder<sp/>or<sp/>selects<sp/>that<sp/>file<sp/>in<sp/>the<sp/>tree.</highlight></codeline>
+<codeline lineno="27"><highlight class="comment"><sp/>*</highlight></codeline>
+<codeline lineno="28"><highlight class="comment"><sp/>*<sp/>@param[in]<sp/>argc<sp/>Number<sp/>of<sp/>elements<sp/>in<sp/>@a<sp/>argv<sp/>(including<sp/>the<sp/>program<sp/>name).</highlight></codeline>
+<codeline lineno="29"><highlight class="comment"><sp/>*<sp/>@param[in]<sp/>argv<sp/>Argument<sp/>vector;<sp/>@c<sp/>argv[1]<sp/>may<sp/>be<sp/>an<sp/>initial<sp/>folder<sp/>or<sp/>file<sp/>path.</highlight></codeline>
+<codeline lineno="30"><highlight class="comment"><sp/>*<sp/>@return<sp/>Exit<sp/>code<sp/>from<sp/>QApplication::exec()<sp/>(typically<sp/>0<sp/>on<sp/>normal<sp/>quit).</highlight></codeline>
+<codeline lineno="31"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="32" refid="main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" refkind="member"><highlight class="normal"></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/><ref refid="main_8cpp_1a0ddf1224851353fc92bfbff6f499fa97" kindref="member">main</ref>(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>argc,<sp/></highlight><highlight class="keywordtype">char</highlight><highlight class="normal"><sp/>*argv[])</highlight></codeline>
+<codeline lineno="33"><highlight class="normal">{</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/><sp/><sp/>QApplication<sp/>app(argc,<sp/>argv);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/><sp/><sp/>QCoreApplication::setApplicationName(QStringLiteral(</highlight><highlight class="stringliteral">&quot;skrat&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/><sp/><sp/>QCoreApplication::setApplicationVersion(QStringLiteral(SKRAT_APP_VERSION));</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/><sp/><sp/>QCoreApplication::setOrganizationName(QStringLiteral(</highlight><highlight class="stringliteral">&quot;CodeMonki&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="namespaceskrat_1ae7244408decc4bfa7daab040f0984cfd" kindref="member">skrat::applyUiTheme</ref>(app,<sp/><ref refid="namespaceskrat_1abe4c3623cb9f674080e5fc401883e101" kindref="member">skrat::loadUiThemePrefs</ref>());</highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#if<sp/>defined(Q_OS_MACOS)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/><sp/><sp/>{</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>QFileInfo<sp/>bundleIcns(</highlight></codeline>
+<codeline lineno="44"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>QCoreApplication::applicationDirPath()<sp/>+<sp/>QStringLiteral(</highlight><highlight class="stringliteral">&quot;/../Resources/skrat.icns&quot;</highlight><highlight class="normal">));</highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(bundleIcns.isFile())<sp/>{</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>app.setWindowIcon(QIcon(bundleIcns.absoluteFilePath()));</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="50"><highlight class="normal"></highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/><sp/><sp/><ref refid="classMainWindow" kindref="compound">MainWindow</ref><sp/>window;</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>QStringList<sp/>args<sp/>=<sp/>QCoreApplication::arguments();</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(args.size()<sp/>&gt;<sp/>1)<sp/>{</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">const</highlight><highlight class="normal"><sp/>QFileInfo<sp/>fi(args.at(1));</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(fi.exists()<sp/>&amp;&amp;<sp/>fi.isDir())<sp/>{</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>window.<ref refid="classMainWindow_1a36baf402fb696610dc4a5c92574070f8" kindref="member">setRootFolder</ref>(fi.absoluteFilePath());</highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}<sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal"><sp/>(fi.exists()<sp/>&amp;&amp;<sp/>fi.isFile())<sp/>{</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>window.<ref refid="classMainWindow_1a36baf402fb696610dc4a5c92574070f8" kindref="member">setRootFolder</ref>(fi.absolutePath());</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>window.<ref refid="classMainWindow_1ad48b6c069f84e205f0d47140c4c2aa21" kindref="member">selectPath</ref>(fi.absoluteFilePath());</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/><sp/><sp/>}</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/><sp/><sp/>window.show();</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>app.exec();</highlight></codeline>
+<codeline lineno="66"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="src/main.cpp"/>
+  </compounddef>
+</doxygen>
