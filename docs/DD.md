@@ -6,7 +6,8 @@
 - Builds and wires all UI elements.
 - Routes user actions to preview-specific logic.
 - Maintains state for search index, current preview path, watch/debounce.
-- Maintains persisted HTML/Markdown display mode state (rendered Preview vs source Text).
+- Maintains persisted HTML/Markdown display mode state (rendered Preview vs source Text) and persisted SVG preview vs source mode.
+- Hosts unified **Find** UI for PDF (`QPdfSearchModel`) and for plain/rich text previews (substring scan over `QTextDocument`).
 - Handles tree context menu handoff to OS-native apps.
 - Hosts Open With chooser entrypoint and delegates app selection/launch logic.
 
@@ -15,12 +16,13 @@
 - Deterministic scroll/jump behavior using scene/page geometry instead of `QPdfView` defaults.
 
 ### `QPdfSearchModel`
+- Supplies PDF text-layer match rectangles for the active query.
+- Drives highlight overlays and next/previous navigation while the PDF stack page is active.
+
 ### `QTextBrowser` (rich preview)
 - Renders local HTML and Markdown-derived HTML in read-only Preview mode.
 - Emits link activation signals used to route external links to system browser and local file links back through in-app preview routing.
-
-- Match extraction for active query.
-- Used for next/previous navigation and result counting.
+- Participates in in-document find when Preview mode is active (search runs on rendered document text).
 
 ### `QPdfBookmarkModel`
 - Supplies outline tree data to TOC tab view.
@@ -47,15 +49,16 @@
 ## 2. State Flows
 
 ### 2.1 Preview Loading
-- Input path -> existence/type check -> PDF/rich-preview-or-rich-text/text/image/placeholder branch.
-- HTML/Markdown path updates: rich Preview mode renders via `QTextBrowser`; Text mode falls back to source in `QPlainTextEdit`; mode controls are shown only for supported suffixes.
+- Input path -> existence/type check -> PDF / HTML·Markdown / **SVG** / generic text / generic image / placeholder branch order (`.svg` is handled before the generic image branch so preview-vs-source can apply).
+- HTML/Markdown path updates: rich Preview mode renders via `QTextBrowser`; Text mode falls back to source in `QPlainTextEdit`; mode controls are shown only for supported suffixes (`preview/richModeRendered`).
+- SVG path updates: **Preview** uses `QSvgRenderer` rasterization into the image stack; **Source** loads UTF-8 file contents into `QPlainTextEdit` (`preview/svgModeRendered`). Toggling SVG mode in the toolbar saves `QSettings` and reloads via `previewPath()` on the same path.
 - PDF path updates: document load, toolbar/tab state, watcher registration.
-- Image path updates: image decode (raster formats via `QImageReader`, basic SVG via `QSvgRenderer` rasterization), image widget update, watcher registration.
+- Generic image path updates: image decode via `QImageReader` (raster formats); watcher registration.
 
 ### 2.2 Search Flow
-- Query change updates search model.
-- Model updates trigger first-match auto-selection and status refresh.
-- Next/previous actions select indexed match and jump via `PdfGraphicsView::jumpTo()`.
+- **PDF:** query change updates `QPdfSearchModel`; model changes trigger first-match auto-selection; next/previous select model row and jump via `PdfGraphicsView::jumpTo()`.
+- **Plain text / QTextBrowser:** query change rescans the active `QTextDocument` for substring matches (ordered positions); first match selects a `QTextCursor` range; next/previous walk the match list; **do not** move focus to the document while the user is typing in the find field (avoid stealing focus from `QLineEdit`).
+- Find toolbar visibility follows searchable stack state (PDF with pages, text view, or rich view — not raw image preview).
 
 ### 2.3 Print Flow
 - Print options dialog chooses mode:
@@ -128,3 +131,8 @@
 - Qt Widgets architecture retained (no QML migration).
 - Maintain Qt 6.4+ compatibility.
 - Open With ranking persistence remains local-only (no cloud sync/telemetry dependency).
+
+## 5. Generated API documentation (Doxygen)
+
+- Repository root `Doxyfile` sets `INPUT` to `src`, `OUTPUT_DIRECTORY` to `docs/api`, with HTML under `docs/api/html` and XML under `docs/api/xml`.
+- Regenerate when public C++ APIs or header doc comments change materially; commit generated output per project release practice.

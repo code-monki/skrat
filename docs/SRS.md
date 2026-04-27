@@ -8,10 +8,11 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 ### 1.2 Scope
 `skrat` provides:
 - File browsing via a tree view
-- PDF preview, navigation, search, TOC browsing, and print workflows
+- PDF preview, navigation, PDF search, TOC browsing, and print workflows
+- In-document search for plaintext and rendered HTML/Markdown previews, and for SVG shown as XML source
 - HTML/Markdown preview with a user-selectable rendered-vs-source mode
 - Text preview for common textual formats
-- Image preview for common raster formats and basic SVG rendering
+- Image preview for common raster formats and basic SVG handling (raster preview and optional XML **source** view)
 - File-tree context action to open selected files in the OS default app
 - In-app installer for a command-line launcher utility (`skrat`)
 - Basic help/about documentation in-app
@@ -40,7 +41,8 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - The system shall default `.html`/`.htm` and `.md`/`.markdown` files to rendered Preview mode.
 - The system shall persist the user’s HTML/Markdown Preview/Text mode selection across launches.
 - The system shall preview supported text files in read-only text view.
-- The system shall preview supported image files (`gif`, `png`, `jpg`/`jpeg`, `tif`/`tiff`, `webp`, basic `svg`) in read-only image view.
+- The system shall preview supported image files (`gif`, `png`, `jpg`/`jpeg`, `tif`/`tiff`, `webp`, basic `svg`) in read-only image view, except that `svg` may be shown as read-only **source** (XML) in the text view per user mode.
+- The system shall allow the user to choose **SVG preview** (rasterized) or **SVG source** (text) for `.svg` files; the choice shall persist across launches.
 - The system shall show an explanatory placeholder for unsupported/unavailable files.
 
 ### FR-017 Rendered Preview Link Handling
@@ -79,10 +81,12 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - The system shall provide a page input field for direct jump with validation.
 - The system shall provide Go To action for page/line contexts.
 
-### FR-004 PDF Search
-- The system shall allow searching within active PDF documents.
+### FR-004 In-document search
+- The system shall allow searching within the active PDF using the PDF text layer (when loaded).
+- The system shall allow searching within read-only plain-text previews and within rendered HTML/Markdown Preview (`QTextBrowser`), including match counts and next/previous navigation for the active query.
+- Searching within SVG applies when SVG is displayed as XML source text.
 - The system shall navigate between search results (next/previous).
-- The system shall auto-jump to the first match on new query results.
+- The system shall auto-select the first match when new query results apply (PDF via search model; text/rich via document scan).
 
 ### FR-005 TOC Navigation
 - The system shall show a TOC tab for PDF bookmark navigation.
@@ -132,6 +136,7 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 ### NFR-004 Maintainability
 - Code should contain in-file API/function documentation for key modules.
 - System docs in `docs/` shall be maintained with release updates.
+- Reference API documentation may be generated with Doxygen from the repository `Doxyfile` into `docs/api/` for HTML/XML consumers.
 
 ## 4. Acceptance Criteria
 
@@ -140,16 +145,19 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 - Given a selected `.html`/`.htm` or `.md`/`.markdown` file, default rendered Preview appears.
 - Given user toggles HTML/Markdown mode to Text, raw source appears for that file.
 - Given app restart, previously selected HTML/Markdown mode is restored.
+- Given a selected `.svg` file, preview follows persisted SVG Preview/Source preference (raster vs XML text).
 - Given unsupported file, then placeholder explains unsupported type.
-- Given supported image file, then image preview appears in the preview pane.
+- Given supported image file (non-SVG), then image preview appears in the preview pane.
 
 ### AC-002 PDF Navigation
 - Given an active PDF with N pages, when navigation controls are used, then current page changes correctly and page indicators update.
 - Given page input outside [1..N], when submitted, then warning dialog appears and page does not jump.
 
 ### AC-003 Search
-- Given an active PDF with matches, when query is entered, then first result is auto-focused.
-- Given repeated next/previous actions, then navigation cycles across available matches.
+- Given an active PDF with matches, when query is entered, then first result is selected and highlighted per PDF search behavior.
+- Given plaintext or rendered HTML Preview with matching text, when query is entered, then matches are enumerated and first match is selected without moving keyboard focus away from the find field while typing.
+- Given SVG **source** mode with matching text in the XML, when query is entered, then in-document search behaves like plaintext search.
+- Given repeated next/previous actions for the active searchable preview, then navigation cycles across available matches.
 
 ### AC-004 TOC
 - Given active PDF with bookmarks, TOC tab is enabled and displays entries.
@@ -176,6 +184,7 @@ Define functional and non-functional requirements for `skrat`, a read-only deskt
 
 ### AC-007 Documentation
 - `docs/` includes SRS, HLA, DD, RTM, and Test Plan documents.
+- Release updates align system docs with observable product behavior (preview modes, find scope, CLI usage).
 
 ### AC-008 Native app handoff
 - Given a selected file in tree view, when user chooses **Open in Default App**, then the OS-associated app opens that file.

@@ -26,29 +26,36 @@
   - PDF view (`PdfGraphicsView` + `QPdfDocument` + `QGraphicsScene` page items)
   - Rich preview view (`QTextBrowser`) for rendered HTML/Markdown
   - Text view (`QPlainTextEdit`)
-  - Image view (`QScrollArea` + `QLabel` pixmap, including basic SVG rasterized preview)
+  - Image view (`QScrollArea` + `QLabel` pixmap, including basic SVG rasterized preview when SVG is in **preview** mode)
   - Placeholder (`QLabel` HTML)
-- HTML/Markdown mode controls (`Preview`/`Text`) shown only for rich-text file types and persisted in local settings.
+- HTML/Markdown mode controls (`Preview`/`Text`) shown only for `.html`/`.htm`/`.md`/`.markdown` and persisted in local settings (`preview/richModeRendered`).
+- SVG (`.svg`) mode controls (**SVG preview** /**SVG source**) shown only for that suffix: raster preview vs XML source in the text view; preference persisted (`preview/svgModeRendered`).
 
-### 2.4 PDF Services
+### 2.4 Document find (unified find bar)
+- Single **Find** toolbar and **Edit → Find…** / next / previous actions apply to whichever searchable preview is active:
+  - **PDF:** `QPdfSearchModel` + highlights/jumps in `PdfGraphicsView`.
+  - **Plain text** (`QPlainTextEdit`) and **rendered HTML/Markdown** (`QTextBrowser`): scan `QTextDocument` for substring matches; show match index and scroll selection without stealing focus from the find field while typing.
+- Image preview (including SVG **preview** mode) and placeholder are not searchable in-app.
+
+### 2.5 PDF Services
 - Page navigation via custom scene/scroll logic in `PdfGraphicsView`
-- Search model (`QPdfSearchModel`)
+- Search model (`QPdfSearchModel`) used only when the PDF stack page is active
 - Bookmark model (`QPdfBookmarkModel`) for TOC
 - Thumbnail list rendering and page-jump activation for PDF tab navigation
 - Print mode selection (raster vs native handoff)
 
-### 2.5 System Integration
+### 2.6 System Integration
 - `QFileSystemWatcher` for content reload
 - Native URI opening for vector print handoff and tree-level "Open in Default App"
 - Native URI opening for external links clicked in rendered HTML/Markdown preview
 - Platform CI packaging/deploy scripts
 
-### 2.6 Open With Services
+### 2.7 Open With Services
 - **Association Provider:** platform-specific handler discovery for a file extension/MIME type.
 - **Preference Store:** local persistence of per-filetype app usage (last-used + launch count).
 - **Launcher Adapter:** platform-specific execution path for opening selected file with selected app.
 
-### 2.7 UI Theme Services
+### 2.8 UI Theme Services
 - **Theme Preference Store:** local persistence of selected theme mode + UI font preferences.
 - **Theme Applicator:** applies palette/font to Qt Widgets chrome while preserving document rendering content.
 

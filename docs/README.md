@@ -1,6 +1,6 @@
 # skrat System Documentation
 
-This folder contains core engineering documentation for the `skrat` desktop viewer, including PDF/text/image behavior and HTML/Markdown Preview-vs-Text mode behavior.
+This folder contains core engineering documentation for the `skrat` desktop viewer, including PDF/text/image behavior, HTML/Markdown Preview-vs-Text mode, SVG preview-vs-source mode, unified in-document find, and the CLI launcher.
 
 ## Documents
 
@@ -9,6 +9,8 @@ This folder contains core engineering documentation for the `skrat` desktop view
 - `DD.md` - Detailed Design
 - `RTM.md` - Requirements Traceability Matrix
 - `TEST_PLAN.md` - Test Strategy and Execution Plan
+
+**Generated API reference (Doxygen):** after configuring Doxygen at the repository root, HTML output is written to `docs/api/html/` (see root `Doxyfile`). Regenerate when public C++ APIs or doc comments change materially.
 
 ## Usage
 
