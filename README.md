@@ -246,11 +246,14 @@ You may pass **one** optional path:
 
 If you do not want to invoke the full app binary path each time, install a launcher via **Tools → Install Command-Line Tool…** and then run `skrat <path>` from your shell.
 
+**Returning to the shell prompt immediately (optional):** On **macOS and Linux**, a trailing **`&`** is interpreted by **your shell** (bash, zsh, …) as “run in the background”; the launcher script does not need to contain `&`. Example: `skrat ~/Projects/foo &`. On **Windows**, **`&` in cmd.exe is a command separator**, not backgrounding; use **`start`** instead, for example `start "" "%LOCALAPPDATA%\skrat\bin\skrat.cmd" .` (use the exact path shown in the install dialog if it differs), or use **`Start-Process`** from PowerShell.
+
 Examples:
 
 ```bash
 ./build/skrat .
 ./build/skrat ./101-cargos-101-travellers.pdf
+skrat . &                 # macOS / Linux: returns to prompt while skrat stays open
 ```
 
 ## License

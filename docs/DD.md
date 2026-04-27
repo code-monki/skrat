@@ -88,6 +88,7 @@
 - `Tools → Install Command-Line Tool…` computes platform-specific launcher target path.
 - Installer writes a wrapper script/shim that forwards CLI args to the app executable.
 - UI reports success and whether install directory is present on current `PATH`.
+- **Shell backgrounding:** On Unix-like systems, users typically append **`&`** to the **invocation** (handled by the shell, not embedded in the launcher). On Windows, **`&`** does not background **cmd.exe** jobs; **`start`** / PowerShell **`Start-Process`** are the usual non-blocking patterns (see repository `README.md`).
 
 ### 2.9 Open With chooser + persistence flow
 - User triggers **Open With…** on selected file.

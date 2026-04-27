@@ -49,7 +49,7 @@
 8. **Help/About**: dialog visibility/content/link checks.
 9. **File reload**: modify currently previewed file and verify debounced reload.
 10. **Native app handoff**: right-click selected file and use **Open in Default App**; verify OS-associated application opens (`.docx`, `.xlsx`, `.pptx`, `.odt`, `.ods`, and unsupported preview formats).
-11. **CLI launcher installer**: run **Tools → Install Command-Line Tool…**, verify launcher file created at platform path, execute `skrat <dir-or-file>` from terminal, and verify app opens expected root/selection.
+11. **CLI launcher installer**: run **Tools → Install Command-Line Tool…**, verify launcher file created at platform path, execute `skrat <dir-or-file>` from terminal, and verify app opens expected root/selection. On macOS/Linux, optionally verify `skrat <path> &` returns to the shell prompt while the app stays running (see `README.md`); on Windows, backgrounding uses `start` / PowerShell, not trailing `&`.
 12. **Open With chooser list**: open chooser for file type with multiple handlers and verify candidates render in expected order (most recently/frequently used first).
 13. **Open With Other…**: choose **Other…**, select app executable/bundle, verify launch and persisted ranking update on subsequent chooser open.
 14. **Open With fallback**: on environment where association discovery is partial, verify chooser still offers **Other…** and successful launch path.
