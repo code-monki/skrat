@@ -84,6 +84,7 @@
 #include <QStatusBar>
 #include <QStyle>
 #include <QSpinBox>
+#include <QTabBar>
 #include <QTabWidget>
 #include <QTextBrowser>
 #include <QVBoxLayout>
@@ -859,9 +860,14 @@ void MainWindow::setupUi()
     m_stack->setCurrentIndex(kPlaceholderPage);
 
     m_leftTabs = new QTabWidget;
+    m_leftTabs->tabBar()->setExpanding(false);
+    m_leftTabs->setStyleSheet(
+        QStringLiteral("QTabWidget::tab-bar { alignment: left; } QTabBar::tab:selected { margin-top: 1px; }"));
     m_leftTabs->addTab(m_tree, tr("Files"));
     m_leftTabs->addTab(m_tocStack, tr("TOC"));
     m_leftTabs->addTab(m_pdfThumbList, tr("Thumbnails"));
+    m_leftTabs->setTabVisible(1, false);
+    m_leftTabs->setTabVisible(2, false);
     m_leftTabs->setTabEnabled(1, false);
     m_leftTabs->setTabEnabled(2, false);
     m_leftTabs->setCurrentWidget(m_tree);
@@ -927,6 +933,10 @@ void MainWindow::setupUi()
     m_richModeToolBar->setWindowTitle(tr("Preview mode"));
     m_richModeToolBar->setMovable(false);
     m_richModeToolBar->setFloatable(false);
+    m_richModeToolBar->setStyleSheet(QStringLiteral("QToolButton { margin: 1px 2px; }"));
+    auto *modeLabelInset = new QWidget(m_richModeToolBar);
+    modeLabelInset->setFixedWidth(6);
+    m_richModeToolBar->addWidget(modeLabelInset);
     m_richModeToolBar->addWidget(new QLabel(tr("Mode:")));
     m_richModeToolBar->addAction(m_actRichPreviewMode);
     m_richModeToolBar->addAction(m_actRichTextMode);
@@ -937,8 +947,14 @@ void MainWindow::setupUi()
 
     previewLayout->addWidget(m_stack, 1);
 
+    auto *leftPaneHost = new QWidget;
+    auto *leftPaneLayout = new QVBoxLayout(leftPaneHost);
+    leftPaneLayout->setContentsMargins(0, 1, 0, 0);
+    leftPaneLayout->setSpacing(0);
+    leftPaneLayout->addWidget(m_leftTabs);
+
     m_splitter = new QSplitter(Qt::Horizontal);
-    m_splitter->addWidget(m_leftTabs);
+    m_splitter->addWidget(leftPaneHost);
     m_splitter->addWidget(m_previewPane);
     m_splitter->setStretchFactor(0, 0);
     m_splitter->setStretchFactor(1, 1);
@@ -1650,6 +1666,8 @@ void MainWindow::updateTocPaneUi()
         m_tocPlaceholder->setText(
             tr("<b>Table of contents</b><br/>Open a PDF with bookmarks to view outline entries."));
         m_tocStack->setCurrentWidget(m_tocPlaceholder);
+        m_leftTabs->setTabVisible(1, false);
+        m_leftTabs->setTabVisible(2, false);
         m_leftTabs->setTabEnabled(1, false);
         m_leftTabs->setTabEnabled(2, false);
         if (m_leftTabs->currentWidget() == m_tocStack || m_leftTabs->currentWidget() == m_pdfThumbList) {
@@ -1659,6 +1677,8 @@ void MainWindow::updateTocPaneUi()
         m_pdfThumbPageCount = -1;
         return;
     }
+    m_leftTabs->setTabVisible(1, true);
+    m_leftTabs->setTabVisible(2, pages > 0);
     m_leftTabs->setTabEnabled(1, true);
     m_leftTabs->setTabEnabled(2, pages > 0);
     if (bookmarks <= 0) {
